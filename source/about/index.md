@@ -1,7 +1,6 @@
 ---
 layout: page
 title: About theory.pm
-date: 2013-07-04 18:10
 comments: false
 sharing: false
 footer: true
