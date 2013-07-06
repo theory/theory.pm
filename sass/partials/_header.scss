@@ -22,4 +22,8 @@ body > header {
       text-decoration: none;
     }
   }
+  /* WTF Chrome? Hack: http://stackoverflow.com/a/13587388/79202 */
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    h1 { left: 0.9em; }
+  }
 }
