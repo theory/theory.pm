@@ -1,6 +1,6 @@
 body > footer {
   @extend .sans;
-  font-size: .625em;
+  // font-size: .625em;
   color: $footer-link-color;
   position: relative;
   padding-top: .5em;
@@ -8,6 +8,7 @@ body > footer {
   margin-bottom: 20em;
   z-index: 1;
   border-top: 4px solid $footer-border-top;
+  text-align: center;
   a {
     @include link-colors($footer-link-color, $footer-link-color-hover, $visited: $footer-link-color);
   }
