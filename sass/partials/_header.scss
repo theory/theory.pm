@@ -5,31 +5,31 @@ body > header {
   padding-top: 0em;
   text-align: center;
    h1 {
-  	position: absolute;
-    display: inline-block;
-    font-weight: normal;
-    top: 6.5em;
-    width: 120px;
     font-weight: bold;
     a, a:link, a:visited, a:hover {
-      color: $title-color;
+      color: $title-color !important;
       text-decoration: none;
     }
  }
-  img { width: 120px; }
+    img, h1 { width: 90px; }
+  @media only screen and (min-width: 480px) {
+    img, h1 { width: 90px; }
+  }
+  @media only screen and (min-width: 750px) {
+    img, h1 { width: 90px; }
+  }
+  @media only screen and (min-width: 768px) {
+    img, h1 { width: 120px; }
+  }
   h2 {
     color: $subtitle-color;
     font-weight: bold;
     margin-top: 0.12em;
-    margin-bottom: 0.15em;
+    margin-bottom: 0;
     font-weight: bold;
     a, a:visited {
       color: $subtitle-color;
       text-decoration: none;
     }
-  }
-  /* WTF Chrome? Hack: http://stackoverflow.com/a/13587388/79202 */
-  @media screen and (-webkit-min-device-pixel-ratio:0) {
-    h1 { left: 0.9em; }
   }
 }

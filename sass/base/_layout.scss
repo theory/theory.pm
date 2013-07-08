@@ -51,7 +51,6 @@ body {
     padding-left: $pad-min;
     padding-right: $pad-min;
     @media only screen and (min-width: 480px) {
-      padding-left: $pad-narrow;
       padding-right: $pad-narrow;
     }
     @media only screen and (min-width: 768px) {
