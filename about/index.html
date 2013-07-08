@@ -92,8 +92,8 @@ function dists(data) {
         var dist = data.hits.hits[i].fields;
         document.write(
             '<dt><a href="http://metacpan.org/release/DWHEELER/' + dist.name +
-            '">' + dist["metadata.name"] + '</a></dt>' +
-            '<dd>' + dist["metadata.abstract"] + '</dd>'
+            '">' + dist.distribution + '</a></dt>' +
+            '<dd>' + dist.abstract + '</dd>'
         );
     }
     document.write('</dl>');
@@ -104,7 +104,7 @@ function dists(data) {
 
 
 <script type="text/javascript"
-         src="http://api.metacpan.org/v0/release/_search?q=author:DWHEELER+AND+status:latest;fields=name,metadata.name,metadata.abstract;size=10;sort=date:desc;callback=dists">
+         src="http://api.metacpan.org/v0/release/_search?q=author:DWHEELER+AND+status:latest;fields=name,distribution,abstract;size=10;sort=date:desc;callback=dists">
 </script>
 
 
