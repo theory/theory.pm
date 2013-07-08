@@ -1,5 +1,5 @@
 .highlight, html .gist .gist-file .gist-syntax .gist-highlight {
-  table td.code { width: 100%; }
+  table td.code { width: 100%; padding: 0; border: 0; }
   .line-numbers {
     text-align: right;
     font-size: 13px;
@@ -26,6 +26,7 @@ figure.code, .gist-file, pre {
   .highlight pre { @include box-shadow(none); }
 }
 
+figure .gutter {  padding: 0; border: 0 }
 html .gist .gist-file {
   margin-bottom: 1.8em;
   position: relative;
@@ -74,9 +75,8 @@ html .gist .gist-file {
 }
 pre {
   background: $pre-bg $noise-bg;
-  @include border-radius(.4em);
   @extend .mono;
-  border: 1px solid $pre-border;
+  border: 0;
   line-height: 1.45em;
   font-size: 13px;
   margin-bottom: 2.1em;
@@ -116,7 +116,7 @@ p, li {
   padding: .8em !important;
   overflow-x: auto;
   line-height: 1.45em;
-  background: $base03 $noise-bg !important;
+  background: $base03 !important;
   color: $base1 !important;
   span { color: $base1 !important; }
   span { font-style: normal !important; font-weight: normal !important; }
