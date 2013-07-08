@@ -40,7 +40,7 @@ function dists(data) {
  </script>
  
 <script type="text/javascript"
-         src="http://api.metacpan.org/v0/release/_search?q=author:DWHEELER+AND+status:latest;fields=name,distribution,abstract;size=10;sort=date:desc;callback=dists">
+         src="http://api.metacpan.org/v0/release/_search?q=author:DWHEELER+AND+status:latest&fields=name,distribution,abstract&size=10&sort=date:desc&callback=dists">
 </script>
 
 Contact Me
