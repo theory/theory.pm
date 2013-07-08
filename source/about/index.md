@@ -6,7 +6,7 @@ sharing: false
 footer: true
 ---
 
-{% img left /images/theory.jpg 400 400 David E. “Theory” Wheeler %}
+{% img /images/theory.jpg David E. “Theory” Wheeler %}
 
 Hi, I'm David E. Wheeler, a.k.a. "theory", a.k.a.
 [DWHEELER](https://metacpan.org/author/DWHEELER "DWHEELER's CPAN Distributions")
