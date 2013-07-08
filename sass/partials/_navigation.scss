@@ -66,6 +66,9 @@ body > nav {
         line-height: 1.2em;
       }
     }
+    @media only screen and (max-width: 500px) {
+      form { width: 60px; }
+    }
     ul[data-subscription$=email] + form {
       width: $sidebar-width-medium - $pad-medium*2 - $sidebar-pad-medium - 58px;
       .search { width: 91%; }
