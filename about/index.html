@@ -6,12 +6,11 @@
 <head>
   <meta charset="utf-8">
   <title>About theory.pm - theory.pm</title>
-  <meta name="author" content="David E. wheeler">
+  <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="About theory.pm Hi, I&rsquo;m David E. Wheeler, a.k.a. &ldquo;theory&rdquo;, a.k.a.
-DWHEELER
-on CPAN. I&rsquo;ve been hacking Perl since 1995, when &hellip;">
+  <meta name="description" content="About theory.pm My name is David E. Wheeler, and this is my Perl blog. I&rsquo;ve been hacking Perl
+since 1995, when I first started programming. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,13 +68,78 @@ on CPAN. I&rsquo;ve been hacking Perl since 1995, when &hellip;">
     <h1 class="entry-title">About theory.pm</h1>
   </header>
   
-  <p><img class="left" src="/images/theory.jpg" width="400" height="400" title="David E. “Theory” Wheeler" ></p>
+  <p><img src="/images/theory.jpg" title="David E. “Theory” Wheeler" ></p>
 
-<p>Hi, I&rsquo;m David E. Wheeler, a.k.a. &ldquo;theory&rdquo;, a.k.a.
-<a href="https://metacpan.org/author/DWHEELER" title="DWHEELER's CPAN Distributions">DWHEELER</a>
-on CPAN. I&rsquo;ve been hacking Perl since 1995, when I first started programming.
-Perl was my first language, and still my favorite. <a href="/">theory.pm</a> is my Perl
-blog. I also have a <a href="http://justatheory.com/" title="Just a Theory">personal blog</a>.</p>
+<p>My name is David E. Wheeler, and this is my Perl blog. I&rsquo;ve been hacking Perl
+since 1995, when I first started programming. Perl was my first language, and
+still my favorite. Today I mostly hack on database-related code, including
+<a href="http://pgxn.org/">PGXN</a>, a <a href="https://metacpan.org/">CPAN</a>-like service for
+<a href="http://www.postgresql.org/">PostgreSQL</a>, and <a href="http://sqitch.org/">Sqitch</a>,
+a database schema change management app.</p>
+
+<p>I&rsquo;m <a href="https://twitter.com/theory/">@theory on Twitter</a> and also
+<a href="https://alpha.app.net/theory/">@theory on App.Net</a>.</p>
+
+<p>You can hire me to hack Perl and PostgreSQL via my consulting firm,
+<a href="http://pgexperts.com/">PostgreSQL Experts</a>.</p>
+
+<h2>Recent CPAN Releases</h2>
+
+<script type="text/javascript">
+function dists(data) {
+    document.write('<dl>');
+    for (i in data.hits.hits) {
+        var dist = data.hits.hits[i].fields;
+        document.write(
+            '<dt><a href="http://metacpan.org/release/DWHEELER/' + dist.name +
+            '">' + dist["metadata.name"] + '</a></dt>' +
+            '<dd>' + dist["metadata.abstract"] + '</dd>'
+        );
+    }
+    document.write('</dl>');
+}
+ </script>
+
+
+
+
+<script type="text/javascript"
+         src="http://api.metacpan.org/v0/release/_search?q=author:DWHEELER+AND+status:latest;fields=name,metadata.name,metadata.abstract;size=10;sort=date:desc;callback=dists">
+</script>
+
+
+<h2>Contact Me</h2>
+
+<p><section class="vcard" itemtype="http://data-vocabulary.org/Person"><p></p></p>
+
+<dl>
+    <dt>Name:</dt>
+    <dd itemprop="name">David E. Wheeler</dd>
+    <dt>Email:</dt>
+    <dd>david@justatheory.com</dd>
+    <dt>Twitter:</dt>
+    <dd itemprop="url"><a href="https://twitter.com/theory">@theory</a></dd>
+    <dt>App.net:</dt>
+    <dd itemprop="url"><a href="https://alpha.app.net/theory">@theory</a></dd>
+    <dt>GitHub:</dt>
+    <dd itemprop="url"><a href="https://github.com/theory">@theory</a></dd>
+    <dt>CPAN:</dt>
+    <dd itemprop="url"><a href="https://metacpan.org/author/DWHEELER">@dwheeler</a></dd>
+</dl>
+
+
+<p></section></p>
+
+<h2>About this Blog</h2>
+
+<p>This blog is built and published with <a href="http://octopress.org/">Octopress</a> and
+written in <a href="http://daringfireball.net/projects/markdown/">Markdown</a>. You can
+<a href="/atom.xml">subscribe to the feed</a> if that&rsquo;s your thing.</p>
+
+<p>The visual style of this blog is a modified version of
+<a href="https://github.com/rastersize/BlogTheme">Aron Cedercrantz’s BlogTheme</a>, the
+license for which can be
+<a href="https://github.com/rastersize/BlogTheme/blob/master/LICENSE">found here</a>.</p>
 
   
 </article>
@@ -86,8 +150,9 @@ blog. I also have a <a href="http://justatheory.com/" title="Just a Theory">pers
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - David E. wheeler -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  Copyright &copy; 2013 - David E. Wheeler –
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> –
+  <a href="/atom.xml" title="Subscribe to theory.com">Feed</a>
 </p>
 
 </footer>
