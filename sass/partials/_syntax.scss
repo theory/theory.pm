@@ -5,7 +5,7 @@
     font-size: 13px;
     line-height: 1.45em;
     @if $solarized == light {
-      background: lighten($base03, 1) !important;
+      background: lighten($base02, 1) !important;
       border-right: 1px solid darken($base02, 2) !important;
       @include box-shadow(lighten($base03, 2) -1px 0 inset);
       text-shadow: lighten($base02, 2) 0 -1px;
@@ -21,12 +21,13 @@
   }
   border: 1px solid $pre-border !important;
 }
+
 figure.code, .gist-file, pre {
   @include box-shadow(rgba(#000, .06) 0 0 10px);
   .highlight pre { @include box-shadow(none); }
 }
 
-figure .gutter {  padding: 0; border: 0 }
+figure .gutter {  padding: 0; border: 0; }
 html .gist .gist-file {
   margin-bottom: 1.8em;
   position: relative;
