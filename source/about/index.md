@@ -23,7 +23,7 @@ function dists(data) {
     for (i in data.hits.hits) {
         var dist = data.hits.hits[i].fields;
         document.write(
-            '<dt><a href="http://beta.metacpan.org/release/DWHEELER/' + dist.name +
+            '<dt><a href="http://metacpan.org/release/DWHEELER/' + dist.name +
             '">' + dist["metadata.name"] + '</a></dt>' +
             '<dd>' + dist["metadata.abstract"] + '</dd>'
         );
