@@ -225,6 +225,31 @@ Inline code block with title and download URL:
 > nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at
 > sem facilisis semper ac in est.
 
+Using Octopress syntax:
+
+{% blockquote %}
+Last night I lay in bed looking up at the stars in the sky and I thought to
+myself, where the heck is the ceiling.s
+{% endblockquote %}
+
+From a printed work:
+
+{% blockquote Douglas Adams, The Hichhikers Guide to the Galaxy %}
+Flying is learning how to throw yourself at the ground and miss.
+{% endblockquote %}
+
+From Twitter:
+
+{% blockquote @allanbranch https://twitter.com/allanbranch/status/90766146063712256 %}
+Over the past 24 hours I've been reflecting on my life & I've realized only one thing. I need a medieval battle axe.
+{% endblockquote %}
+
+From the Web:
+
+{% blockquote Seth Godin http://sethgodin.typepad.com/seths_blog/2009/07/welcome-to-island-marketing.html Welcome to Island Marketing %}
+Every interaction is both precious and an opportunity to delight.
+{% endblockquote %}
+
 ### New pseudo-protocols for [] links ###
 
 * [abbr](abbr:bar)
@@ -267,4 +292,12 @@ Inline Markup:
 | ------------- | ------------------------------ |
 | `help()`      | Display the help window.       |
 | `destroy()`   | **Destroy your computer!**     |
+
+### Pull Quote ###
+
+{% pullquote %}
+Surround your paragraph with the pull quote tags. Then when you come to
+the text you want to pull, {" surround it like this "} and that's all there is to it.
+{% endpullquote %}
+
 
