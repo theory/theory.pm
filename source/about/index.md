@@ -73,5 +73,8 @@ written in [Markdown](http://daringfireball.net/projects/markdown/). You can
 The visual style of this blog is a modified version of
 [Aron Cedercrantz’s BlogTheme](https://github.com/rastersize/BlogTheme), the
 license for which can be
-[found here](https://github.com/rastersize/BlogTheme/blob/master/LICENSE).
+[found here](https://github.com/rastersize/BlogTheme/blob/master/LICENSE). The
+text is set in [Source Sans Pro](https://github.com/adobe/source-sans-pro) and
+[Source Code Pro](https://github.com/adobe/source-code-pro), released by Adobe under the
+[Open Font License](https://github.com/adobe/source-code-pro/blob/master/LICENSE.txt).
 
