@@ -6,7 +6,7 @@
     </url>
     <url>
         <loc>http://theory.pm/about/</loc>
-        <lastmod>2013-07-08T22:22:38+02:00</lastmod>
+        <lastmod>2013-07-21T11:06:30+02:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/blog/archives/</loc>
@@ -17,11 +17,11 @@
         <lastmod>2013-07-06T16:44:20+02:00</lastmod>
     </url>
     <url>
-        <loc>http://theory.pm/layout-test/</loc>
-        <lastmod>2013-07-18T18:11:46+02:00</lastmod>
-    </url>
-    <url>
         <loc>http://theory.pm/robots.txt</loc>
         <lastmod>2013-07-04T17:22:14+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://theory.pm/test/layout/</loc>
+        <lastmod>2013-07-21T11:08:04+02:00</lastmod>
     </url>
 </urlset>
