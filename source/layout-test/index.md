@@ -189,6 +189,14 @@ nisi at sem facilisis semper ac in est.
 
 ### Preformatted Blocks ###
 
+Simple Markdown indented code:
+
+    my $dbh = DBI->connect($dsn, $user, $pass, {
+        PrintError           => 0,
+        RaiseError           => 1,
+        AutoCommit           => 1,
+    });
+
 Example With Syntax Highlighting a Caption and Link:
 
 ``` ruby Discover if a number is prime http://www.noulakaz.net/weblog/2007/03/18/a-regular-expression-to-check-for-prime-numbers/ Source Article
