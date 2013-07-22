@@ -308,4 +308,8 @@ Surround your paragraph with the pull quote tags. Then when you come to
 the text you want to pull, {" surround it like this "} and that's all there is to it.
 {% endpullquote %}
 
+### Footnote ###
 
+That's some text with a footnote.[^1]
+
+[^1]: And that's the footnote.
