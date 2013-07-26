@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>theory.pm</title>
+  <title>A Perl Blog - theory.pm</title>
   <meta name="author" content="David E. Wheeler">
 
   
@@ -19,7 +19,7 @@ blog in 2004 more or less for fun, thinking it would be my permanent home on &he
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://theory.pm">
+  <link rel="canonical" href="http://theory.pm/blog/2013/07/26/a-perl-blog">
   <link href="/favicon.ico" rel="icon">
   
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -73,15 +73,12 @@ blog in 2004 more or less for fun, thinking it would be my permanent home on &he
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/07/26/a-perl-blog/">A Perl Blog</a></h1>
+      <h1 class="entry-title">A Perl Blog</h1>
     
     
       <p class="meta">
@@ -104,7 +101,7 @@ blog in 2004 more or less for fun, thinking it would be my permanent home on &he
   </header>
 
 
-  <div class="entry-content"><p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
+<div class="entry-content"><p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
 blog in 2004 more or less for fun, thinking it would be my permanent home on
 the internet. And it has been. But the design, while okay in 2004, is just
 awful by today&rsquo;s standards. A redesign is something I have planned to do for
@@ -147,22 +144,34 @@ start writing more Perl-related stuff. I&rsquo;m starting with some posts about 
 state of exception handling in Perl 5, the first of which is <a href="/exceptions/2013/07/26/trying-times/">already up</a>. Stay
 tuned for more.</p>
 </div>
-  
-  
 
 
-    </article>
+  <footer>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://theory.pm/blog/2013/07/26/a-perl-blog/" data-via="theory" data-counturl="http://theory.pm/blog/2013/07/26/a-perl-blog/" >Tweet</a>
   
   
-    <article>
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="false" data-layout="button_count" data-width="200" data-show-faces="false"></div>
+  
+  
+  <span class="adn-post"><a href="https://alpha.app.net/intent/post/?url=/blog/2013/07/26/a-perl-blog/&text=theory.pm: “A Perl Blog”" class="adn-button" target="_blank" data-type="share" data-width="132" data-height="20" data-text="theory.pm: “A Perl Blog”" data-url="/blog/2013/07/26/a-perl-blog/" >Share on App.net</a></span>
+  <script>(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//d2zh9g63fcvyrq.cloudfront.net/adn.js";fjs.parentNode.insertBefore(js,fjs);}}(document, "script", "adn-button-js"));</script>
+  
+</div>
+
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/exceptions/2013/07/26/trying-times/">Trying Times</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a href="/about" title="About the author (David E. Wheeler)" rel="author">David E. Wheeler</a></span></span>
+
+      
 
 
 
@@ -174,95 +183,44 @@ tuned for more.</p>
   
 
 
-<time datetime="2013-07-26T15:20:00+02:00" pubdate data-updated="true">Friday, 26 July 2013</time>
-        
-      </p>
-    
-  </header>
+<time datetime="2013-07-26T18:08:00+02:00" pubdate data-updated="true">Friday, 26 July 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/categories/blog/'>blog</a>
+  
+</span>
 
 
-  <div class="entry-content"><p>Exception handling is a bit of a pain in Perl. Traditionally, we use
-<code>eval {}</code>:</p>
+    </p>
+          <div class="follow_buttons_byline">
 
-<figure class='code'><figcaption><span>Perl eval</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="nb">eval</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="vg">$@</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $err…</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+  <a href="http://twitter.com/theory" class="twitter-follow-button" data-show-count="true">Follow @theory</a>
 
 
-<p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
-<code>$@</code> variable, which has inflicted unwarranted pain on developers over the
-years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
-shortcomings:</p>
+   <a href="https://alpha.app.net/intent/follow/?user_id=%40theory" class="adn-button" target="_blank" data-type="follow" data-width="277" data-height="20" data-user-id="@theory" data-show-count="1" data-show-username="1">Follow me on App.net</a>
+<script src="//d2zh9g63fcvyrq.cloudfront.net/adn.js"></script>
 
-<figure class='code'><figcaption><span>Try::Tiny</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $_…</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+      </div>
 
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/exceptions/2013/07/26/trying-times/" title="Previous Post: Trying Times">&laquo; Trying Times</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-<p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
-subroutine references rather than blocks. While a necessity of a pure-Perl
-implementation, it prevents <code>return</code>ing from the calling context. One must
-work around this deficiency by
-<a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
-
-<figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$rv</span> <span class="o">=</span> <span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">f</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>   <span class="c1"># …</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$rv</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="k">return</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I can&rsquo;t tell you how often this quirk burns me.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/exceptions/2013/07/26/trying-times/"><code>goto MORE; # &rarr;</code></a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/archives">Blog Archives</a>
-    
-  </div>
-</div>
 
     </div>
   </div>
@@ -279,7 +237,10 @@ work around this deficiency by
       var disqus_shortname = 'theorypm';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://theory.pm/blog/2013/07/26/a-perl-blog/';
+        var disqus_url = 'http://theory.pm/blog/2013/07/26/a-perl-blog/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
