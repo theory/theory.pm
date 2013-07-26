@@ -32,11 +32,10 @@ try {
 };
 ```
 
-Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
+Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
 subroutine references rather than blocks. While a necessity of a pure-Perl
 implementation, it prevents `return`ing from the calling context. One must
-work around this deficiency by
-[checking return values](http://stackoverflow.com/a/10366209/79202):
+work around this deficiency by [checking return values]:
 
 ``` perl Return from Try::Tiny http://stackoverflow.com/a/10366209/79202 More Gotchas
 my $rv = try {
@@ -125,9 +124,11 @@ objects and an official `try`/`catch` syntax.
 
 <!-- notes -->
 
+[^1]: In fairness much of the `$@` pain has been addressed [in Perl 5.14].
 [Try::Tiny]: https://metacpan.org/module/Try::Tiny
+[checking return values]: http://stackoverflow.com/a/10366209/79202
 [Exception::Class]: https://metacpan.org/module/Exception::Class
 [Throwable]: https://metacpan.org/module/Throwable
 [PGXN::Manager]: https://github.com/pgxn/pgxn-manager/
 [JSON]: https://metacpan.org/module/JSON
-[^1]: In fairness much of the `$@` pain has been addressed [in Perl 5.14](https://metacpan.org/module/JESSE/perl-5.14.0/pod/perldelta.pod#Exception-Handling).
+[in Perl 5.14]: https://metacpan.org/module/JESSE/perl-5.14.0/pod/perldelta.pod#Exception-Handling
