@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-07-26T18:47:27+02:00</updated>
+  <updated>2013-07-26T20:30:29+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -100,7 +100,7 @@ shortcomings:</p>
 </span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
 </span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
 </span><span class='line'>    <span class="c1"># Inspect $_…</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
 </span></code></pre></td></tr></table></div></figure>
 
 

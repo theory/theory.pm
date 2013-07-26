@@ -4,7 +4,7 @@
   <title><![CDATA[Category: exceptions | theory.pm]]></title>
   <link href="http://theory.pm/categories/exceptions/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-07-26T18:47:27+02:00</updated>
+  <updated>2013-07-26T20:30:29+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -40,7 +40,7 @@ try {
     foo();
 } catch {
     # Inspect $_…
-}
+};
 </code></p>
 
 <p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
