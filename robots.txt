@@ -1,4 +1,5 @@
 User-agent: *
-Disallow: 
+Disallow: /test/ # for dev use only
+Disallow: /tmp/ # these will soon disappear
 
 Sitemap: http://theory.pm/sitemap.xml 
