@@ -29,7 +29,7 @@ try {
     foo();
 } catch {
     # Inspect $_…
-}
+};
 ```
 
 Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
