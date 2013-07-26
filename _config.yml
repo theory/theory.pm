@@ -44,7 +44,7 @@ pygments: false # default python pygments have been replaced by pygments.rb
 paginate: 10          # Posts per page on the blog index
 pagination_dir:   # Directory base for pagination URLs eg. /page/2/
 recent_posts: 5       # Posts in the sidebar Recent Posts section
-excerpt_link: "Go on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
+excerpt_link: "<code>goto MORE; # &rarr;</code>"  # "Continue reading" link text at the bottom of excerpted articles
 excerpt_in_feed: false # Truncate excerpted articles in the atom feed
 permalink_label: "&infin;"
 permalink_label_feed: "&infin; Permalink"
@@ -53,7 +53,7 @@ linklog_marker_position: after
 linklog_marker_position_feed: after
 standard_post_marker:
 
-titlecase: true       # Converts page and post titles to titlecase
+titlecase: false       # Converts page and post titles to titlecase
 
 # list each of the sidebar modules you want to include, in the order you want them to appear.
 # To add custom asides, create files in /source/_includes/custom/asides/ and add them to the list like 'custom/asides/custom_aside_name.html'
@@ -84,12 +84,12 @@ twitter_show_follower_count: false
 twitter_tweet_button: true
 
 # Google +1
-google_plus_one: false
+google_plus_one: true
 google_plus_one_size: medium
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results
-googleplus_user:
+googleplus_user: 109508135916621459489
 googleplus_hidden: false
 
 # Pinboard
@@ -108,4 +108,4 @@ disqus_show_comment_count: false
 google_analytics_tracking_id:
 
 # Facebook Like
-facebook_like: false
+facebook_like: true
