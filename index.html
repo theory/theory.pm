@@ -217,11 +217,10 @@ shortcomings:</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
+<p>Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
 subroutine references rather than blocks. While a necessity of a pure-Perl
 implementation, it prevents <code>return</code>ing from the calling context. One must
-work around this deficiency by
-<a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
+work around this deficiency by <a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
 
 <figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

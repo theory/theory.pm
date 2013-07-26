@@ -145,11 +145,10 @@ shortcomings:</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
+<p>Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
 subroutine references rather than blocks. While a necessity of a pure-Perl
 implementation, it prevents <code>return</code>ing from the calling context. One must
-work around this deficiency by
-<a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
+work around this deficiency by <a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
 
 <figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -290,7 +289,7 @@ objects and an official <code>try</code>/<code>catch</code> syntax.</p>
 <hr/>
 <ol>
 <li id="fn:1">
-<p>In fairness much of the <code>$@</code> pain has been addressed <a href="https://metacpan.org/module/JESSE/perl-5.14.0/pod/perldelta.pod#Exception-Handling">in Perl 5.14</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>In fairness much of the <code>$@</code> pain has been addressed [in Perl 5.14].<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
