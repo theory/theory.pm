@@ -9,7 +9,16 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content=" Blog Archives ">
+  <meta name="description" content="Exception handling is a bit of a pain in Perl. Traditionally, we use
+eval {}: Perl eval1
+2
+3
+4
+5
+6
+eval { foo();
+}
+if (my $err = $@) { # Inspect $err &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -62,6 +71,110 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/exceptions/2013/07/26/trying-times/">Trying Times</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-26T15:20:00+02:00" pubdate data-updated="true">Friday, 26 July 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Exception handling is a bit of a pain in Perl. Traditionally, we use
+<code>eval {}</code>:</p>
+
+<figure class='code'><figcaption><span>Perl eval</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="nb">eval</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="vg">$@</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1"># Inspect $err…</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
+<code>$@</code> variable, which has inflicted unwarranted pain on developers over the
+years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
+shortcomings:</p>
+
+<figure class='code'><figcaption><span>Try::Tiny</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">try</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1"># Inspect $_…</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
+subroutine references rather than blocks. While a necessity of a pure-Perl
+implementation, it prevents <code>return</code>ing from the calling context. One must
+work around this deficiency by
+<a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
+
+<figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$rv</span> <span class="o">=</span> <span class="n">try</span> <span class="p">{</span>
+</span><span class='line'>   <span class="n">f</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
+</span><span class='line'>   <span class="c1"># …</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$rv</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>   <span class="k">return</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I can&rsquo;t tell you how often this quirk burns me.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/exceptions/2013/07/26/trying-times/"><code>goto MORE; # &rarr;</code></a>
+    </footer>
+  
+
+
+    </article>
   
   <div class="pagination">
     

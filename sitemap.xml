@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://theory.pm/exceptions/2013/07/26/trying-times/</loc>
+        <lastmod>2013-07-26T18:05:32+02:00</lastmod>
+    </url>
+    <url>
         <loc>http://theory.pm/404.html</loc>
         <lastmod>2013-07-22T15:28:45+02:00</lastmod>
     </url>
@@ -10,11 +14,11 @@
     </url>
     <url>
         <loc>http://theory.pm/archives/</loc>
-        <lastmod>2013-07-06T16:44:20+02:00</lastmod>
+        <lastmod>2013-07-26T18:05:32+02:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/</loc>
-        <lastmod>2013-07-22T15:29:00+02:00</lastmod>
+        <lastmod>2013-07-26T18:05:32+02:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/robots.txt</loc>

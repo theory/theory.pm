@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: exceptions | theory.pm]]></title>
+  <link href="http://theory.pm/categories/exceptions/atom.xml" rel="self"/>
+  <link href="http://theory.pm/"/>
+  <updated>2013-07-26T18:05:39+02:00</updated>
+  <id>http://theory.pm/</id>
+  <author>
+    <name><![CDATA[David E. Wheeler]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Trying Times]]></title>
+    <link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
+    <updated>2013-07-26T15:20:00+02:00</updated>
+    <id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
+    <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
+<code>eval {}</code>:</p>
+
+<p><code>perl Perl eval
+eval {
+    foo();
+}
+if (my $err = $@) {
+    # Inspect $err…
+}
+</code></p>
+
+<p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
+<code>$@</code> variable, which has inflicted unwarranted pain on developers over the
+years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
+shortcomings:</p>
+
+<p><code>perl Try::Tiny
+try {
+    foo();
+} catch {
+    # Inspect $_…
+}
+</code></p>
+
+<p>Alas, Try::Tiny introduces its own idiosyncrasies, the particularly its use of
+subroutine references rather than blocks. While a necessity of a pure-Perl
+implementation, it prevents <code>return</code>ing from the calling context. One must
+work around this deficiency by
+<a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
+
+<p>``` perl Return from Try::Tiny <a href="http://stackoverflow.com/a/10366209/79202">http://stackoverflow.com/a/10366209/79202</a> More Gotchas
+my $rv = try {
+   f();
+} catch {
+   # …
+};</p>
+
+<p>if (!$rv) {
+   return;
+}
+```</p>
+
+<p>I can&rsquo;t tell you how often this quirk burns me.</p>
+
+<!-- more -->
+
+
+<p>Sadly, there is a deeper problem then syntax: Just what, exactly, is an
+exception? How does one determine the exceptional condition, and what can be
+done about it? It might be a string. The string might be localized. It might
+be an <a href="https://metacpan.org/module/Exception::Class">Exception::Class</a> object, or a <a href="https://metacpan.org/module/Throwable">Throwable</a> object, or a simple array
+reference. Or any other value a Perl scalar can hold. This lack of specificity
+requires careful handling of exceptions:</p>
+
+<p>``` perl Exceptional Conditions
+if (my $err = $@) {
+    if (ref $err) {
+        if (eval { $err->isa(&lsquo;Exception::Class&rsquo;) }) {
+            if ( $err->isa(&lsquo;SomeException&rsquo;) ) {
+                # …
+            } elsif ( $err->isa(&lsquo;SomeException&rsquo;) ) {
+                # …
+            } else {
+                # …
+            }
+        } elsif (eval { $err->DOES(&lsquo;Throwable&rsquo;) }) {
+            # …
+        } elsif ( ref $err eq &lsquo;ARRAY&rsquo;) {
+            # …
+        }
+    } else {
+        if ( $err =~ /DBI/ ) {
+            # …
+        } elsif ( $err =~ /cannot open &lsquo;([^&rsquo;]+)&lsquo;/ ) {
+            # …
+        }
+    }
+}</p>
+
+<pre><code>
+Not every exception handler requires so many conditions, but I have certainly
+exercised all these approaches. Usually my exception handlers accrete
+condition as users report new, unexpected errors.
+
+That's not all. My code frequently requires parsing information out of a
+string error. Here's an example from [PGXN::Manager]:
+
+``` perl Exception Parsing https://github.com/pgxn/pgxn-manager/blob/master/lib/PGXN/Manager/Distribution.pm#L123 Source
+try {
+    $self-&gt;distmeta(decode_json scalar $member-&gt;contents );
+} catch {
+    my $f = quotemeta __FILE__;
+    (my $err = $_) =~ s/\s+at\s+$f.+//ms;
+    $self-&gt;error([
+        'Cannot parse JSON from “[_1]”: [_2]',
+        $member-&gt;fileName,
+        $err
+    ]);
+    return;
+} or return;
+
+return $self;
+</code></pre>
+
+<p>When <a href="https://metacpan.org/module/JSON">JSON</a> throws an exception on invalid JSON, the code must catch that
+exception to show the user. The user cares not at all what file threw the
+exception, nor the line number. The code must <em>strip that stuff out</em> before
+passing the original message off to a localizing error method.</p>
+
+<p>Gross.</p>
+
+<p>It&rsquo;s time to end this. A forthcoming post will propose a plan for adding
+proper exception handling to the core Perl language, including exception
+objects and an official <code>try</code>/<code>catch</code> syntax.</p>
+
+<!-- notes -->
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>In fairness much of the <code>$@</code> pain has been addressed <a href="https://metacpan.org/module/JESSE/perl-5.14.0/pod/perldelta.pod#Exception-Handling">in Perl 5.14</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>
