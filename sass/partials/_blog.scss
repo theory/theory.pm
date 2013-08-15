@@ -1,54 +1,110 @@
+#content .blog-index {
+  padding: { top: 0; bottom: 0; }
+  article { padding-top: 2em; }
+}
+
 article {
   padding-top: 1em;
   a { @extend .force-wrap; }
   header {
     position: relative;
-    h1 {
-      margin: 0;
-      a { text-decoration: none;
-        &:hover { text-decoration: none; } }
+    @media only screen and (min-width: 768px) {
+      margin-bottom: 0.5em;
+      // padding-bottom: 1em;
+      // background: $img-border bottom left repeat-x;
     }
+    .blog-index & { background: none; padding-bottom: 0; }
     p {
       font-size: .9em;
       // hsl(220, 25, 75)
-      color: lighten($text-color-light, 10);
       margin: 0;
-      &.meta {
-        @extend .sans;
-        // text-transform: uppercase;
-      }
+      color: lighten($text-color-light, 10);
+      &.meta { @extend .sans; }
     }
-    @media only screen and (min-width: 768px) {
-      /*margin-bottom: 1.5em;*/
-      padding-bottom: .5em;
+    // time { text-transform: uppercase; }
+  }
+  .entry-title {
+    margin: 0;
+    a { text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+    .blog-index & {
+      font-size: $h1;
+      a { color: inherit; &:hover { color: $link-color-hover; } }
     }
   }
+
+  a[rel=bookmark] { text-decoration: none; }
+
   h2 {
     padding-top: 0.8em;
+    // background: $img-border top left repeat-x;
   }
-  .entry-content & h2:first-child, header + h2 { padding-top: 0; }
   h2:first-child, header + h2 { background: none; }
+  &[data-linklog] {
+    .entry-title {
+      font-size: $h1;
+      a { text-decoration: underline; }
+    }
+    .blog-index & .entry-title { font-size: $h2; }
+  }
+
+  .linklog-marker {
+    color: $text-color-light;
+    font-size: .8em;
+    line-height: 1em;
+    position: relative; top: -.15em;
+  }
+
+  > footer {
+    color: $text-color-light;
+    padding-bottom: 2.5em;
+    margin-top: 2em;
+    @extend .sans;
+    .blog-index & { margin-top: 1em; }
+    .meta {
+      margin-top: .75em;
+      margin-bottom: .75em;
+      font-size: .85em;
+      clear: both;
+      overflow: hidden;
+    }
+    .byline + time:before, time +time:before, .comments:before, .byline ~ .categories:before {
+      @extend .separator;
+    }
+  }
+
+}
+#content .blog-index {
+  a[rel=full-article] {
+    display: inline-block;
+    padding: .4em .8em;
+    margin-right: .5em;
+    text-decoration: none;
+    color: mix($text-color, $text-color-light);
+    @extend .serif;
+    @include transition(background-color .5s);
+    &:hover {
+      text-shadow: none;
+    }
+  }
+  .blog-index & + article {
+    background: $img-border top left repeat-x;
+  }
+
   .feature {
     padding-top: .5em;
     margin-bottom: 1em;
     padding-bottom: 1em;
     background: $img-border bottom left repeat-x;
+    font-size: 2.0em; font-style: italic;
     line-height: 1.3em;
   }
+
   img, video, .flash-video {
     @extend .flex-content;
     @extend .basic-alignment;
-    @include shadow-box($border: #aaa 1px solid, $shadow: rgba(#000, .25) 0 2px 10px, $border-radius: .3em);
-    padding: .25em;
-    background-color: #fff;
-  }
-  .no-border {
-    border: none;
-    border-radius: 0;
-    -moz-border-radius: 0;
-    box-shadow: none;
-    background: transparent;
-    padding: 0;
+    @include shadow-box;
   }
   video, .flash-video { margin: 0 auto 1.5em; }
   video { display: block; width: 100%; }
@@ -68,58 +124,6 @@ article {
         height: 100%;
       }
     }
-  }
-  > footer {
-    color: $text-color-light;
-    padding-bottom: 2.5em;
-    margin-top: 2em;
-    @extend .sans;
-    p.meta {
-      margin-top: .75em;
-      margin-bottom: .75em;
-      font-size: .85em;
-      clear: both;
-      overflow: hidden;
-    }
-    .byline + time:before, time +time:before, .comments:before, .byline ~ .categories:before {
-      @extend .separator;
-    }
-  }
-
-}
-article + article {
-  .blog-index & {
-  }
-}
-#content .blog-index {
-  article {
-	padding-top: 3em;
-	padding-bottom: 1.5em;
-	border-top: 4px solid $article-border;
-  }
-  article:first-child {
-    padding-top: 1em;
-    border-top: none;
-  }
-  article header { background: none; }
-  article h1 {
-    a { color: inherit; &:hover { color: $link-color-hover; } }
-  }
-  a[rel=full-article] {
-    display: inline-block;
-    padding: .4em .8em;
-    margin-right: .5em;
-    text-decoration: none;
-    color: mix($text-color, $text-color-light);
-    @extend .serif;
-    @include transition(background-color .5s);
-    &:hover {
-      text-shadow: none;
-    }
-  }
-  footer {
-    @extend .sans;
-    margin-top: 1em;
   }
 }
 

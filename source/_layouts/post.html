@@ -5,7 +5,8 @@ sidebar: false
 ---
 
 <div>
-<article class="hentry" role="article">
+{% include post/variables.html %}
+<article class="hentry" role="article" {% if linklog %}data-linklog{% endif %}>
   {% include article.html %}
   <footer>
     {% unless page.sharing == false %}
