@@ -4,7 +4,7 @@
   <title><![CDATA[Category: exceptions | theory.pm]]></title>
   <link href="http://theory.pm/categories/exceptions/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-08-05T14:40:37+02:00</updated>
+  <updated>2013-08-15T19:14:14+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -13,12 +13,18 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <entry>
-    <title type="html"><![CDATA[Trying Times]]></title>
-    <link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
-    <updated>2013-07-26T15:20:00+02:00</updated>
-    <id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
-    <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Trying Times]]></title>
+<link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
+<updated>2013-07-26T15:20:00+02:00</updated>
+<id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
+
+      <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
 <code>eval {}</code>:</p>
 
 <p><code>perl Perl eval
@@ -146,6 +152,7 @@ objects and an official <code>try</code>/<code>catch</code> syntax.</p>
 </div>
 
 ]]></content>
-  </entry>
+    </entry>
   
 </feed>
+

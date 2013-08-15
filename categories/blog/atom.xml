@@ -4,7 +4,7 @@
   <title><![CDATA[Category: blog | theory.pm]]></title>
   <link href="http://theory.pm/categories/blog/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-08-05T14:40:37+02:00</updated>
+  <updated>2013-08-15T19:14:14+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -13,12 +13,18 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <entry>
-    <title type="html"><![CDATA[A Perl Blog]]></title>
-    <link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
-    <updated>2013-07-26T18:08:00+02:00</updated>
-    <id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
-    <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[A Perl Blog]]></title>
+<link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
+<updated>2013-07-26T18:08:00+02:00</updated>
+<id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
+
+      <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
 blog in 2004 more or less for fun, thinking it would be my permanent home on
 the internet. And it has been. But the design, while okay in 2004, is just
 awful by today&rsquo;s standards. A redesign is something I have planned to do for
@@ -61,6 +67,7 @@ start writing more Perl-related stuff. I&rsquo;m starting with some posts about 
 state of exception handling in Perl 5, the first of which is <a href="/exceptions/2013/07/26/trying-times/">already up</a>. Stay
 tuned for more.</p>
 ]]></content>
-  </entry>
+    </entry>
   
 </feed>
+

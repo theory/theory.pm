@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mop | theory.pm]]></title>
+  <link href="http://theory.pm/categories/mop/atom.xml" rel="self"/>
+  <link href="http://theory.pm/"/>
+  <updated>2013-08-15T19:14:14+02:00</updated>
+  <id>http://theory.pm/</id>
+  <author>
+    <name><![CDATA[David E. Wheeler]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Mopping the Moose &rarr;]]></title>
+<link href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html"/>
+<updated>2013-08-15T13:44:00+02:00</updated>
+<id>http://theory.pm/mop/2013/08/15/mopping-the-moose</id>
+
+      <content type="html"><![CDATA[<p>Stevan Little:</p>
+
+<blockquote><p>I spent much of last week on vacation with the family so very little actual
+coding got done on the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a>, but instead I did a lot of thinking. My
+next major goal for the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a> is to port a module written in <a href="https://metacpan.org/module/Moose">Moose</a>, in
+particular, one that uses many different <a href="https://metacpan.org/module/Moose">Moose</a> features. The module I have
+chosen to port is <a href="https://metacpan.org/module/Bread::Board">Bread::Board</a> and I chose it for two reasons; first, it
+was the first real module that I wrote using <a href="https://metacpan.org/module/Moose">Moose</a> and second, it makes
+heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsquo;s features.</p></blockquote>
+
+<p>I&rsquo;m so happy to see Stevan making progress on the Perl 5 MOP again.</p>
+
+<p><a rel="bookmark" href="http://theory.pm/mop/2013/08/15/mopping-the-moose/">§ Permalink</a></p>
+
+]]></content>
+    </entry>
+  
+</feed>
+

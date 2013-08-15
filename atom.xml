@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-08-05T14:40:37+02:00</updated>
+  <updated>2013-08-15T19:14:14+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -13,12 +13,43 @@
   <generator uri="http://octopress.org/">Octopress</generator>
 
   
-  <entry>
-    <title type="html"><![CDATA[A Perl Blog]]></title>
-    <link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
-    <updated>2013-07-26T18:08:00+02:00</updated>
-    <id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
-    <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Mopping the Moose &rarr;]]></title>
+<link href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html"/>
+<updated>2013-08-15T13:44:00+02:00</updated>
+<id>http://theory.pm/mop/2013/08/15/mopping-the-moose</id>
+
+      <content type="html"><![CDATA[<p>Stevan Little:</p>
+
+<blockquote><p>I spent much of last week on vacation with the family so very little actual
+coding got done on the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a>, but instead I did a lot of thinking. My
+next major goal for the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a> is to port a module written in <a href="https://metacpan.org/module/Moose">Moose</a>, in
+particular, one that uses many different <a href="https://metacpan.org/module/Moose">Moose</a> features. The module I have
+chosen to port is <a href="https://metacpan.org/module/Bread::Board">Bread::Board</a> and I chose it for two reasons; first, it
+was the first real module that I wrote using <a href="https://metacpan.org/module/Moose">Moose</a> and second, it makes
+heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsquo;s features.</p></blockquote>
+
+<p>I&rsquo;m so happy to see Stevan making progress on the Perl 5 MOP again.</p>
+<p><a rel="bookmark" href="http://theory.pm/mop/2013/08/15/mopping-the-moose/">§ Permalink</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[A Perl Blog]]></title>
+<link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
+<updated>2013-07-26T18:08:00+02:00</updated>
+<id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
+
+      <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
 blog in 2004 more or less for fun, thinking it would be my permanent home on
 the internet. And it has been. But the design, while okay in 2004, is just
 awful by today&rsquo;s standards. A redesign is something I have planned to do for
@@ -61,14 +92,20 @@ start writing more Perl-related stuff. I&rsquo;m starting with some posts about 
 state of exception handling in Perl 5, the first of which is <a href="http://theory.pm/exceptions/2013/07/26/trying-times/">already up</a>. Stay
 tuned for more.</p>
 ]]></content>
-  </entry>
+    </entry>
   
-  <entry>
-    <title type="html"><![CDATA[Trying Times]]></title>
-    <link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
-    <updated>2013-07-26T15:20:00+02:00</updated>
-    <id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
-    <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Trying Times]]></title>
+<link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
+<updated>2013-07-26T15:20:00+02:00</updated>
+<id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
+
+      <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
 <code>eval {}</code>:</p>
 
 <figure class='code'><figcaption><span>Perl eval</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -253,6 +290,6 @@ objects and an official <code>try</code>/<code>catch</code> syntax.</p>
 </div>
 
 ]]></content>
-  </entry>
+    </entry>
   
 </feed>
