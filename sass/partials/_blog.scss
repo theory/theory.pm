@@ -44,7 +44,7 @@ article {
   &[data-linklog] {
     .entry-title {
       font-size: $h1;
-      a { text-decoration: underline; }
+      // a { text-decoration: underline; }
     }
     .blog-index & .entry-title { font-size: $h2; }
   }
