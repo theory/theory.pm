@@ -19,7 +19,7 @@ article {
       // hsl(220, 25, 75)
       margin: 0;
       color: lighten($text-color-light, 10);
-      &.meta { @extend .sans; }
+      &.meta { @extend .sans; padding-top: 0.5em; }
     }
     // time { text-transform: uppercase; }
   }
@@ -45,7 +45,14 @@ article {
     .entry-title {
       font-size: $h1;
       // a { text-decoration: underline; }
-      a { color: inherit; }
+      a {
+        color: inherit;
+        border: 1px solid $title-color;
+        border-width: 0 0 1px 0;
+        padding-bottom: 0.08em;
+        margin-bottom: 1em;
+        &:hover { text-decoration: none; border-color: $header-link-color; }
+      }
     }
     .blog-index & .entry-title { font-size: $h2; }
   }
