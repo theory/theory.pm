@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-08-15T19:22:58+02:00</updated>
+  <updated>2013-08-15T19:39:49+02:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -19,7 +19,7 @@
 
 
 
-<title type="html"><![CDATA[Mopping the Moose &rarr;]]></title>
+<title type="html"><![CDATA[Mopping the Moose →]]></title>
 <link href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html"/>
 <updated>2013-08-15T13:44:00+02:00</updated>
 <id>http://theory.pm/mop/2013/08/15/mopping-the-moose</id>
@@ -35,7 +35,7 @@ was the first real module that I wrote using <a href="https://metacpan.org/modul
 heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsquo;s features.</p></blockquote>
 
 <p>I&rsquo;m so happy to see Stevan making progress on the Perl 5 MOP again.</p>
-<p><a rel="bookmark" href="http://theory.pm/mop/2013/08/15/mopping-the-moose/">§ Permalink</a></p>]]></content>
+<p><a rel="bookmark" href="http://theory.pm/mop/2013/08/15/mopping-the-moose/">§</a></p>]]></content>
     </entry>
   
     <entry>
