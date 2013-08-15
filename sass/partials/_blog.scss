@@ -45,6 +45,7 @@ article {
     .entry-title {
       font-size: $h1;
       // a { text-decoration: underline; }
+      a { color: inherit; }
     }
     .blog-index & .entry-title { font-size: $h2; }
   }
