@@ -32,7 +32,11 @@
   article[data-linklog] .entry-title {
     font-size: $h4;
     // a { text-decoration: underline; }
-      a { margin: 0.3em; &:hover { text-decoration: none; } }
+      a {
+        margin: 0.3em;
+        padding-bottom: 0.15em;
+        &:hover { text-decoration: none; }
+      }
   }
   a.category, time {
     @extend .sans;
