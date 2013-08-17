@@ -10,6 +10,8 @@ body > header {
     a, a:link, a:visited, a:hover {
       color: $title-color !important;
       text-decoration: none;
+      background-color: transparent;
+      border: none;
     }
  }
   img, h1 { width: 90px; }
@@ -31,6 +33,10 @@ body > header {
     a, a:visited {
       color: $subtitle-color;
       text-decoration: none;
+      border: none;
+    }
+    a:hover {
+      background-color: transparent;
     }
   }
 }

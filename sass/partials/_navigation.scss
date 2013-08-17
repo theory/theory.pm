@@ -51,6 +51,10 @@ body > nav {
       padding: 0;
       line-height: 1.55em;
       font-weight: bold;
+      border: none;
+      &:hover {
+        background-color: transparent;
+      }
     }
     @media only screen and (min-width: 768px) {
   	  a { font-size: 1.25em; }

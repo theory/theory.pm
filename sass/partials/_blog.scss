@@ -26,13 +26,7 @@ article {
   .entry-title {
     margin: 0;
     a {
-      text-decoration: none;
-        border: 1px solid transparent;
-        border-width: 0 0 1px 0;
-      &:hover {
-        text-decoration: none !important;
-        border-color: $link-color;
-      }
+     border-color: transparent;
     }
     .blog-index & {
       font-size: $h1;
