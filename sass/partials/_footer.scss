@@ -11,6 +11,7 @@ body > footer {
   text-align: center;
   a {
     @include link-colors($footer-link-color, $footer-link-color-hover, $visited: $footer-link-color);
+    border: none;
   }
   p:last-child { margin-bottom: 0; }
   ul {
