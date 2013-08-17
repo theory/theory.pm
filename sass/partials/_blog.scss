@@ -91,7 +91,7 @@ article {
     padding: .4em .8em;
     margin-right: .5em;
     text-decoration: none;
-    color: mix($text-color, $text-color-light);
+    // color: mix($text-color, $text-color-light);
     @extend .serif;
     @include transition(background-color .5s);
     &:hover {
