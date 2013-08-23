@@ -1,11 +1,134 @@
 $blockquote: $type-border !default;
-$sans: 'HelveticaNeue-Light','HelveticaNeue',Helvetica,Arial,sans-serif !default;
-$serif: "PT Serif", Georgia, Times, "Times New Roman", serif !default;
-$mono: PragmataPro, Menlo, Monaco, "Andale Mono", "Lucida Console", "Courier New", monospace !default;
-$heading-font-family: 'HelveticaNeue-CondensedBold','HelveticaNeue',Helvetica,Arial,sans-serif !default;
-$header-title-font-family:  $sans !default;
-$header-subtitle-font-family: $heading-font-family !default;
+
+$sans:  "Source Sans Pro", "Helvetica", sans-serif;
+$serif: "Source Sans Pro", "Helvetica", sans-serif;
+$mono: "Source Code Pro", "Courier", monospace;
+$heading-font-family: "Source Sans Pro", "Futura", "Helvetica", sans-serif;
+$header-title-font-family: "Source Sans Pro", "Futura", "Helvetica", sans-serif;
+$header-subtitle-font-family: "Source Sans Pro", "Futura", "Helvetica", sans-serif;
 $nav-font-family: $heading-font-family !default;
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-regular-webfont.eot');
+    src: url('/fonts/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-regular-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-regular-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-it-webfont.eot');
+    src: url('/fonts/sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-it-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-it-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-bold-webfont.eot');
+    src: url('/fonts/sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-bold-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-bold-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-boldit-webfont.eot');
+    src: url('/fonts/sourcesanspro-boldit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-boldit-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-boldit-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-boldit-webfont.svg#source_sans_probold_italic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-black-webfont.eot');
+    src: url('/fonts/sourcesanspro-black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-black-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-black-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-black-webfont.svg#source_sans_problack') format('svg');
+    font-weight: bolder; // black
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-blackit-webfont.eot');
+    src: url('/fonts/sourcesanspro-blackit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-blackit-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-blackit-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-blackit-webfont.svg#source_sans_problack_italic') format('svg');
+    font-weight: bolder; // black
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-light-webfont.eot');
+    src: url('/fonts/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-light-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-light-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
+    font-weight: lighter; // light
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('/fonts/sourcesanspro-lightit-webfont.eot');
+    src: url('/fonts/sourcesanspro-lightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcesanspro-lightit-webfont.woff') format('woff'),
+         url('/fonts/sourcesanspro-lightit-webfont.ttf') format('truetype'),
+         url('/fonts/sourcesanspro-lightit-webfont.svg#source_sans_prolight_italic') format('svg');
+    font-weight: lighter; // light
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('/fonts/sourcecodepro-regular-webfont.eot');
+    src: url('/fonts/sourcecodepro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcecodepro-regular-webfont.woff') format('woff'),
+         url('/fonts/sourcecodepro-regular-webfont.ttf') format('truetype'),
+         url('/fonts/sourcecodepro-regular-webfont.svg#source_code_proregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('/fonts/sourcecodepro-bold-webfont.eot');
+    src: url('/fonts/sourcecodepro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcecodepro-bold-webfont.woff') format('woff'),
+         url('/fonts/sourcecodepro-bold-webfont.ttf') format('truetype'),
+         url('/fonts/sourcecodepro-bold-webfont.svg#source_code_probold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Source Code Pro';
+    src: url('/fonts/sourcecodepro-light-webfont.eot');
+    src: url('/fonts/sourcecodepro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/sourcecodepro-light-webfont.woff') format('woff'),
+         url('/fonts/sourcecodepro-light-webfont.ttf') format('truetype'),
+         url('/fonts/sourcecodepro-light-webfont.svg#source_code_prolight') format('svg');
+    font-weight: lighter; // light
+    font-style: normal;
+}
 
 $h1:	2.2em !default;
 $h2:	1.5em !default;
