@@ -5,7 +5,7 @@
 	margin-bottom: -1.5em;
 	background-repeat: no-repeat;
 	background-size: 200px 200px;
-	background-image: url(/images/aron_cedercrantz.jpg);
+	// background-image: url(/images/aron_cedercrantz.jpg);
 }
 @media only screen and (min-width: 550px) {
 	.profile-image { float: none; }
@@ -17,7 +17,7 @@
        only screen and (-o-min-device-pixel-ratio: 3/2),
        only screen and (min--moz-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
-    .profile-image { background-image: url(/images/aron_cedercrantz@2x.jpg); }
+    //.profile-image { background-image: url(/images/aron_cedercrantz@2x.jpg); }
 }
 
 .get-vcard {
