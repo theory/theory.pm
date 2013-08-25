@@ -1,3 +1,6 @@
 [submodule ".themes/BlogTheme"]
 	path = .themes/BlogTheme
 	url = https://github.com/rastersize/BlogTheme.git
+[submodule ".themes/theory-theme"]
+	path = .themes/theory-theme
+	url = https://github.com/theory/theory-theme.git
