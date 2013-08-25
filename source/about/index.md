@@ -70,7 +70,8 @@ This blog is built and published with [Octopress](http://octopress.org/) and
 written in [Markdown](http://daringfireball.net/projects/markdown/). You can
 [subscribe to the feed](/atom.xml) if that's your thing.
 
-The visual style of this blog is a modified version of
+The visual style of this blog defined by
+[theory-theme](https://github.com/theory/theory-theme/), a modified version of
 [Aron Cedercrantz’s BlogTheme](https://github.com/rastersize/BlogTheme), the
 license for which can be
 [found here](https://github.com/rastersize/BlogTheme/blob/master/LICENSE). The
