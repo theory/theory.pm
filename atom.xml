@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-08-27T09:10:51+02:00</updated>
+  <updated>2013-08-29T14:56:56-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[→ TPF To Revamp Grants]]></title>
 <link href="http://news.perlfoundation.org/2013/08/2013q3-grant-proposals.html"/>
-<updated>2013-08-23T17:28:00+02:00</updated>
+<updated>2013-08-23T17:28:00-07:00</updated>
 <id>http://theory.pm/tpf/2013/08/23/tpf-to-revamp-grants</id>
 
       <content type="html"><![CDATA[<p>Alberto Simões:</p>
@@ -47,7 +47,7 @@ the new rules.</p>
 
 <title type="html"><![CDATA[→ Mopping the Moose]]></title>
 <link href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html"/>
-<updated>2013-08-15T13:44:00+02:00</updated>
+<updated>2013-08-15T13:44:00-07:00</updated>
 <id>http://theory.pm/mop/2013/08/15/mopping-the-moose</id>
 
       <content type="html"><![CDATA[<p>Stevan Little:</p>
@@ -72,7 +72,7 @@ heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsqu
 
 <title type="html"><![CDATA[A Perl Blog]]></title>
 <link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
-<updated>2013-07-26T18:08:00+02:00</updated>
+<updated>2013-07-26T18:08:00-07:00</updated>
 <id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
 
       <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
@@ -128,7 +128,7 @@ tuned for more.</p>
 
 <title type="html"><![CDATA[Trying Times]]></title>
 <link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
-<updated>2013-07-26T15:20:00+02:00</updated>
+<updated>2013-07-26T15:20:00-07:00</updated>
 <id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
 
       <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
