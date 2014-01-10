@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sql | theory.pm]]></title>
   <link href="http://theory.pm/categories/sql/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-11-04T10:50:47-08:00</updated>
+  <updated>2014-01-09T19:48:29-08:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -49,8 +49,7 @@ could still do it with four statements.</strong></p></blockquote>
 <p>Or you could just use one statement. Here&rsquo;s how to do it with a <a href="http://www.postgresql.org/docs/current/static/queries-with.html" title="PostgreSQL Documentation: WITH Queries (Common Table Expressions)">CTE</a> on
 PostgreSQL 9.2 and higher:</p>
 
-<p><code>sql PostgreSQL Multirow Upate with CTE
-WITH up(name, salary) AS ( VALUES
+<pre><code class="sql PostgreSQL Multirow Upate with CTE">WITH up(name, salary) AS ( VALUES
      ('Jane',  1200),
      ('Frank', 1100),
      ('Susan', 1175),
@@ -60,13 +59,12 @@ UPDATE staff
    SET salary = up.salary
   FROM up
  WHERE staff.name = up.name;
-</code></p>
+</code></pre>
 
 <p>Still on PostgreSQL 9.1 or lower? Use a subselect in the <code>FROM</code> clause
 instead:</p>
 
-<p><code>sql PostgreSQL Multirow Update with Subselect
-UPDATE staff
+<pre><code class="sql PostgreSQL Multirow Update with Subselect">UPDATE staff
    SET salary = up.salary
    FROM (VALUES
        ('Jane',  1200),
@@ -75,12 +73,11 @@ UPDATE staff
        ('John',  1150)
    ) AS up(name, salary)
  WHERE staff.name = up.name;
-</code></p>
+</code></pre>
 
 <p>Stuck with MySQL or Oracle? Use a <code>UNION</code> query in a second table:</p>
 
-<p><code>sql MySQL &amp; Oracle Multirow Update
-UPDATE staff, (
+<pre><code class="sql MySQL & Oracle Multirow Update">UPDATE staff, (
          SELECT 'Jane' AS name, 1200 AS salary
    UNION SELECT 'Frank',        1100
    UNION SELECT 'Susan',        1175
@@ -88,13 +85,12 @@ UPDATE staff, (
 ) AS up
    SET staff.salary = up.salary
  WHERE staff.name = up.name;
-</code></p>
+</code></pre>
 
 <p>Using SQLite? Might make sense to use a temporary table for thousands or
 millions of rows. But for just a few, use a <code>CASE</code> expression:</p>
 
-<p><code>sql SQLite Multirow Update
-UPDATE staff
+<pre><code class="sql SQLite Multirow Update">UPDATE staff
    SET salary = CASE name
        WHEN 'Jane'  THEN 1200
        WHEN 'Frank' THEN 1100
@@ -102,7 +98,7 @@ UPDATE staff
        WHEN 'John'  THEN 1150
    END
  WHERE name in ('Jane', 'Frank', 'Susan', 'John');
-</code></p>
+</code></pre>
 
 <p>If you need to support multiple database architectures, sure, use something
 like <a href="https://github.com/hochgurgler/DBIx-MultiRow" title="DBIx::MultiRow on GitHub">DBIx::MultiRow</a> to encapsulate things. But if, like most of us, you&rsquo;re

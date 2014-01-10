@@ -4,7 +4,7 @@
   <title><![CDATA[Category: exceptions | theory.pm]]></title>
   <link href="http://theory.pm/categories/exceptions/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2013-11-04T10:50:47-08:00</updated>
+  <updated>2014-01-09T19:48:29-08:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -27,44 +27,41 @@
       <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
 <code>eval {}</code>:</p>
 
-<p><code>perl Perl eval
-eval {
+<pre><code class="perl Perl eval">eval {
     foo();
 }
 if (my $err = $@) {
     # Inspect $err…
 }
-</code></p>
+</code></pre>
 
 <p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
 <code>$@</code> variable, which has inflicted unwarranted pain on developers over the
 years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
 shortcomings:</p>
 
-<p><code>perl Try::Tiny
-try {
+<pre><code class="perl Try::Tiny">try {
     foo();
 } catch {
     # Inspect $_…
 };
-</code></p>
+</code></pre>
 
 <p>Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
 subroutine references rather than blocks. While a necessity of a pure-Perl
 implementation, it prevents <code>return</code>ing from the calling context. One must
 work around this deficiency by <a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
 
-<p>``` perl Return from Try::Tiny <a href="http://stackoverflow.com/a/10366209/79202">http://stackoverflow.com/a/10366209/79202</a> More Gotchas
-my $rv = try {
+<pre><code class="perl Return from Try::Tiny http://stackoverflow.com/a/10366209/79202 More Gotchas">my $rv = try {
    f();
 } catch {
    # …
-};</p>
+};
 
-<p>if (!$rv) {
+if (!$rv) {
    return;
 }
-```</p>
+</code></pre>
 
 <p>I can&rsquo;t tell you how often this quirk burns me.</p>
 
@@ -78,41 +75,39 @@ be an <a href="https://metacpan.org/module/Exception::Class">Exception::Class</a
 reference. Or any other value a Perl scalar can hold. This lack of specificity
 requires careful handling of exceptions:</p>
 
-<p>``` perl Exceptional Conditions
-if (my $err = $@) {
+<pre><code class="perl Exceptional Conditions">if (my $err = $@) {
     if (ref $err) {
-        if (eval { $err->isa(&lsquo;Exception::Class&rsquo;) }) {
-            if ( $err->isa(&lsquo;SomeException&rsquo;) ) {
+        if (eval { $err-&gt;isa('Exception::Class') }) {
+            if ( $err-&gt;isa('SomeException') ) {
                 # …
-            } elsif ( $err->isa(&lsquo;SomeException&rsquo;) ) {
+            } elsif ( $err-&gt;isa('SomeException') ) {
                 # …
             } else {
                 # …
             }
-        } elsif (eval { $err->DOES(&lsquo;Throwable&rsquo;) }) {
+        } elsif (eval { $err-&gt;DOES('Throwable') }) {
             # …
-        } elsif ( ref $err eq &lsquo;ARRAY&rsquo;) {
+        } elsif ( ref $err eq 'ARRAY') {
             # …
         }
     } else {
         if ( $err =~ /DBI/ ) {
             # …
-        } elsif ( $err =~ /cannot open &lsquo;([^&rsquo;]+)&lsquo;/ ) {
+        } elsif ( $err =~ /cannot open '([^']+)'/ ) {
             # …
         }
     }
-}</p>
+}
+</code></pre>
 
-<pre><code>
-Not every exception handler requires so many conditions, but I have certainly
+<p>Not every exception handler requires so many conditions, but I have certainly
 exercised all these approaches. Usually my exception handlers accrete
-condition as users report new, unexpected errors.
+condition as users report new, unexpected errors.</p>
 
-That's not all. My code frequently requires parsing information out of a
-string error. Here's an example from [PGXN::Manager]:
+<p>That&rsquo;s not all. My code frequently requires parsing information out of a
+string error. Here&rsquo;s an example from <a href="https://github.com/pgxn/pgxn-manager/">PGXN::Manager</a>:</p>
 
-``` perl Exception Parsing https://github.com/pgxn/pgxn-manager/blob/master/lib/PGXN/Manager/Distribution.pm#L123 Source
-try {
+<pre><code class="perl Exception Parsing https://github.com/pgxn/pgxn-manager/blob/master/lib/PGXN/Manager/Distribution.pm#L123 Source">try {
     $self-&gt;distmeta(decode_json scalar $member-&gt;contents );
 } catch {
     my $f = quotemeta __FILE__;
@@ -142,6 +137,17 @@ objects and an official <code>try</code>/<code>catch</code> syntax.</p>
 <!-- notes -->
 
 
+
+
+<div id='networkedblogs_nwidget_container' style='height:360px;padding-top:10px;'><div id='networkedblogs_nwidget_above'></div><div id='networkedblogs_nwidget_widget' style="border:1px solid #D1D7DF;background-color:#F5F6F9;margin:0px auto;"><div id="networkedblogs_nwidget_logo" style="padding:1px;margin:0px;background-color:#edeff4;text-align:center;height:21px;"><a href="http://www.networkedblogs.com/" target="_blank" title="NetworkedBlogs"><img style="border: none;" src="http://static.networkedblogs.com/static/images/logo_small.png" title="NetworkedBlogs"/></a></div><div id="networkedblogs_nwidget_body" style="text-align: center;"></div><div id="networkedblogs_nwidget_follow" style="padding:5px;"><a style="display:block;line-height:100%;width:90px;margin:0px auto;padding:4px 8px;text-align:center;background-color:#3b5998;border:1pxsolid #D9DFEA;border-bottom-color:#0e1f5b;border-right-color:#0e1f5b;color:#FFFFFF;font-family:'lucida grande',tahoma,verdana,arial,sans-serif;font-size:11px;text-decoration:none;" href="http://www.networkedblogs.com/blog/theorypm" id="ebac8e75be42e2bc9b4b710e6436008d">Follow this blog</a></div></div><div id='networkedblogs_nwidget_below'></div></div>
+
+
+<script type="text/javascript">
+if(typeof(networkedblogs)=="undefined"){networkedblogs={};networkedblogs.blogId=1391106;networkedblogs.shortName="theorypm";}
+</script>
+
+
+<script src="http://nwidget.networkedblogs.com/getnetworkwidget?bid=1391106" type="text/javascript"></script>
 
 <div class="footnotes">
 <hr/>
