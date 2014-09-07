@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2014-09-06T17:56:48-07:00</updated>
+  <updated>2014-09-06T18:13:19-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,460 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Localize Your Perl Apps with this One Weird Trick]]></title>
+<link href="http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/"/>
+<updated>2014-09-06T18:10:00-07:00</updated>
+<id>http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
+
+      <content type="html"><![CDATA[<p>These days, <a href="http://en.wikipedia.org/wiki/Gettext" title="Wikipedia: “gettext”">gettext</a> is far and away the most widely-used localization
+(<a href="http://en.wikipedia.org/wiki/Language_localisation" title="Wikipedia: “Localization”">l10n</a>) and internationalization (<a href="http://en.wikipedia.org/wiki/Internationalization_and_localization" title="Wikipedia: “Internationalization and Localization”">i18n</a>) library for open-source software. So
+far, it has not been widely used in the Perl community, even though it&rsquo;s the
+most flexible, capable, and easy-to use solution, thanks to
+<a href="https://metacpan.org/module/Locale::TextDomain" title="Locale::TextDomain on CPAN">Locale::TextDomain</a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> How easy? Let&rsquo;s get started!</p>
+
+<h3>Module Internationale</h3>
+
+<p>First, just <em>use</em> Locale::TextDomain. Say you&rsquo;re creating an awesome new
+module, Awesome::Module. These CPAN distribution will be named
+<code>Awesome-Module</code>, so that&rsquo;s the &ldquo;domain&rdquo; to use for its localizations. Just let
+Locale::TextDomain know:</p>
+
+<figure class='code'><figcaption><span>Establish Dominion</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">use</span> <span class="nn">Locale::</span><span class="n">TextDomain</span> <span class="s">&#39;Awesome-Module&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Locale::TextDomain will later use this string to look for the appropriate
+translation catalogs. But don&rsquo;t worry about that just yet. Instead, start using
+it to translate user-visible strings in your code. With the assistance of the
+Locale::TextDomain&rsquo;s [comprehensive documentation], you&rsquo;ll find it second nature
+to internationalize your modules in no time. For example, simple strings are
+denoted with <code>__</code>:</p>
+
+<figure class='code'><figcaption><span>Trekkie Greetings</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">say</span> <span class="n">__</span> <span class="s">&#39;Greetings puny human!&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to specify variables, use <code>__x</code>:</p>
+
+<figure class='code'><figcaption><span>Animal Thanks</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">say</span> <span class="n">__x</span><span class="p">(</span>
+</span><span class='line'>   <span class="s">&#39;Thank you {sir}, may I have another?&#39;</span><span class="p">,</span>
+</span><span class='line'>   <span class="n">sir</span> <span class="o">=&gt;</span> <span class="nv">$username</span><span class="p">,</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Need to manage plurals? Use <code>__n</code>:</p>
+
+<figure class='code'><figcaption><span>Obligatory Python Reference</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">say</span> <span class="n">__n</span><span class="p">(</span>
+</span><span class='line'>    <span class="s">&#39;I will not buy this record, it is scratched.&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s">&#39;I will not buy these records, they are scratched.&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nv">$num_records</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If <code>$num_records</code> is 1, the first phrase will be used. Otherwise the second.</p>
+
+<p>Sometimes you gotta do both, mix variables and plurals. <code>__nx</code> has got you
+covered there:</p>
+
+<figure class='code'><figcaption><span>Deeper Understanding</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">say</span> <span class="n">__nx</span><span class="p">(</span>
+</span><span class='line'>    <span class="s">&#39;One item has been grokked.&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s">&#39;{count} items have been grokked.&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nv">$num_items</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">count</span> <span class="o">=&gt;</span> <span class="nv">$num_items</span><span class="p">,</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Congratulations! Your module is now internationalized. Wasn&rsquo;t that easy? Make a
+habit of using these functions in all the modules in your distribution, always
+with the <code>Awesome-Module</code> domain, and you&rsquo;ll be set.</p>
+
+<h4>Encode da Code</h4>
+
+<p>Locale::TextDomain is great, but it dates from a time when Perl character
+encoding was, shall we say, sub-optimal. It therefore took it upon itself to
+try to do the right thing, which is to to detect the locale from the runtime
+environment and automatically encode as appropriate. Which might work okay if
+all you ever do is print localized messages &mdash; and never anything else.</p>
+
+<p>If, on the other hand, you will be manipulating localized strings in your code,
+or emitting unlocalized text (such as that provided by the user or read from a
+database), then it&rsquo;s probably best to coerce Locale::TextDomain to return Perl
+strings, rather than encoded bytes. There&rsquo;s no formal interface for this in
+Locale::TextDomain, so we have to hack it a bit: set the <code>$OUTPUT_CHARSET</code>
+environment variable to &ldquo;UTF-8&rdquo; and then bind a filter. Don&rsquo;t know what that
+means? Me neither. Just put this code somewhere in your distribution where it
+will always run early, before anything gets localized:</p>
+
+<figure class='code'><figcaption><span>Control Decode</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">use</span> <span class="nn">Locale::</span><span class="n">Messages</span> <span class="sx">qw(bind_textdomain_filter)</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">Encode</span><span class="p">;</span>
+</span><span class='line'><span class="k">BEGIN</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$ENV</span><span class="p">{</span><span class="n">OUTPUT_CHARSET</span><span class="p">}</span> <span class="o">=</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">bind_textdomain_filter</span> <span class="s">&#39;Awesome-Module&#39;</span> <span class="o">=&gt;</span> <span class="o">\&amp;</span><span class="nn">Encode::</span><span class="n">decode_utf8</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You only have to do this once per domain. So even if you use Locale::TextDomain
+with the <code>Awesome-Module</code> domain in a bunch of your modules, the presence of
+this code in a single early-loading module ensures that strings will always be
+returned as Perl strings by the localization functions.</p>
+
+<h4>Environmental Safety</h4>
+
+<p>So what about output? There&rsquo;s one more bit of boilerplate you&rsquo;ll need to throw
+in. Or rather, put this into the <code>main</code> package that uses your modules to begin
+with, such as the command-line script the user invokes to run an application.</p>
+
+<p>First, on the shebang line, follow <a href="http://stackoverflow.com/a/6163129/79202" title="Perl UTF-8 Recommendations on Stack Overflow">Tom Christiansen&rsquo;s advice</a> and put <code>-CAS</code>
+in it (or set the <code>$PERL_UNICODE</code> environment variable to <code>AS</code>). Then use the
+<a href="https://metacpan.org/pod/POSIX#setlocale" title="POSIX on CPAN">POSIX <code>setlocale</code></a> function to the appropriate locale for the runtime
+environment. How? Like this:</p>
+
+<figure class='code'><figcaption><span>Localization Boilerplate</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl -CAS</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">use</span> <span class="n">v5</span><span class="mf">.12</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">warnings</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">utf8</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">POSIX</span> <span class="sx">qw(setlocale)</span><span class="p">;</span>
+</span><span class='line'><span class="k">BEGIN</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="vg">$^O</span> <span class="ow">eq</span> <span class="s">&#39;MSWin32&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nb">require</span> <span class="nn">Win32::</span><span class="n">Locale</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">setlocale</span> <span class="nn">POSIX::</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="nn">Win32::Locale::</span><span class="n">get_locale</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">setlocale</span> <span class="nn">POSIX::</span><span class="n">LC_ALL</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">use</span> <span class="nn">Awesome::</span><span class="n">Module</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Locale::TextDomain will notice the locale and select the appropriate translation
+catalog at runtime.</p>
+
+<h3>Is that All There Is?</h3>
+
+<p>Now what? Well, you could do nothing. Ship your code and those
+internationalized phrases will be handled just like any other string in your
+code.</p>
+
+<p>But what&rsquo;s the point of that? The real goal is to get these things translated.
+There are two parts to that process:</p>
+
+<ol>
+<li><p>Parsing the internationalized strings from your modules and creating
+language-specific translation catalogs, or &ldquo;<a href="https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html" title="GNU gettext: PO Files">PO files</a>&rdquo;, for translators to
+edit. These catalogs should be maintained in your source code repository.</p></li>
+<li><p>Compiling the PO files into binary files, or &ldquo;<a href="https://www.gnu.org/software/gettext/manual/html_node/MO-Files.html" title="GNU gettext: MO Files">MO files</a>&rdquo;, and distributing
+them with your modules. These files should <em>not</em> be maintained in
+your source code repository.</p></li>
+</ol>
+
+
+<p>Until a year ago, there was no Perl-native way to manage these processes.
+Locale::TextDomain ships with a <a href="https://metacpan.org/source/GUIDO/libintl-perl-1.23/sample/simplecal/po/Makefile" title="Sample Locale::TextDomain Makefile">sample Makefile</a> demonstrating the appropriate
+use of the <a href="https://www.gnu.org/software/gettext/">GNU gettext</a> command-line tools, but that seemed a steep price for
+a Perl hacker to pay.</p>
+
+<p>A better fit for the Perl hacker&rsquo;s brain, I thought, is Dist::Zilla. So I wrote
+<a href="https://metacpan.org/module/Dist::Zilla::LocaleTextDomain" title="Dist::Zilla::LocaleTextDomain on CPAN">Dist::Zilla::LocaleTextDomain</a> to encapsulate the use of the gettext
+utiltiies. Here&rsquo;s how it works.</p>
+
+<p>First, configuring Dist::Zilla to compile localization catalogs for
+distribution: add these lines to your <code>dist.ini</code> file:</p>
+
+<figure class='code'><figcaption><span>LocaleTextDomain is your dist.ini</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[ShareDir]</span>
+</span><span class='line'><span class="k">[LocaleTextDomain]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are <a href="https://metacpan.org/pod/Dist::Zilla::Plugin::LocaleTextDomain#Configuration" title="Dist::Zilla LocaleTextDomain Configuration">configuration attributes</a> for the <code>LocaleTextDomain</code> plugin, such as
+where to find the PO files and where to put the compiled MO files. In case you
+didn&rsquo;t use your distribution name as your localization domain in your modules,
+for example:</p>
+
+<figure class='code'><figcaption><span>Go with a Java-y Domain</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">use</span> <span class="nn">Locale::</span><span class="n">TextDomain</span> <span class="s">&#39;com.example.perl-libawesome&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then you&rsquo;d set the <code>textdomain</code> attribute so that the <code>LocaleTextDomain</code> plugin
+can find the translation catalogs:</p>
+
+<figure class='code'><figcaption><span>The Domain in DNS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ini'><span class='line'><span class="k">[LocaleTextDomain]</span>
+</span><span class='line'><span class="na">textdomain</span> <span class="o">=</span> <span class="s">com.example.perl-libawesome</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Check out the <a href="https://metacpan.org/pod/Dist::Zilla::Plugin::LocaleTextDomain#Configuration" title="Dist::Zilla LocaleTextDomain Configuration">configuration docs</a> for details on all available attributes.</p>
+
+<p>At this point, the plugin doesn&rsquo;t do much, because there are no translation
+catalogs yet. You might see this line from <code>dzil build</code>, though:</p>
+
+<figure class='code'><figcaption><span>Nothing to See Here</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="o">[</span>LocaleTextDomain<span class="o">]</span> Skipping language compilation: directory po does not exist
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let&rsquo;s give it something to do!</p>
+
+<h3>Locale Motion</h3>
+
+<p>To add a French translation file, use the <a href="https://metacpan.org/pod/Dist::Zilla::App::Command::msg_init" title="dzil msg-init documentation on CPAN"><code>msg-init</code></a> command<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>:</p>
+
+<figure class='code'><figcaption><span>French Neuveau</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-init fr
+</span><span class='line'>Created po/fr.po.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>msg-init</code> command uses the <a href="https://www.gnu.org/software/gettext/">GNU gettext</a> utilities to scan your Perl
+source code and initialize the French catalog, <code>po/fr.po</code>. This file is now
+ready translation! Commit it into your source code repository so your
+agile-minded French-speaking friends can find it. Use <code>msg-init</code> to create as
+many language files as you like:</p>
+
+<figure class='code'><figcaption><span>Multilingualism</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-init de ja.JIS en_US.UTF-8 en_UK.UTF-8
+</span><span class='line'>Created po/de.po.
+</span><span class='line'>Created po/ja.po.
+</span><span class='line'>Created po/en_US.po.
+</span><span class='line'>Created po/en_UK.po.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each language has its on PO file. You can even have region-specific catalogs,
+such as the <code>en_US</code> and <code>en_UK</code> variants here. Each time a catalog is updated,
+the changes should be committed to the repository, like code. This allows the
+latest translations to always be available for compilation and distribution.
+The output from <code>dzil build</code> now looks something like:</p>
+
+<figure class='code'><figcaption><span>Catalogs Plugged</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>po/fr.po: 10 translated messages, 1 fuzzy translation, 0 untranslated messages.
+</span><span class='line'>po/ja.po: 10 translated messages, 1 fuzzy translation, 0 untranslated messages.
+</span><span class='line'>po/en_US.po: 10 translated messages, 1 fuzzy translation, 0 untranslated messages.
+</span><span class='line'>po/en_UK.po: 10 translated messages, 1 fuzzy translation, 0 untranslated messages.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The resulting MO files will be in the shared directory of your distribution:</p>
+
+<figure class='code'><figcaption><span>She Want Mo Mo Mo</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% find Awesome-Module-0.01/share -type f
+</span><span class='line'>Awesome-Module-0.01/share/LocaleData/de/LC_MESSAGES/Awesome-Module.mo
+</span><span class='line'>Awesome-Module-0.01/share/LocaleData/en_UK/LC_MESSAGES/Awesome-Module.mo
+</span><span class='line'>Awesome-Module-0.01/share/LocaleData/en_US/LC_MESSAGES/Awesome-Module.mo
+</span><span class='line'>Awesome-Module-0.01/share/LocaleData/ja/LC_MESSAGES/Awesome-Module.mo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From here <a href="https://metacpan.org/module/Module::Build" title="Module::Build on CPAN">Module::Build</a> or <a href="https://metacpan.org/module/ExtUtils::MakeMaker" title="ExtUtils::MakeMaker on CPAN">ExtUtils::MakeMaker</a> will install these MO files
+with the rest of your distribution, right where Locale::TextDomain can find
+them at runtime. The PO files, on the other hand, won&rsquo;t be used at all, so you
+might as well exclude them from the distribution. Add this line to your
+<code>MANIFEST.SKIP</code> to prevent the <code>po</code> directory and its contents from being
+included in the distribution:</p>
+
+<figure class='code'><figcaption><span>No PO</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="o">^</span><span class="n">po</span><span class="o">/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Mergers and Acquisitions</h3>
+
+<p>Of course no code base is static. In all likelihood, you&rsquo;ll change your code
+&mdash; and end up adding, editing, and removing localizable strings as a result.
+You&rsquo;ll need to periodically merge these changes into all of your translation
+catalogs so that your translators can make the corresponding updates. That&rsquo;s
+what the the <a href="https://metacpan.org/pod/Dist::Zilla::App::Command::msg_merge" title="dzil msg-merge documentation on CPAN"><code>msg-merge</code></a> command is for:</p>
+
+<figure class='code'><figcaption><span>Merge Management </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-merge
+</span><span class='line'>extracting gettext strings
+</span><span class='line'>Merging gettext strings into po/de.po
+</span><span class='line'>Merging gettext strings into po/en_UK.po
+</span><span class='line'>Merging gettext strings into po/en_US.po
+</span><span class='line'>Merging gettext strings into po/ja.po
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command re-scans your Perl code and updates all of the language files. Old
+messages will be commented-out and new ones added. Commit the changes and give
+your translators a holler so they can keep the awesome going.</p>
+
+<h4>Template Scan</h4>
+
+<p>The <code>msg-init</code> and <code>msg-merge</code> commands don&rsquo;t actually scan your source code.
+Sort of lied about that. Sorry. What they actually do is merge a template file
+into the appropriate catalog files. If this template file does not already
+exist, a temporary one will be created and discarded when the initialization or
+merging is done.</p>
+
+<p>But projects commonly maintain a permanent template file, stored in the source
+code repository along with the translation catalogs. For this purpose, we have
+the <a href="https://metacpan.org/pod/Dist::Zilla::App::Command::msg_scan" title="dzil msg-scan documentation on CPAN"><code>msg-scan</code></a> command. Use it to create or update the template, or POT file:</p>
+
+<figure class='code'><figcaption><span>Scanners</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-scan
+</span><span class='line'>extracting gettext strings into po/Awesome-Module.pot
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From here on in, the resulting <code>.pot</code> file will be used by <code>msg-init</code> and <code>msg-merge</code> instead of scanning your code all over again. But keep in mind
+that, if you do maintain a POT file, future merges will be a two-step process:
+First run <code>msg-scan</code> to update the POT file, then <code>msg-merge</code> to merge its
+changes into the PO files:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-scan
+</span><span class='line'>extracting gettext strings into po/Awesome-Module.pot
+</span><span class='line'>% dzil msg-merge
+</span><span class='line'>Merging gettext strings into po/de.po
+</span><span class='line'>Merging gettext strings into po/en_UK.po
+</span><span class='line'>Merging gettext strings into po/en_US.po
+</span><span class='line'>Merging gettext strings into po/ja.po
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Lost in Translation</h3>
+
+<p>One more thing, a note for translators. They can, of course, also use
+<code>msg-scan</code> and <code>msg-merge</code> to update the catalogs they&rsquo;re working on. But how
+do they test their translations? Easy: use the <a href="https://metacpan.org/pod/Dist::Zilla::App::Command::msg_compile" title="dzil msg-compile documentation on CPAN"><code>msg-compile</code></a> command to
+compile a single catalog:</p>
+
+<figure class='code'><figcaption><span>Translation Comilation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-compile po/fr.po
+</span><span class='line'><span class="o">[</span>LocaleTextDomain<span class="o">]</span> po/fr.po: 195 translated messages.
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The resulting compiled catalog will be saved to the <code>LocaleData</code> subdirectory
+of the current directory, so it&rsquo;s easily available to your app for testing.
+Just be sure to tell Perl to include the current directory in the search path,
+and set the <code>$LANGUAGE</code> environment variable for your language. For example,
+here&rsquo;s how I test the [Sqitch] French catalog:</p>
+
+<figure class='code'><figcaption><span>Translation Comilation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>% dzil msg-compile po/fr.po
+</span><span class='line'><span class="o">[</span>LocaleTextDomain<span class="o">]</span> po/fr.po: 148 translated messages, 36 fuzzy translations, 27 untranslated messages.
+</span><span class='line'>% <span class="nv">LANGUAGE</span><span class="o">=</span>fr perl -Ilib -CAS -I. bin/sqitch foo
+</span><span class='line'><span class="s2">&quot;foo&quot;</span> n<span class="err">&#39;</span>est pas une commande valide
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Just be sure to delete the <code>LocaleData</code> directory when you&rsquo;re done &mdash; or at
+least don&rsquo;t commit it to the repository.</p>
+
+<h3>TL;DR</h3>
+
+<p>This may seem like a lot of steps, and it is. But once you have the basics in
+place &mdash; Configuring the <a href="https://metacpan.org/module/Dist::Zilla::LocaleTextDomain" title="Dist::Zilla::LocaleTextDomain on CPAN">Dist::Zilla::LocaleTextDomain</a> plugin, setting up
+the &ldquo;textdomain filter&rdquo;, setting and the locale in the application &mdash; there
+are just a few habits to get into:</p>
+
+<ul>
+<li>Use the functions <code>__</code>, <code>__x</code>, <code>__n</code>, and <code>__nx</code> to internationalize
+user-visible strings</li>
+<li>Run <code>msg-scan</code> and <code>msg-merge</code> to keep the catalogs up-to-date</li>
+<li>Keep your translators in the loop.</li>
+</ul>
+
+
+<p>The <a href="https://metacpan.org/module/Dist::Zilla::LocaleTextDomain" title="Dist::Zilla::LocaleTextDomain on CPAN">Dist::Zilla::LocaleTextDomain</a> plugin will do the rest.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>What about <a href="https://metacpan.org/module/Locale::Maketext">Locale::Maketext</a>, you ask? It has not, alas, withsthood the test of time. For details, see Nikolai Prokoschenko&rsquo;s epic 2009 polemic, &ldquo;<a href="http://rassie.org/archives/247">On the state of i18n in Perl</a>.&rdquo; See also Steffen Winkler&rsquo;s presentation, <a href="http://download.steffen-winkler.de/dpws2010/I18N_STEFFENW.pod">Internationalisierungs-Framework auswählen</a> (and the <a href="https://gist.github.com/ap/909197">English translation</a> by <a href="http://blogs.perl.org/users/aristotle/2011/04/stop-using-maketext.html">Aristotle Pagaltzis</a>), from <a href="http://conferences.yapceurope.org/gpw2010/">German Perl Workshop 2010</a>.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>The <code>msg-init</code> function &mdash; like all of the <code>dzil msg-*</code> commands &ndash; uses the <a href="https://www.gnu.org/software/gettext/">GNU gettext</a> utilities under the hood. You&rsquo;ll need a reasonably modern version in your path, or else it won&rsquo;t work.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+    </entry>
   
     <entry>
       
