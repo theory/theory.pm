@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2014-09-06T18:13:19-07:00</updated>
+  <updated>2014-09-06T18:16:02-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -24,7 +24,12 @@
 <updated>2014-09-06T18:10:00-07:00</updated>
 <id>http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
 
-      <content type="html"><![CDATA[<p>These days, <a href="http://en.wikipedia.org/wiki/Gettext" title="Wikipedia: “gettext”">gettext</a> is far and away the most widely-used localization
+      <content type="html"><![CDATA[<p>Nota Bene: This is a republication of a <a href="http://perladvent.org/2013/2013-12-09.html">post that originally appeared in the
+2013 Perl Advent Calendar</a>.</p>
+
+<hr />
+
+<p>These days, <a href="http://en.wikipedia.org/wiki/Gettext" title="Wikipedia: “gettext”">gettext</a> is far and away the most widely-used localization
 (<a href="http://en.wikipedia.org/wiki/Language_localisation" title="Wikipedia: “Localization”">l10n</a>) and internationalization (<a href="http://en.wikipedia.org/wiki/Internationalization_and_localization" title="Wikipedia: “Internationalization and Localization”">i18n</a>) library for open-source software. So
 far, it has not been widely used in the Perl community, even though it&rsquo;s the
 most flexible, capable, and easy-to use solution, thanks to
