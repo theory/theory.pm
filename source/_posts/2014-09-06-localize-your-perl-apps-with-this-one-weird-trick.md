@@ -4,7 +4,7 @@ title: "Localize Your Perl Apps with this One Weird Trick"
 date: 2014-09-06 18:10
 comments: true
 external-url: 
-categories: 
+categories: l10n
 ---
 
 Nota Bene: This is a republication of a [post that originally appeared in the
