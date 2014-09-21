@@ -25,12 +25,18 @@
         <lastmod>2013-09-25T20:54:30-07:00</lastmod>
     </url>
     <url>
-        <loc>http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/</loc>
-        <lastmod>2014-09-06T18:15:30-07:00</lastmod>
+        <loc>
+            http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/
+        </loc>
+        <lastmod>2014-09-21T14:49:51-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/podcast/2014/09/17/sqitch-on-floss-weekly/</loc>
         <lastmod>2014-09-21T14:48:18-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/</loc>
+        <lastmod>2014-09-21T14:49:42-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/404.html</loc>
@@ -42,11 +48,11 @@
     </url>
     <url>
         <loc>http://theory.pm/archives/</loc>
-        <lastmod>2014-09-21T14:48:18-07:00</lastmod>
+        <lastmod>2014-09-21T14:49:51-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/</loc>
-        <lastmod>2014-09-21T14:48:18-07:00</lastmod>
+        <lastmod>2014-09-21T14:49:51-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/robots.txt</loc>

@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2014-09-21T14:48:27-07:00</updated>
+  <updated>2014-09-21T14:50:31-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,21 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Build Modern Perl RPMs with rpmcpan]]></title>
+<link href="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/"/>
+<updated>2014-09-21T14:45:00-07:00</updated>
+<id>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan</id>
+
+      <content type="html"><![CDATA[
+]]></content>
+    </entry>
   
     <entry>
       
@@ -54,9 +69,9 @@ using working through one of the tutorials:</p>
 
 
 <title type="html"><![CDATA[Localize Your Perl Apps with this One Weird Trick]]></title>
-<link href="http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/"/>
+<link href="http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/"/>
 <updated>2014-09-06T18:10:00-07:00</updated>
-<id>http://theory.pm/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
+<id>http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
 
       <content type="html"><![CDATA[<p>Nota Bene: This is a republication of a <a href="http://perladvent.org/2013/2013-12-09.html">post that originally appeared in the
 2013 Perl Advent Calendar</a>.</p>

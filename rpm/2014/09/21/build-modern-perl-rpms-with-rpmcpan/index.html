@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Lexical Subroutines - theory.pm</title>
+  <title>Build Modern Perl RPMs with rpmcpan - theory.pm</title>
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="Ricardo Signes: One of the big new experimental features in Perl 5.18.0 is lexical subroutines. In other words, you can write this: my sub quickly &hellip;">
+  <meta name="description" content="
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://theory.pm/syntax/2013/09/25/lexical-subroutines">
+  <link rel="canonical" href="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan">
   <link href="/favicon.ico" rel="icon">
   
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -75,21 +76,19 @@
 
 
 
-  
 
 
 
 
 
 
-
-<article class="hentry" role="article" data-linklog>
+<article class="hentry" role="article" >
   
   <header>
     <h1 class="entry-title">
 
-<a href="http://rjbs.manxome.org/rubric/entry/2016">Lexical Subroutines</a>
-<span class='linklog-marker'>→</span>
+Build Modern Perl RPMs with rpmcpan
+
 </h1>
 
     
@@ -106,42 +105,16 @@
   
 
 
-<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+<time datetime="2014-09-21T14:45:00-07:00" pubdate data-updated="true">Sunday, 21 September 2014</time>
         
-         &bull; <a rel="bookmark" href="/syntax/2013/09/25/lexical-subroutines/">§</a>
+         &bull; <a rel="bookmark" href="/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/">§</a>
       </p>
     
   </header>
 
 
 
-  <div class="entry-content"><p>Ricardo Signes:</p>
-
-<blockquote><p>One of the big new experimental features in Perl 5.18.0 is lexical
- subroutines. In other words, you can write this:</p>
-
-<pre><code>my sub quickly { ... }
-my @sorted = sort quickly @list;
-
-my sub greppy (&amp;@) { ... }
-my @grepped = greppy { ... } @input;
-</code></pre>
-
-<p>These two examples show cases where lexical <em>references</em> to anonymous
-subroutines would not have worked. The first argument to <code>sort</code> must be a
-block or a subroutine <em>name</em>, which leads to awful code like this:</p>
-
-<pre><code>sort { $subref-&gt;($a, $b) } @list
-</code></pre>
-
-<p>With our greppy, above, we get to benefit from the parser-affecting
-behaviors of subroutine prototypes.</p></blockquote>
-
-<p>My favorite tidbit about this feature? Because lexical subs are <em>lexical,</em> and
-method-dispatch is <em>package</em>-based, lexical subs are not subject to method
-lookup and dispatch! This just might alleviate the confusion of methods and
-subs, as <a href="http://www.modernperlbooks.com/mt/2013/09/functions-shouldnt-be-methods-yet-another-reminder.html">chromatic complained about just yesterday</a>. Probably doesn&rsquo;t solve
-the problem for imported subs, though.</p>
+  <div class="entry-content">
 </div>
 
 
@@ -149,7 +122,7 @@ the problem for imported subs, though.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://theory.pm/syntax/2013/09/25/lexical-subroutines/" data-via="theory" data-counturl="http://theory.pm/syntax/2013/09/25/lexical-subroutines/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/" data-via="theory" data-counturl="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -178,12 +151,12 @@ the problem for imported subs, though.</p>
   
 
 
-<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+<time datetime="2014-09-21T14:45:00-07:00" pubdate data-updated="true">Sunday, 21 September 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/syntax/'>syntax</a>
+    <a class='category' href='/categories/rpm/'>rpm</a>
   
 </span>
 
@@ -197,10 +170,8 @@ the problem for imported subs, though.</p>
 
     <p class="meta">
       
-        <a class="basic-alignment left" href="/sql/2013/09/09/multirow-database-updates/" title="Previous Post: Multirow Database Updates">&laquo; Multirow Database Updates</a>
+        <a class="basic-alignment left" href="/podcast/2014/09/17/sqitch-on-floss-weekly/" title="Previous Post: Sqitch on FLOSS Weekly">&laquo; Sqitch on FLOSS Weekly</a>
       
-      
-        <a class="basic-alignment right" href="/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/" title="next Post: Localize Your Perl Apps with this One Weird Trick">Localize Your Perl Apps with this One Weird Trick &raquo;</a>
       
     </p>
   </footer>
@@ -231,8 +202,8 @@ the problem for imported subs, though.</p>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://theory.pm/syntax/2013/09/25/lexical-subroutines/';
-        var disqus_url = 'http://theory.pm/syntax/2013/09/25/lexical-subroutines/';
+        var disqus_identifier = 'http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/';
+        var disqus_url = 'http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/';
         var disqus_script = 'embed.js';
       
     (function () {
