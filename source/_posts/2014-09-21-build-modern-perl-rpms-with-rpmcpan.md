@@ -7,6 +7,8 @@ external-url:
 categories: rpm
 ---
 
+{% img center /images/ioperllove.png 640 'iovation + Perl = Love' 'iovation + Perl = Love' %}
+
 We've been using the CentOS Perl RPMs at [iovation] to run all of our Perl
 applications. This has been somewhat painful, because the version of Perl,
 5.10.1, is quite old --- it shipped in August 2009. In fact, it consists
