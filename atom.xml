@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2014-09-21T14:50:31-07:00</updated>
+  <updated>2014-09-21T19:00:56-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,21 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[Build Modern Perl RPMs with rpmcpan]]></title>
-<link href="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/"/>
-<updated>2014-09-21T14:45:00-07:00</updated>
-<id>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan</id>
-
-      <content type="html"><![CDATA[
-]]></content>
-    </entry>
   
     <entry>
       
