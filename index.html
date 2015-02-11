@@ -9,8 +9,8 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="We&rsquo;ve been using the CentOS Perl RPMs at iovation to run all of our Perl
-applications. This has been somewhat painful, because the version of &hellip;">
+  <meta name="description" content="I&rsquo;ve just pushed Pod-Simple 3.29_v3 to CPAN. Karl Williamson did a lot of
+hacking on this release, finally adding support for EBCDIC. But as &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +72,86 @@ applications. This has been somewhat painful, because the version of &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/2015/02/11/please-test-pod-simple-3-dot-29-3/">Please Test Pod::Simple 3.29_3</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-11T10:53:00-08:00" pubdate data-updated="true">Wednesday, 11 February 2015</time>
+        
+         &bull; <a rel="bookmark" href="/2015/02/11/please-test-pod-simple-3-dot-29-3/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p><img class="center" src="http://a1886.phobos.apple.com/us/r30/Purple2/v4/32/36/8c/32368cd4-b6ef-02e6-9020-2265de069e80/mzl.debeadca.png" title="'Pod Book'" ></p>
+
+<p>I&rsquo;ve just pushed <a href="https://metacpan.org/release/Pod-Simple/">Pod-Simple</a> 3.29_v3 to CPAN. <a href="https://metacpan.org/author/KHW">Karl Williamson</a> did a lot of
+hacking on this release, finally adding support for EBCDIC. But as part of
+that work, and in coordination with Pod::Simple&rsquo;s original author, <a href="http://interglacial.com/">Sean
+Burke</a>, as well as <a href="http://lists.perl.org/list/pod-people.html">pod-people</a>, we have switched the default encoding from
+<a href="http://en.wikipedia.org/wiki/ISO/IEC_8859-1">Latin-1</a> to <a href="http://en.wikipedia.org/wiki/Windows-1252">CP-1252</a>.</p>
+
+<p>On the surface, that might sound like a big change, but in truth, it&rsquo;s pretty
+straight-forward. CP-1252 is effectively a superset of Latin-1, repurposing
+30 or so unused control characters from Latin-1. Those characters are pretty
+common on Windows (the home of the CP family of encodings), especially in
+pastes from Word. It&rsquo;s nice to be able to pick those up essentially for free.</p>
+
+<p>Still, Karl&rsquo;s done more than that. He also updated the encoding detection to
+do a better job at detecting UTF-8. This is the <em>real</em> default. Pod::Simple
+only falls back on CP1252 if there are no obvious UTF-8 byte sequences in
+your Pod.</p>
+
+<p>Overall these changes should be a great improvement. Better encoding support
+is always a good idea. But it is a pretty significant change, including a
+change to <a href="https://metacpan.org/pod/distribution/perl/pod/perlpodspec.pod">the Pod spec</a>. Hence the test release. Please make sure it works
+well with your code by installing it today:</p>
+
+<pre><code>cpan D/DW/DWHEELER/Pod-Simple-3.29_3.tar.gz
+cpanm DWHEELER/Pod-Simple-3.29_3.tar.gz
+</code></pre>
+
+<p>Oh, and one last thing: If Pod::Simple fails to properly recognize the encoding in your Pod file, you can always use the <code>=encoding</code> command early in your Pod file to make it explicit:</p>
+
+<pre><code>=encoding CP1254
+</code></pre>
+</div>
+
+
+    </article>
   
     
     
@@ -1337,7 +1417,7 @@ work around this deficiency by <a href="http://stackoverflow.com/a/10366209/7920
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 – David E. Wheeler –
+  Copyright &copy; 2015 – David E. Wheeler –
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> –
   <a href="/atom.xml" title="Subscribe to theory.com">Feed</a>
 </p>
