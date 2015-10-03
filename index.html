@@ -9,8 +9,7 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="I&rsquo;ve just pushed Pod-Simple 3.29_v3 to CPAN. Karl Williamson did a lot of
-hacking on this release, finally adding support for EBCDIC. But as &hellip;">
+  <meta name="description" content="Until last week, I had two newish blogs. This one, theory.pm, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +71,61 @@ hacking on this release, finally adding support for EBCDIC. But as &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/blog/2015/10/03/theory-dot-so-is-no-more/">theory.so is No More</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-10-03T13:14:00-07:00" pubdate data-updated="true">Saturday,  3 October 2015</time>
+        
+         &bull; <a rel="bookmark" href="/blog/2015/10/03/theory-dot-so-is-no-more/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Until last week, I had two newish blogs. This one, <a href="/">theory.pm</a>, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it would be a good idea to have separate blogs for separate audiences, but it turns out I don&rsquo;t post enough to make much difference. And now, as of last week, I let the theory.so domain expire. Control the <a href="https://en.wikipedia.org/wiki/.so">.so</a> domain was turned over to Somalia a few months ago, and domain renwal fees went <em>way</em> up. Since I had so few posts over there (14 since August, 2013), I decided it was a good time to just merge it with theory.pm and be done with it.</p>
+
+<p>So my apologies if a bunch of my old posts just showed up in your RSS readers. (You all still use RSS readers, right?). This is a one-time merging of the two blogs, so should not happen again.</p>
+
+<p>Well…maybe. Now I have a total of 25 posts on theory.pm (since July 2013), which is still pretty paltry. I&rsquo;m thinking it&rsquo;s silly to have this thing separate from my original blog, <a href="http://justatheory.com/">Just a Theory</a>, so I might eventually merge that blog, too. Not sure what domain I&rsquo;ll use for it. Maybe I&rsquo;ll go back to justatheory.com. Or maybe I&rsquo;ll use one of the other domains I registered, like the recently added theory.one. Or maybe theory dot something else.</p>
+
+<p>Not that you care. Good on you for reading this far. I would have stopped before now. You&rsquo;re a better person than I.</p>
+</div>
+
+
+    </article>
   
     
     
@@ -838,21 +892,19 @@ user-visible strings</li>
 
 
 
-  
 
 
 
 
 
 
-
-    <article data-linklog>
+    <article >
       
   <header>
     <h1 class="entry-title">
 
-<a href="http://rjbs.manxome.org/rubric/entry/2016">Lexical Subroutines</a>
-<span class='linklog-marker'>→</span>
+<a href="/2014/09/05/sqitch-goes-vertical/">Sqitch Goes Vertical</a>
+
 </h1>
 
     
@@ -869,42 +921,102 @@ user-visible strings</li>
   
 
 
-<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+<time datetime="2014-09-05T17:46:00-07:00" pubdate data-updated="true">Friday,  5 September 2014</time>
         
-         &bull; <a rel="bookmark" href="/syntax/2013/09/25/lexical-subroutines/">§</a>
+         &bull; <a rel="bookmark" href="/2014/09/05/sqitch-goes-vertical/">§</a>
       </p>
     
   </header>
 
 
 
-  <div class="entry-content"><p>Ricardo Signes:</p>
+  <div class="entry-content"><p>I released <a href="http://sqitch.org/">Sqitch</a> v0.996 today. Despite the minor version increase, this is
+a pretty big release. I&rsquo;m busy knocking out all the stuff I want to get done
+for 1.0, but the version space is running out, so just a minor version jump
+from v0.995 to v0.996. But a lot changed. A couple the biggies:</p>
 
-<blockquote><p>One of the big new experimental features in Perl 5.18.0 is lexical
- subroutines. In other words, you can write this:</p>
+<h3>Goodbye Mouse and Moose, Hello Moo</h3>
 
-<pre><code>my sub quickly { ... }
-my @sorted = sort quickly @list;
+<p>If you&rsquo;re not a Perl programmer, you probably aren&rsquo;t familiar with <a href="https://metacpan.org/module/Moose">Moose</a> or
+its derivatives <a href="https://metacpan.org/module/Mouse">Mouse</a> and <a href="https://metacpan.org/module/Moo">Moo</a>. Briefly, it&rsquo;s an object system. Great
+interface and features, but freaking <em>huge</em>—and <em>slow</em>. Mouse is a lighter
+version, and when we (mostly) switched to it <a href="https://github.com/theory/sqitch/pull/73">last year</a>, it yielded a 20-30% speed
+improvement.</p>
 
-my sub greppy (&amp;@) { ... }
-my @grepped = greppy { ... } @input;
+<p>Still wasn&rsquo;t great, though. So on a day off recently, I switched
+to Moo, which implements most of Moose but without a lot of the baggage. At
+first, there wasn&rsquo;t much difference in performance, but as I profiled it
+(<a href="https://metacpan.org/module/Devel::NYTProf">Devel::NYTProf</a> is indispensable for profiling Perl apps, BTW), I was able
+to root out all trace of Moose or Mouse, including in CPAN modules Sqitch
+depends on. The result is around a 40% speedup over what we had before.
+Honestly, it feels like a new app, it&rsquo;s so fast. I&rsquo;m really happy with how it
+turned out, and to have shed some of the baggage from the code base.</p>
+
+<p>The downside is that package maintainers will need to do some work to get the
+new dependencies built. Have a look at <a href="https://github.com/theory/sqitch/compare/v0.995...v0.996#diff-4">the RPM spec changes</a> I made to get
+our internal Sqitch RPMs to build v0.996.</p>
+
+<h3>MySQL Password Handling</h3>
+
+<p>The handling of MySQL passwords has also been improved. Sqitch now uses the
+<code>$MYSQL_PWD</code> environment variable if a password is provided in a target. This
+should simplify authentication when running MySQL change scripts through the
+<code>mysql</code> client client.</p>
+
+<p>Furthermore, if <a href="https://metacpan.org/module/MySQL::Config">MySQL::Config</a> is installed, Sqitch will look for passwords
+in the <code>client</code> and <code>mysql</code> sections of your MySQL configuration files
+(<code>~/.my.cnf</code>, <code>/etc/my.cnf</code>). This should already happen automatically when
+executing scripts, but Sqitch now tries to replicate that behavior when
+connecting to the database via <a href="https://metacpan.org/module/DBI">DBI</a>.</p>
+
+<p>Spotting the <code>$MYSQL_PWD</code> commit, Ștefan Suciu updated the Firebird engine to
+use the <code>$ISC_PASSWORD</code> when running scripts. Awesome.</p>
+
+<h3>Vertically Integrated</h3>
+
+<p>And finally, another big change: I added support for <a href="https://my.vertica.com/">Vertica</a>, a very nice
+commercial column-store database that features partitioning and sharding,
+among other OLAP-style functionality. It was originally forked from
+<a href="http://www.postgresql.org/">PostgreSQL</a>, so it was fairly straight-forward to port, though I did have to
+borrow a bit from the Oracle and SQLite engines, too. This port was essential
+for <a href="http://www.iovation.com/">work</a>, as we&rsquo;re starting to use Vertical more and more, and need ways to
+manage changes.</p>
+
+<p>If you&rsquo;re using Vertica, peruse <a href="https://github.com/theory/sqitch/blob/master/lib/sqitchtutorial-vertica.pod">the tutorial</a> to get a feel for what it&rsquo;s
+all about. If you want to install it, you can get it from CPAN:</p>
+
+<pre><code>cpan install App::Sqitch BDD::ODBC
 </code></pre>
 
-<p>These two examples show cases where lexical <em>references</em> to anonymous
-subroutines would not have worked. The first argument to <code>sort</code> must be a
-block or a subroutine <em>name</em>, which leads to awful code like this:</p>
+<p>Or, if you&rsquo;re on Homebrew:</p>
 
-<pre><code>sort { $subref-&gt;($a, $b) } @list
+<pre><code>brew tap theory/sqitch
+brew install sqitch_vertica
 </code></pre>
 
-<p>With our greppy, above, we get to benefit from the parser-affecting
-behaviors of subroutine prototypes.</p></blockquote>
+<p>Be warned that there&rsquo;s a minor bug in v0.996, though. Apply this diff to fix
+it:</p>
 
-<p>My favorite tidbit about this feature? Because lexical subs are <em>lexical,</em> and
-method-dispatch is <em>package</em>-based, lexical subs are not subject to method
-lookup and dispatch! This just might alleviate the confusion of methods and
-subs, as <a href="http://www.modernperlbooks.com/mt/2013/09/functions-shouldnt-be-methods-yet-another-reminder.html">chromatic complained about just yesterday</a>. Probably doesn&rsquo;t solve
-the problem for imported subs, though.</p>
+<pre><code>@@ -16,7 +16,7 @@ our $VERSION = '0.996';
+
+ sub key    { 'vertica' }
+ sub name   { 'Vertica' }
+-sub driver { 'DBD::Pg 2.0' }
++sub driver { 'DBD::ODBC 1.43' }
+ sub default_client { 'vsql' }
+
+ has '+destination' =&gt; (
+</code></pre>
+
+<p>That fix will be in the next release, of course, as will <a href="https://github.com/theory/sqitch/commit/4f8dbaa236a04f6dd1ec762250ffd8481078691a">support for Vertica 6</a>.</p>
+
+<h3>What Next?</h3>
+
+<p>I need to focus on some other work stuff for a few weeks, but then I expect
+to come back to Sqitch again. I&rsquo;d like to get 1.0 shipped before the end of
+the year. To that end, next up I will be <a href="https://github.com/theory/sqitch/issues/153">rationalizing configuration hierarchies</a>
+to make engine selection and deploy-time configuration more sensible. I hope
+to get that done by early October.</p>
 </div>
 
 
@@ -928,7 +1040,7 @@ the problem for imported subs, though.</p>
   <header>
     <h1 class="entry-title">
 
-<a href="http://techblog.net-a-porter.com/2013/08/dbixmultirow-updating-multiple-database-rows-quickly-and-easily/">Multirow Database Updates</a>
+<a href="http://www.modernperlbooks.com/mt/2014/02/managing-sqitch-with-make.html">Managing Sqitch with Make</a>
 <span class='linklog-marker'>→</span>
 </h1>
 
@@ -946,41 +1058,125 @@ the problem for imported subs, though.</p>
   
 
 
-<time datetime="2013-09-09T17:47:00-07:00" pubdate data-updated="true">Monday,  9 September 2013</time>
+<time datetime="2014-02-09T13:58:00-08:00" pubdate data-updated="true">Sunday,  9 February 2014</time>
         
-         &bull; <a rel="bookmark" href="/sql/2013/09/09/multirow-database-updates/">§</a>
+         &bull; <a rel="bookmark" href="/sqitch/2014/02/09/managing-sqitch-with-make/">§</a>
       </p>
     
   </header>
 
 
 
-  <div class="entry-content"><p>William Blunn:</p>
+  <div class="entry-content"><p>chromatic:</p>
 
-<blockquote><p>So, given a list of updates to apply we could effect them using the
-following steps:</p>
+<blockquote><p>This saves me a few dozen keystrokes and a few seconds every time I make a
+database change. If that sounds trivial to you, good. A few keystrokes and a
+few seconds <em>are</em> trivial. My brainpower <em>isn&rsquo;t</em> trivial. Those keystrokes
+and seconds mean the difference between staying in the zone and fumbling
+around trying to remember commands I don&rsquo;t use all day every day. They save
+me minutes every time I use them, if you count the friction of switching
+between &ldquo;How do I do this in Sqitch again? What&rsquo;s the directory layout here?&rdquo;
+and &ldquo;What was I really working on?&rdquo;</p></blockquote>
 
-<ol>
-<li>Use CREATE TEMPORARY TABLE to create a temporary table to hold the
-updates</li>
-<li>Use INSERT to populate the temporary table with the updates</li>
-<li>Use UPDATE … FROM to update the target table using updates in the
-temporary table</li>
-<li>Use DROP TABLE to drop the temporary table</li>
-</ol>
+<p>Nice application of a <code>Makefile</code> to eliminate boilerplate. A couple of notes, though:</p>
+
+<p>Nice post. A couple comments and questions:</p>
+
+<ul>
+<li><p>As of Sqitch v0.990, you can pass the <code>--open-editor</code> option to the <code>add</code>
+command to have the new files opened in your editor.</p></li>
+<li><p>If you want to add a pgTAP test with a new change, see <a href="/sqitch/2014/01/13/templating-tests-with-sqitch/" title="Templating Tests with Sqitch">this post</a>.</p></li>
+<li><p>What is the call to <code>sqitch status</code> for? Since its output just goes to
+<code>/dev/null</code>, I don&rsquo;t understand the point.</p></li>
+<li><p>Also as of v0.990, you can <a href="/sqitch/2014/01/09/sqitch-on-target/" title="Sqitch on Target">specify Sqitch targets</a>. The <code>-d</code>, <code>-u</code>, and
+other options then override values in the target URI.</p></li>
+<li><p>I <em>really</em> want to get Sqitch to <a href="https://github.com/theory/sqitch/issues/25" title="Add VCS Integration to Sqitch">better understand and work with VCSs</a>. An
+example would be to have it automatically <code>git add</code> files created by
+<code>sqitch add</code>. Another might be a Git config setting pointing to the Sqitch
+config file. Alas, I don&rsquo;t know when I will have the tuits to work on that.</p></li>
+</ul>
 
 
-<p>So in the example above we can reduce five statements to four. This isn’t a
-significant improvement in this case. But now the number of statements is no
-longer directly dependent on the number of rows requiring updates.</p>
+<p>Lots of room for growth and improvement in Sqitch going forward. You post provides more food for thought.</p>
+</div>
 
-<p><strong>Even if we wanted to update a thousand rows with different values, we
-could still do it with four statements.</strong></p></blockquote>
 
-<p>Or you could just use one statement. Here&rsquo;s how to do it with a <a href="http://www.postgresql.org/docs/current/static/queries-with.html" title="PostgreSQL Documentation: WITH Queries (Common Table Expressions)">CTE</a> on
-PostgreSQL 9.2 and higher:</p>
+    </article>
+  
+    
+    
 
-<figure class='code'><figcaption><span>PostgreSQL Multirow Upate with CTE</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/sqitch/2014/01/13/templating-tests-with-sqitch/">Templating Tests with Sqitch</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T14:11:00-08:00" pubdate data-updated="true">Monday, 13 January 2014</time>
+        
+         &bull; <a rel="bookmark" href="/sqitch/2014/01/13/templating-tests-with-sqitch/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Back in September, <a href="/sqitch/2013/09/06/sqitch-templating/">I described</a> how to create custom deploy, revert, and
+verify scripts for various types of <a href="http://sqitch.org/" title="Sane database schema change management">Sqitch</a> changes, such as adding a new
+table. Which is cool and all, but what I&rsquo;ve found while developing databases
+at <a href="http://iovation.com/">work</a> is that I nearly always want to create a test script with the same
+name as a newly-added change.</p>
+
+<p>So for the recent v0.990 release, the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> gained the ability to
+generate arbitrary script files from templates. To get it to work, we just
+have to create template files. Templates can go into <code>~/.sqitch/templates</code>
+(for personal use) or in <code>$(sqitch --etc-path)/templates</code> (for use by
+everyone on a system). The latter is where templates are installed by
+default. Here&rsquo;s what it looks like:</p>
+
+<figure class='code'><figcaption><span>List Default Templates</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates
+</span><span class='line'>deploy  revert  verify
+</span><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates/deploy
+</span><span class='line'>firebird.tmpl  mysql.tmpl  oracle.tmpl  pg.tmpl  sqlite.tmpl
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each directory defines the type of script and the name of the directory in
+which it will be created. The contents are default templates, one for each
+engine.</p>
+
+<p>To create a default test template, all we have to do is create a template for our preferred engine in a directory named <code>test</code>. So I created <code>~/.sqitch/templates/test/pg.tmpl</code>. Here it is:</p>
+
+<figure class='code'><figcaption><span>Default pgTAP template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -990,424 +1186,502 @@ PostgreSQL 9.2 and higher:</p>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">WITH</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span> <span class="k">AS</span> <span class="p">(</span> <span class="k">VALUES</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'>  <span class="k">FROM</span> <span class="n">up</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Still on PostgreSQL 9.1 or lower? Use a subselect in the <code>FROM</code> clause
-instead:</p>
-
-<figure class='code'><figcaption><span>PostgreSQL Multirow Update with Subselect</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'>   <span class="k">FROM</span> <span class="p">(</span><span class="k">VALUES</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">)</span> <span class="k">AS</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Stuck with MySQL or Oracle? Use a <code>UNION</code> query in a second table:</p>
-
-<figure class='code'><figcaption><span>MySQL & Oracle Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span><span class="p">,</span> <span class="p">(</span>
-</span><span class='line'>         <span class="k">SELECT</span> <span class="s1">&#39;Jane&#39;</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="mi">1200</span> <span class="k">AS</span> <span class="n">salary</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span>        <span class="mi">1100</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span>        <span class="mi">1175</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;John&#39;</span><span class="p">,</span>         <span class="mi">1150</span>
-</span><span class='line'><span class="p">)</span> <span class="k">AS</span> <span class="n">up</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">staff</span><span class="p">.</span><span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using SQLite? Might make sense to use a temporary table for thousands or
-millions of rows. But for just a few, use a <code>CASE</code> expression:</p>
-
-<figure class='code'><figcaption><span>SQLite Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">name</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Jane&#39;</span>  <span class="k">THEN</span> <span class="mi">1200</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Frank&#39;</span> <span class="k">THEN</span> <span class="mi">1100</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Susan&#39;</span> <span class="k">THEN</span> <span class="mi">1175</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;John&#39;</span>  <span class="k">THEN</span> <span class="mi">1150</span>
-</span><span class='line'>   <span class="k">END</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you need to support multiple database architectures, sure, use something
-like <a href="https://github.com/hochgurgler/DBIx-MultiRow" title="DBIx::MultiRow on GitHub">DBIx::MultiRow</a> to encapsulate things. But if, like most of us, you&rsquo;re
-on one database for an app, I can&rsquo;t recommend stongly enough how well it pays
-to get to know your database well.</p>
-</div>
-
-
-    </article>
-  
-    
-    
-
-
-
-  
-
-
-
-
-
-
-
-    <article data-linklog>
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="http://news.perlfoundation.org/2013/08/2013q3-grant-proposals.html">TPF To Revamp Grants</a>
-<span class='linklog-marker'>→</span>
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-23T17:28:00-07:00" pubdate data-updated="true">Friday, 23 August 2013</time>
-        
-         &bull; <a rel="bookmark" href="/tpf/2013/08/23/tpf-to-revamp-grants/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>Alberto Simões:</p>
-
-<blockquote><p>Nevertheless, this lack of &ldquo;lower than $3000&rdquo; grant proposals, and the fact
-that lot of people have been discussing (and complaining) about this value
-being too low, the Grants Committee is starting a discussion on rewriting
-and reorganizing the way it works. Namely, in my personal blog I
-<a href="http://blogs.perl.org/users/alberto_simoes/2013/02/about-the-grants-committee.html">opened a discussion</a> about the Grants Committee some time ago, and had
-plenty of feedback, that will be helpful for our internal discussion.</p></blockquote>
-
-<p>This is great news. I would love to see more and more ambitious grant
-proposals, as well as awards people an subsist on. I look forward to seeing
-the new rules.</p>
-</div>
-
-
-    </article>
-  
-    
-    
-
-
-
-  
-
-
-
-
-
-
-
-    <article data-linklog>
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html">Mopping the Moose</a>
-<span class='linklog-marker'>→</span>
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-15T13:44:00-07:00" pubdate data-updated="true">Thursday, 15 August 2013</time>
-        
-         &bull; <a rel="bookmark" href="/mop/2013/08/15/mopping-the-moose/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>Stevan Little:</p>
-
-<blockquote><p>I spent much of last week on vacation with the family so very little actual
-coding got done on the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a>, but instead I did a lot of thinking. My
-next major goal for the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a> is to port a module written in <a href="https://metacpan.org/module/Moose">Moose</a>, in
-particular, one that uses many different <a href="https://metacpan.org/module/Moose">Moose</a> features. The module I have
-chosen to port is <a href="https://metacpan.org/module/Bread::Board">Bread::Board</a> and I chose it for two reasons; first, it
-was the first real module that I wrote using <a href="https://metacpan.org/module/Moose">Moose</a> and second, it makes
-heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsquo;s features.</p></blockquote>
-
-<p>I&rsquo;m so happy to see Stevan making progress on the Perl 5 MOP again.</p>
-</div>
-
-
-    </article>
-  
-    
-    
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/blog/2013/07/26/a-perl-blog/">A Perl Blog</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-26T18:08:00-07:00" pubdate data-updated="true">Friday, 26 July 2013</time>
-        
-         &bull; <a rel="bookmark" href="/blog/2013/07/26/a-perl-blog/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
-blog in 2004 more or less for fun, thinking it would be my permanent home on
-the internet. And it has been. But the design, while okay in 2004, is just
-awful by today&rsquo;s standards. A redesign is something I have planned to do for
-quite some time.</p>
-
-<p>I had also been thinking about my audience. Or rather, audiences. I&rsquo;ve blogged
-about many things, but while a few dear family members might want to read
-everything I ever post, most folks, I think, are interested in only a subset
-of topics. Readers of <a href="http://justatheory.com/">Just a Theory</a> came for posts about Perl, or
-PostgreSQL, or culture, travel, or politics. But few came for all those
-topics, in my estimation.</p>
-
-<p>More recently, a whole bunch of top-level domains have opened up, often with
-the opportunity for anyone to register them. I was lucky enough to snag
-<code>theory.pm</code> and <code>theory.pl</code>, thinking that perhaps I would create a site just
-for blogging about Perl. I also nabbed <code>theory.so</code>, which I might dedicate to
-database-related blogging, and <code>theory.me</code>, which would be my personal blog
-(travel, photography, cultural essays, etc.).</p>
-
-<p>And then there is <a href="http://octopress.org">Octopress</a>. A blogging engine for hackers. Perfect for me.
-Hard to imagine something more appropriate (unless it was written in Perl). It
-seemed like a good opportunity to partition my online blogging.</p>
-
-<p>So here we are with my first partition. <a href="/">theory.pm</a> is a Perl blog. Seemed
-like the perfect name. I fiddled with it off and on for a few months, often
-following <a href="http://mattgemmell.com/2013/05/22/designing-blogs-for-readers/">Matt Gemmell&rsquo;s Advice</a>, and I&rsquo;m really happy with it. The
-open-source fonts <a href="https://github.com/adobe/source-sans-pro">Source Sans Pro</a> and <a href="https://github.com/adobe/source-code-pro">Source Code Pro</a>, from Adobe, look
-great. The source code examples are beautifully marked up and displayed using
-the <a href="http://ethanschoonover.com/solarized">Solarized</a> color scheme (though presentation varies in feed readers).
-Better still, it&rsquo;s equally attractive and readable on computers, tablets and
-phones, thanks to the foundation laid by Aron Cedercrantz’s <a href="https://github.com/rastersize/BlogTheme">BlogTheme</a>.</p>
-
-<p>I expect to fork this code to create a database blog soon, and then perhaps
-put together a personal blog. Maybe the personal blog will provide link posts
-for posts on the other sites, so that if anyone really wants to read
-everything, they can. I haven&rsquo;t decided yet.</p>
-
-<p>In the meantime, now that I have a dedicated Perl blog, I guess I&rsquo;ll have to
-start writing more Perl-related stuff. I&rsquo;m starting with some posts about the
-state of exception handling in Perl 5, the first of which is <a href="/exceptions/2013/07/26/trying-times/">already up</a>. Stay
-tuned for more.</p>
-</div>
-
-
-    </article>
-  
-    
-    
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/exceptions/2013/07/26/trying-times/">Trying Times</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-26T15:20:00-07:00" pubdate data-updated="true">Friday, 26 July 2013</time>
-        
-         &bull; <a rel="bookmark" href="/exceptions/2013/07/26/trying-times/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>Exception handling is a bit of a pain in Perl. Traditionally, we use
-<code>eval {}</code>:</p>
-
-<figure class='code'><figcaption><span>Perl eval</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="nb">eval</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="vg">$@</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $err…</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
-<code>$@</code> variable, which has inflicted unwarranted pain on developers over the
-years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
-shortcomings:</p>
-
-<figure class='code'><figcaption><span>Try::Tiny</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $_…</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
-subroutine references rather than blocks. While a necessity of a pure-Perl
-implementation, it prevents <code>return</code>ing from the calling context. One must
-work around this deficiency by <a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
-
-<figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$rv</span> <span class="o">=</span> <span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">f</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>   <span class="c1"># …</span>
-</span><span class='line'><span class="p">};</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$rv</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="k">return</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test [% change %]!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>I can&rsquo;t tell you how often this quirk burns me.</p>
+<p>This is my standard boilerplate for tests, more or less. It just loads
+<a href="http://pgtap.org/">pgTAP</a>, sets the plan, runs the tests, finishes and rolls back. See this
+template in action:</p>
 
+<figure class='code'><figcaption><span>Add a change.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add whatever -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/whatever.sql
+</span><span class='line'>Created revert/whatever.sql
+</span><span class='line'>Created <span class="nb">test</span>/whatever.sql
+</span><span class='line'>Created verify/whatever.sql
+</span><span class='line'>Added <span class="s2">&quot;whatever&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool, it added the test script. Here’s what it looks like:</p>
+
+<figure class='code'><figcaption><span>Generated test script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test whatever!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that it replaced the <code>change</code> variable in the call to <code>pass()</code>. All
+ready to start writing tests! Nice, right? If we don&rsquo;t want the test script
+created &ndash; for example when adding a column to a table for which a test
+already exists &ndash; we use the <code>--without</code> option to omit it:</p>
+
+<figure class='code'><figcaption><span>Add change without test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add add_timestamp_column --without <span class="nb">test</span> -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/add_timestamp_column.sql
+</span><span class='line'>Created revert/add_timestamp_column.sql
+</span><span class='line'>Created verify/add_timestamp_column.sql
+</span><span class='line'>Added <span class="s2">&quot;add_timestamp_column&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Naturally you&rsquo;ll want to update the existing test to validate the new column.</p>
+
+<p>In the <a href="/sqitch/2013/09/06/sqitch-templating/">previous templating post</a>, we added custom scripts as for <code>CREATE
+TABLE</code> changes; now we can add a test template, too. This one takes advantage
+of the advanced features of <a href="http://tt2.org/">Template Toolkit</a>. We name it
+<code>~/.sqitch/templates/test/createtable.tmpl</code> to complement the deploy,
+revert, and verify scripts created previously:</p>
+
+<figure class='code'><figcaption><span>CREATE TABLE test template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test [% change %]</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;[% table or change %]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% type.item( loop.index ) or &#39;</span><span class="nb">text</span><span class="s1">&#39; %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As <a href="/sqitch/2013/09/06/sqitch-templating/">before</a>, we tell the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> to use the <code>createtable</code> templates:</p>
+
+<figure class='code'><figcaption><span>Create table with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">schema</span><span class="o">=</span>corp -s <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>id -s <span class="nb">type</span><span class="o">=</span>SERIAL <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>name -s <span class="nb">type</span><span class="o">=</span>TEXT <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>quantity -s <span class="nb">type</span><span class="o">=</span>INTEGER <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This yields a very nice test script to get you going:</p>
+
+<figure class='code'><figcaption><span>Generated Table Test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test corp_widgets</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;SERIAL&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;TEXT&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;INTEGER&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t know about you, but I&rsquo;ll be using this functionality <em>a lot.</em></p>
 </div>
-  <footer>
-    <a rel="full-article" href="/exceptions/2013/07/26/trying-times/">do continue →</a>
-  </footer>
+
+
+    </article>
+  
+    
+    
+
+
+
+  
+
+
+
+
+
+
+
+    <article data-linklog>
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="http://inessential.com/2014/01/02/vesper_sync_diary_7_audibles">Brent Simmons is Not Wrong</a>
+<span class='linklog-marker'>→</span>
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-10T11:02:00-08:00" pubdate data-updated="true">Friday, 10 January 2014</time>
+        
+         &bull; <a rel="bookmark" href="/theory/2014/01/10/brent-simmons-is-not-wrong/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Brent Simmons:</p>
+
+<blockquote><p>Database people are already gasping for air, because they know what’s coming.
+Instead of creating a separate table for attachment metadata, I created an
+attachments column in the notes table and just encoded the attachment
+metadata there.</p>
+
+<p>On iOS it uses Core Data’s built-in object archiving feature. On the server
+it’s stored as JSON.</p>
+
+<p>This is wrong, surely; it’s not how to do this. Except, in this case, it is.
+Incomplete object graphs are wrong; inefficient and slower syncing with more
+complex server-side code is also wrong.</p>
+
+<p>This is <em>less wrong than the alternatives.</em></p></blockquote>
+
+<p>Some database folks might be gasping for air, but not those of us steeped in
+relational theory. In <em><a href="http://www.amazon.com/Database-Depth-Relational-Theory-Practitioners/dp/0596100124/justatheory-20">Database in Depth</a></em>, relational theorist <a href="http://en.wikipedia.org/wiki/Christopher_J._Date">C.J. Date</a>
+poses a question:</p>
+
+<p><a href="http://www.amazon.com/Database-Depth-Relational-Theory-Practitioners/dp/0596100124/justatheory-20"><img class="right" src="http://ecx.images-amazon.com/images/I/41Z2NjCztCL.jpg" width="300" title="“Database in Depth,” by C.J. Date" ></a></p>
+
+<blockquote><p>In Chapter 1, I said that 1NF meant that every tuple in every relation
+contains just a single value (of the appropriate type, of course) in every
+attribute position&mdash;and it’s usual to add that those “single values” are
+supposed to be atomic. But this latter requirement raises the obvious
+question: what does it mean for data to be atomic?</p>
+
+<p>Well, on page 6 of the book mentioned earlier, Codd defines atomic data as
+data that “cannot be decomposed into smaller pieces by the DBMS (excluding
+certain special functions).” But even if we ignore that parenthetical
+exclusion, this definition is a trifle puzzling, and not very precise. For
+example, what about character strings? Are character strings atomic? Every
+product I know provides several operators on such strings—LIKE, SUBSTR
+(substring), “||” (concatenate), and so on—that clearly rely on the fact that
+character strings in general can be decomposed by the DBMS. So are those
+strings atomic? What do you think?</p></blockquote>
+
+<p>The whole book is worth a read, especially the first four chapters, as it
+does an excellent job of dispelling the myth that complex data types are
+verboten in a properly normalized relational model. Another gem:</p>
+
+<blockquote><p>But I could have used any number of different examples to make my point: I
+could have shown attributes (and therefore domains) that contained arrays; or
+bags; or lists; or photographs; or audio or video recordings; or X rays; or
+fingerprints; or XML documents; or any other kind of value, “atomic” or
+“nonatomic,” that you might care to think of. Attributes, and therefore
+domains, can contain anything (any values, that is). All of which goes a long
+way, incidentally, toward explaining why a true “object/relational” system
+would be nothing more nor less than a true relational system—which is to say,
+a system that supports the relational model, with all that such support
+entails.</p></blockquote>
+
+<p>This is exactly why PostgreSQL offers <a href="http://www.postgresql.org/docs/current/static/arrays.html">array</a>, <a href="http://www.postgresql.org/docs/current/static/datatype-xml.html">XML</a>, and <a href="http://www.postgresql.org/docs/current/static/datatype-json.html">JSON</a> data types:
+because sometimes, they are exactly what you need to properly model your
+system.</p>
+
+<p>So you go, Brent, you&rsquo;re doing it exactly right.</p>
+</div>
+
+
+    </article>
+  
+    
+    
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/sqitch/2014/01/09/sqitch-on-target/">Sqitch on Target</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-09T15:27:00-08:00" pubdate data-updated="true">Thursday,  9 January 2014</time>
+        
+         &bull; <a rel="bookmark" href="/sqitch/2014/01/09/sqitch-on-target/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>At the end of the day last week, I released <a href="http://sqitch.org/">Sqitch</a> v0.990. This was a
+pretty big release, with lots of changes. The most awesome addition, in my
+opinion, is <em>Named Deployment targets.</em></p>
+
+<p>In previous versions of Sqitch, one
+could set default values for the database to deploy to, but needed to use the
+<code>--db-*</code> options to deploy to another database. This was fine for
+development: just set the default on <code>localhost</code> and go. But when it came
+time to deploy to other servers for testing, QA, or production, it was a bit
+of a PITA. At <a href="http://www.iovation.com/">work</a>, I ended up writing deployment docs that defined a slew
+of environment variables, and our operations team needed to adjust those
+variables to deploy to various servers. It was ugly, and frankly a bit of a
+pain in the ass.</p>
+
+<p>I thought it&rsquo;d be better to have named deployment targets, so instead of
+changing a bunch of environment variables in order to set a bunch of options,
+we could just name a target and go. I borrowed the idea from <a href="http://git-scm.com/docs/git-remote">Git remotes</a>,
+and started a <a href="https://github.com/theory/uri-db">database URI spec</a> (mentioned <a href="/rfc/2013/11/26/toward-a-database-uri-standard/">previously</a>) to simplify things
+a bit. Here&rsquo;s how it works. Say you have a PostgreSQL Sqitch project called
+&ldquo;Flipr&rdquo;. While doing development, you&rsquo;ll want to have a local database to
+deploy to. There is also a QA database and a production database. Use the
+<a href="https://metacpan.org/pod/sqitch-target"><code>target</code></a> command to set them up:</p>
+
+<figure class='code'><figcaption><span>Sqitch Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch target add dev db:pg:flipr
+</span><span class='line'>sqitch target add qa db:pg://sqitch@qa.example.com/flipr
+</span><span class='line'>sqitch target add prod db:pg://sqitch@db.example.com/flipr
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Like <a href="http://git-scm.com/docs/git-remote">Git remotes</a>, we just have names and URIs. To <a href="https://metacpan.org/pod/sqitch-deploy"><code>deploy</code></a> to a database,
+just name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to Dev</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Want to deploy to QA? Name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to QA</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy qa
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works with any of the commands that connect to a database, including
+<a href="https://metacpan.org/pod/sqitch-revert"><code>revert</code></a> and <a href="https://metacpan.org/pod/sqitch-status"><code>status</code></a>:</p>
+
+<figure class='code'><figcaption><span>Targeted revert, Status</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch revert --to @HEAD^^ dev
+</span><span class='line'>sqitch status prod
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The great thing about this feature is that the configuration is all stored
+in the project Sqitch configuration file. That means you can commit all the
+connection URIs for all likely targets in directly to the project repository.
+If they change, just change them in the config, commit, and push.</p>
+
+<p>Targets don&rsquo;t always have to be configured in advance, of course. The names
+essentially stand in for the URIs, so you can connect to an unnamed target
+just by using a URI:</p>
+
+<figure class='code'><figcaption><span>URI Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch log db:postgres://db1.example.net/flipr_export
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course there are still defaults specific to each engine. I generally like
+to set the &ldquo;dev&rdquo; target as the default deploy target, like so:</p>
+
+<figure class='code'><figcaption><span>Configure Default Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch config core.pg.target dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the &ldquo;dev&rdquo; target as the default for the PostgreSQL engine. So now I
+can do stuff with the &ldquo;dev&rdquo; target without mentioning it at all:</p>
+
+<figure class='code'><figcaption><span>Rebase Dev Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch rebase --onto HEAD^4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Named targets may also have a couple other attributes associated with them:</p>
+
+<ul>
+<li><code>client</code>: The command-line client to use for a target.</li>
+<li><code>registry</code>: The name of the Sqitch registry schema or database, which defaults to, simply, <code>sqitch</code>.</li>
+</ul>
+
+
+<p>Now that I&rsquo;ve started using it, I can think of other things I&rsquo;d like to add to targets in the future, including:</p>
+
+<ul>
+<li><a href="https://github.com/theory/sqitch/issues/143">Setting other attributes</a>, such as the deployment mode, whether to verify changes, and variables.</li>
+<li><a href="https://github.com/theory/sqitch/issues/135">Allowing multiple URIs</a>, for concurrent database deployments!</li>
+</ul>
+
+
+<p>Pretty cool stuff ahead, IMO. I&rsquo;m grateful to <a href="http://www.iovation.com/">work</a> for letting me hack on
+Sqitch.</p>
+</div>
 
 
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/page/2/">&larr; Older</a>
     
     <a href="/archives">Blog Archives</a>
     

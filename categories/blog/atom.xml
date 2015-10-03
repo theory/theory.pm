@@ -4,7 +4,7 @@
   <title><![CDATA[Category: blog | theory.pm]]></title>
   <link href="http://theory.pm/categories/blog/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2015-03-12T10:24:38-07:00</updated>
+  <updated>2015-10-03T13:25:47-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[theory.so is No More]]></title>
+<link href="http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/"/>
+<updated>2015-10-03T13:14:00-07:00</updated>
+<id>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more</id>
+
+      <content type="html"><![CDATA[<p>Until last week, I had two newish blogs. This one, <a href="/">theory.pm</a>, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it would be a good idea to have separate blogs for separate audiences, but it turns out I don&rsquo;t post enough to make much difference. And now, as of last week, I let the theory.so domain expire. Control the <a href="https://en.wikipedia.org/wiki/.so">.so</a> domain was turned over to Somalia a few months ago, and domain renwal fees went <em>way</em> up. Since I had so few posts over there (14 since August, 2013), I decided it was a good time to just merge it with theory.pm and be done with it.</p>
+
+<p>So my apologies if a bunch of my old posts just showed up in your RSS readers. (You all still use RSS readers, right?). This is a one-time merging of the two blogs, so should not happen again.</p>
+
+<p>Well…maybe. Now I have a total of 25 posts on theory.pm (since July 2013), which is still pretty paltry. I&rsquo;m thinking it&rsquo;s silly to have this thing separate from my original blog, <a href="http://justatheory.com/">Just a Theory</a>, so I might eventually merge that blog, too. Not sure what domain I&rsquo;ll use for it. Maybe I&rsquo;ll go back to justatheory.com. Or maybe I&rsquo;ll use one of the other domains I registered, like the recently added theory.one. Or maybe theory dot something else.</p>
+
+<p>Not that you care. Good on you for reading this far. I would have stopped before now. You&rsquo;re a better person than I.</p>
+]]></content>
+    </entry>
   
     <entry>
       

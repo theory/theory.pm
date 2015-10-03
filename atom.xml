@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2015-03-12T10:24:38-07:00</updated>
+  <updated>2015-10-03T13:25:47-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[theory.so is No More]]></title>
+<link href="http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/"/>
+<updated>2015-10-03T13:14:00-07:00</updated>
+<id>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more</id>
+
+      <content type="html"><![CDATA[<p>Until last week, I had two newish blogs. This one, <a href="http://theory.pm/">theory.pm</a>, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it would be a good idea to have separate blogs for separate audiences, but it turns out I don&rsquo;t post enough to make much difference. And now, as of last week, I let the theory.so domain expire. Control the <a href="https://en.wikipedia.org/wiki/.so">.so</a> domain was turned over to Somalia a few months ago, and domain renwal fees went <em>way</em> up. Since I had so few posts over there (14 since August, 2013), I decided it was a good time to just merge it with theory.pm and be done with it.</p>
+
+<p>So my apologies if a bunch of my old posts just showed up in your RSS readers. (You all still use RSS readers, right?). This is a one-time merging of the two blogs, so should not happen again.</p>
+
+<p>Well…maybe. Now I have a total of 25 posts on theory.pm (since July 2013), which is still pretty paltry. I&rsquo;m thinking it&rsquo;s silly to have this thing separate from my original blog, <a href="http://justatheory.com/">Just a Theory</a>, so I might eventually merge that blog, too. Not sure what domain I&rsquo;ll use for it. Maybe I&rsquo;ll go back to justatheory.com. Or maybe I&rsquo;ll use one of the other domains I registered, like the recently added theory.one. Or maybe theory dot something else.</p>
+
+<p>Not that you care. Good on you for reading this far. I would have stopped before now. You&rsquo;re a better person than I.</p>
+]]></content>
+    </entry>
   
     <entry>
       
@@ -641,6 +662,1323 @@ user-visible strings</li>
 
 
 
+<title type="html"><![CDATA[Sqitch Goes Vertical]]></title>
+<link href="http://theory.pm/2014/09/05/sqitch-goes-vertical/"/>
+<updated>2014-09-05T17:46:00-07:00</updated>
+<id>http://theory.pm/2014/09/05/sqitch-goes-vertical</id>
+
+      <content type="html"><![CDATA[<p>I released <a href="http://sqitch.org/">Sqitch</a> v0.996 today. Despite the minor version increase, this is
+a pretty big release. I&rsquo;m busy knocking out all the stuff I want to get done
+for 1.0, but the version space is running out, so just a minor version jump
+from v0.995 to v0.996. But a lot changed. A couple the biggies:</p>
+
+<h3>Goodbye Mouse and Moose, Hello Moo</h3>
+
+<p>If you&rsquo;re not a Perl programmer, you probably aren&rsquo;t familiar with <a href="https://metacpan.org/module/Moose">Moose</a> or
+its derivatives <a href="https://metacpan.org/module/Mouse">Mouse</a> and <a href="https://metacpan.org/module/Moo">Moo</a>. Briefly, it&rsquo;s an object system. Great
+interface and features, but freaking <em>huge</em>—and <em>slow</em>. Mouse is a lighter
+version, and when we (mostly) switched to it <a href="https://github.com/theory/sqitch/pull/73">last year</a>, it yielded a 20-30% speed
+improvement.</p>
+
+<p>Still wasn&rsquo;t great, though. So on a day off recently, I switched
+to Moo, which implements most of Moose but without a lot of the baggage. At
+first, there wasn&rsquo;t much difference in performance, but as I profiled it
+(<a href="https://metacpan.org/module/Devel::NYTProf">Devel::NYTProf</a> is indispensable for profiling Perl apps, BTW), I was able
+to root out all trace of Moose or Mouse, including in CPAN modules Sqitch
+depends on. The result is around a 40% speedup over what we had before.
+Honestly, it feels like a new app, it&rsquo;s so fast. I&rsquo;m really happy with how it
+turned out, and to have shed some of the baggage from the code base.</p>
+
+<p>The downside is that package maintainers will need to do some work to get the
+new dependencies built. Have a look at <a href="https://github.com/theory/sqitch/compare/v0.995...v0.996#diff-4">the RPM spec changes</a> I made to get
+our internal Sqitch RPMs to build v0.996.</p>
+
+<h3>MySQL Password Handling</h3>
+
+<p>The handling of MySQL passwords has also been improved. Sqitch now uses the
+<code>$MYSQL_PWD</code> environment variable if a password is provided in a target. This
+should simplify authentication when running MySQL change scripts through the
+<code>mysql</code> client client.</p>
+
+<p>Furthermore, if <a href="https://metacpan.org/module/MySQL::Config">MySQL::Config</a> is installed, Sqitch will look for passwords
+in the <code>client</code> and <code>mysql</code> sections of your MySQL configuration files
+(<code>~/.my.cnf</code>, <code>/etc/my.cnf</code>). This should already happen automatically when
+executing scripts, but Sqitch now tries to replicate that behavior when
+connecting to the database via <a href="https://metacpan.org/module/DBI">DBI</a>.</p>
+
+<p>Spotting the <code>$MYSQL_PWD</code> commit, Ștefan Suciu updated the Firebird engine to
+use the <code>$ISC_PASSWORD</code> when running scripts. Awesome.</p>
+
+<h3>Vertically Integrated</h3>
+
+<p>And finally, another big change: I added support for <a href="https://my.vertica.com/">Vertica</a>, a very nice
+commercial column-store database that features partitioning and sharding,
+among other OLAP-style functionality. It was originally forked from
+<a href="http://www.postgresql.org/">PostgreSQL</a>, so it was fairly straight-forward to port, though I did have to
+borrow a bit from the Oracle and SQLite engines, too. This port was essential
+for <a href="http://www.iovation.com/">work</a>, as we&rsquo;re starting to use Vertical more and more, and need ways to
+manage changes.</p>
+
+<p>If you&rsquo;re using Vertica, peruse <a href="https://github.com/theory/sqitch/blob/master/lib/sqitchtutorial-vertica.pod">the tutorial</a> to get a feel for what it&rsquo;s
+all about. If you want to install it, you can get it from CPAN:</p>
+
+<pre><code>cpan install App::Sqitch BDD::ODBC
+</code></pre>
+
+<p>Or, if you&rsquo;re on Homebrew:</p>
+
+<pre><code>brew tap theory/sqitch
+brew install sqitch_vertica
+</code></pre>
+
+<p>Be warned that there&rsquo;s a minor bug in v0.996, though. Apply this diff to fix
+it:</p>
+
+<pre><code>@@ -16,7 +16,7 @@ our $VERSION = '0.996';
+
+ sub key    { 'vertica' }
+ sub name   { 'Vertica' }
+-sub driver { 'DBD::Pg 2.0' }
++sub driver { 'DBD::ODBC 1.43' }
+ sub default_client { 'vsql' }
+
+ has '+destination' =&gt; (
+</code></pre>
+
+<p>That fix will be in the next release, of course, as will <a href="https://github.com/theory/sqitch/commit/4f8dbaa236a04f6dd1ec762250ffd8481078691a">support for Vertica 6</a>.</p>
+
+<h3>What Next?</h3>
+
+<p>I need to focus on some other work stuff for a few weeks, but then I expect
+to come back to Sqitch again. I&rsquo;d like to get 1.0 shipped before the end of
+the year. To that end, next up I will be <a href="https://github.com/theory/sqitch/issues/153">rationalizing configuration hierarchies</a>
+to make engine selection and deploy-time configuration more sensible. I hope
+to get that done by early October.</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ Managing Sqitch with Make]]></title>
+<link href="http://www.modernperlbooks.com/mt/2014/02/managing-sqitch-with-make.html"/>
+<updated>2014-02-09T13:58:00-08:00</updated>
+<id>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make</id>
+
+      <content type="html"><![CDATA[<p>chromatic:</p>
+
+<blockquote><p>This saves me a few dozen keystrokes and a few seconds every time I make a
+database change. If that sounds trivial to you, good. A few keystrokes and a
+few seconds <em>are</em> trivial. My brainpower <em>isn&rsquo;t</em> trivial. Those keystrokes
+and seconds mean the difference between staying in the zone and fumbling
+around trying to remember commands I don&rsquo;t use all day every day. They save
+me minutes every time I use them, if you count the friction of switching
+between &ldquo;How do I do this in Sqitch again? What&rsquo;s the directory layout here?&rdquo;
+and &ldquo;What was I really working on?&rdquo;</p></blockquote>
+
+<p>Nice application of a <code>Makefile</code> to eliminate boilerplate. A couple of notes, though:</p>
+
+<p>Nice post. A couple comments and questions:</p>
+
+<ul>
+<li><p>As of Sqitch v0.990, you can pass the <code>--open-editor</code> option to the <code>add</code>
+command to have the new files opened in your editor.</p></li>
+<li><p>If you want to add a pgTAP test with a new change, see <a href="http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/" title="Templating Tests with Sqitch">this post</a>.</p></li>
+<li><p>What is the call to <code>sqitch status</code> for? Since its output just goes to
+<code>/dev/null</code>, I don&rsquo;t understand the point.</p></li>
+<li><p>Also as of v0.990, you can <a href="http://theory.pm/sqitch/2014/01/09/sqitch-on-target/" title="Sqitch on Target">specify Sqitch targets</a>. The <code>-d</code>, <code>-u</code>, and
+other options then override values in the target URI.</p></li>
+<li><p>I <em>really</em> want to get Sqitch to <a href="https://github.com/theory/sqitch/issues/25" title="Add VCS Integration to Sqitch">better understand and work with VCSs</a>. An
+example would be to have it automatically <code>git add</code> files created by
+<code>sqitch add</code>. Another might be a Git config setting pointing to the Sqitch
+config file. Alas, I don&rsquo;t know when I will have the tuits to work on that.</p></li>
+</ul>
+
+
+<p>Lots of room for growth and improvement in Sqitch going forward. You post provides more food for thought.</p>
+<p><a rel="bookmark" href="http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make/">§</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Templating Tests with Sqitch]]></title>
+<link href="http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/"/>
+<updated>2014-01-13T14:11:00-08:00</updated>
+<id>http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch</id>
+
+      <content type="html"><![CDATA[<p>Back in September, <a href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/">I described</a> how to create custom deploy, revert, and
+verify scripts for various types of <a href="http://sqitch.org/" title="Sane database schema change management">Sqitch</a> changes, such as adding a new
+table. Which is cool and all, but what I&rsquo;ve found while developing databases
+at <a href="http://iovation.com/">work</a> is that I nearly always want to create a test script with the same
+name as a newly-added change.</p>
+
+<p>So for the recent v0.990 release, the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> gained the ability to
+generate arbitrary script files from templates. To get it to work, we just
+have to create template files. Templates can go into <code>~/.sqitch/templates</code>
+(for personal use) or in <code>$(sqitch --etc-path)/templates</code> (for use by
+everyone on a system). The latter is where templates are installed by
+default. Here&rsquo;s what it looks like:</p>
+
+<figure class='code'><figcaption><span>List Default Templates</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates
+</span><span class='line'>deploy  revert  verify
+</span><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates/deploy
+</span><span class='line'>firebird.tmpl  mysql.tmpl  oracle.tmpl  pg.tmpl  sqlite.tmpl
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each directory defines the type of script and the name of the directory in
+which it will be created. The contents are default templates, one for each
+engine.</p>
+
+<p>To create a default test template, all we have to do is create a template for our preferred engine in a directory named <code>test</code>. So I created <code>~/.sqitch/templates/test/pg.tmpl</code>. Here it is:</p>
+
+<figure class='code'><figcaption><span>Default pgTAP template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test [% change %]!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is my standard boilerplate for tests, more or less. It just loads
+<a href="http://pgtap.org/">pgTAP</a>, sets the plan, runs the tests, finishes and rolls back. See this
+template in action:</p>
+
+<figure class='code'><figcaption><span>Add a change.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add whatever -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/whatever.sql
+</span><span class='line'>Created revert/whatever.sql
+</span><span class='line'>Created <span class="nb">test</span>/whatever.sql
+</span><span class='line'>Created verify/whatever.sql
+</span><span class='line'>Added <span class="s2">&quot;whatever&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool, it added the test script. Here’s what it looks like:</p>
+
+<figure class='code'><figcaption><span>Generated test script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test whatever!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that it replaced the <code>change</code> variable in the call to <code>pass()</code>. All
+ready to start writing tests! Nice, right? If we don&rsquo;t want the test script
+created &ndash; for example when adding a column to a table for which a test
+already exists &ndash; we use the <code>--without</code> option to omit it:</p>
+
+<figure class='code'><figcaption><span>Add change without test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add add_timestamp_column --without <span class="nb">test</span> -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/add_timestamp_column.sql
+</span><span class='line'>Created revert/add_timestamp_column.sql
+</span><span class='line'>Created verify/add_timestamp_column.sql
+</span><span class='line'>Added <span class="s2">&quot;add_timestamp_column&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Naturally you&rsquo;ll want to update the existing test to validate the new column.</p>
+
+<p>In the <a href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/">previous templating post</a>, we added custom scripts as for <code>CREATE
+TABLE</code> changes; now we can add a test template, too. This one takes advantage
+of the advanced features of <a href="http://tt2.org/">Template Toolkit</a>. We name it
+<code>~/.sqitch/templates/test/createtable.tmpl</code> to complement the deploy,
+revert, and verify scripts created previously:</p>
+
+<figure class='code'><figcaption><span>CREATE TABLE test template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test [% change %]</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;[% table or change %]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% type.item( loop.index ) or &#39;</span><span class="nb">text</span><span class="s1">&#39; %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As <a href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/">before</a>, we tell the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> to use the <code>createtable</code> templates:</p>
+
+<figure class='code'><figcaption><span>Create table with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">schema</span><span class="o">=</span>corp -s <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>id -s <span class="nb">type</span><span class="o">=</span>SERIAL <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>name -s <span class="nb">type</span><span class="o">=</span>TEXT <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>quantity -s <span class="nb">type</span><span class="o">=</span>INTEGER <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This yields a very nice test script to get you going:</p>
+
+<figure class='code'><figcaption><span>Generated Table Test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test corp_widgets</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;SERIAL&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;TEXT&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;INTEGER&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t know about you, but I&rsquo;ll be using this functionality <em>a lot.</em></p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ Brent Simmons is Not Wrong]]></title>
+<link href="http://inessential.com/2014/01/02/vesper_sync_diary_7_audibles"/>
+<updated>2014-01-10T11:02:00-08:00</updated>
+<id>http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong</id>
+
+      <content type="html"><![CDATA[<p>Brent Simmons:</p>
+
+<blockquote><p>Database people are already gasping for air, because they know what’s coming.
+Instead of creating a separate table for attachment metadata, I created an
+attachments column in the notes table and just encoded the attachment
+metadata there.</p>
+
+<p>On iOS it uses Core Data’s built-in object archiving feature. On the server
+it’s stored as JSON.</p>
+
+<p>This is wrong, surely; it’s not how to do this. Except, in this case, it is.
+Incomplete object graphs are wrong; inefficient and slower syncing with more
+complex server-side code is also wrong.</p>
+
+<p>This is <em>less wrong than the alternatives.</em></p></blockquote>
+
+<p>Some database folks might be gasping for air, but not those of us steeped in
+relational theory. In <em><a href="http://www.amazon.com/Database-Depth-Relational-Theory-Practitioners/dp/0596100124/justatheory-20">Database in Depth</a></em>, relational theorist <a href="http://en.wikipedia.org/wiki/Christopher_J._Date">C.J. Date</a>
+poses a question:</p>
+
+<p><a href="http://www.amazon.com/Database-Depth-Relational-Theory-Practitioners/dp/0596100124/justatheory-20"><img class="right" src="http://ecx.images-amazon.com/images/I/41Z2NjCztCL.jpg" width="300" title="“Database in Depth,” by C.J. Date" ></a></p>
+
+<blockquote><p>In Chapter 1, I said that 1NF meant that every tuple in every relation
+contains just a single value (of the appropriate type, of course) in every
+attribute position&mdash;and it’s usual to add that those “single values” are
+supposed to be atomic. But this latter requirement raises the obvious
+question: what does it mean for data to be atomic?</p>
+
+<p>Well, on page 6 of the book mentioned earlier, Codd defines atomic data as
+data that “cannot be decomposed into smaller pieces by the DBMS (excluding
+certain special functions).” But even if we ignore that parenthetical
+exclusion, this definition is a trifle puzzling, and not very precise. For
+example, what about character strings? Are character strings atomic? Every
+product I know provides several operators on such strings—LIKE, SUBSTR
+(substring), “||” (concatenate), and so on—that clearly rely on the fact that
+character strings in general can be decomposed by the DBMS. So are those
+strings atomic? What do you think?</p></blockquote>
+
+<p>The whole book is worth a read, especially the first four chapters, as it
+does an excellent job of dispelling the myth that complex data types are
+verboten in a properly normalized relational model. Another gem:</p>
+
+<blockquote><p>But I could have used any number of different examples to make my point: I
+could have shown attributes (and therefore domains) that contained arrays; or
+bags; or lists; or photographs; or audio or video recordings; or X rays; or
+fingerprints; or XML documents; or any other kind of value, “atomic” or
+“nonatomic,” that you might care to think of. Attributes, and therefore
+domains, can contain anything (any values, that is). All of which goes a long
+way, incidentally, toward explaining why a true “object/relational” system
+would be nothing more nor less than a true relational system—which is to say,
+a system that supports the relational model, with all that such support
+entails.</p></blockquote>
+
+<p>This is exactly why PostgreSQL offers <a href="http://www.postgresql.org/docs/current/static/arrays.html">array</a>, <a href="http://www.postgresql.org/docs/current/static/datatype-xml.html">XML</a>, and <a href="http://www.postgresql.org/docs/current/static/datatype-json.html">JSON</a> data types:
+because sometimes, they are exactly what you need to properly model your
+system.</p>
+
+<p>So you go, Brent, you&rsquo;re doing it exactly right.</p>
+<p><a rel="bookmark" href="http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong/">§</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Sqitch on Target]]></title>
+<link href="http://theory.pm/sqitch/2014/01/09/sqitch-on-target/"/>
+<updated>2014-01-09T15:27:00-08:00</updated>
+<id>http://theory.pm/sqitch/2014/01/09/sqitch-on-target</id>
+
+      <content type="html"><![CDATA[<p>At the end of the day last week, I released <a href="http://sqitch.org/">Sqitch</a> v0.990. This was a
+pretty big release, with lots of changes. The most awesome addition, in my
+opinion, is <em>Named Deployment targets.</em></p>
+
+<p>In previous versions of Sqitch, one
+could set default values for the database to deploy to, but needed to use the
+<code>--db-*</code> options to deploy to another database. This was fine for
+development: just set the default on <code>localhost</code> and go. But when it came
+time to deploy to other servers for testing, QA, or production, it was a bit
+of a PITA. At <a href="http://www.iovation.com/">work</a>, I ended up writing deployment docs that defined a slew
+of environment variables, and our operations team needed to adjust those
+variables to deploy to various servers. It was ugly, and frankly a bit of a
+pain in the ass.</p>
+
+<p>I thought it&rsquo;d be better to have named deployment targets, so instead of
+changing a bunch of environment variables in order to set a bunch of options,
+we could just name a target and go. I borrowed the idea from <a href="http://git-scm.com/docs/git-remote">Git remotes</a>,
+and started a <a href="https://github.com/theory/uri-db">database URI spec</a> (mentioned <a href="http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/">previously</a>) to simplify things
+a bit. Here&rsquo;s how it works. Say you have a PostgreSQL Sqitch project called
+&ldquo;Flipr&rdquo;. While doing development, you&rsquo;ll want to have a local database to
+deploy to. There is also a QA database and a production database. Use the
+<a href="https://metacpan.org/pod/sqitch-target"><code>target</code></a> command to set them up:</p>
+
+<figure class='code'><figcaption><span>Sqitch Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch target add dev db:pg:flipr
+</span><span class='line'>sqitch target add qa db:pg://sqitch@qa.example.com/flipr
+</span><span class='line'>sqitch target add prod db:pg://sqitch@db.example.com/flipr
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Like <a href="http://git-scm.com/docs/git-remote">Git remotes</a>, we just have names and URIs. To <a href="https://metacpan.org/pod/sqitch-deploy"><code>deploy</code></a> to a database,
+just name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to Dev</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Want to deploy to QA? Name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to QA</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy qa
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works with any of the commands that connect to a database, including
+<a href="https://metacpan.org/pod/sqitch-revert"><code>revert</code></a> and <a href="https://metacpan.org/pod/sqitch-status"><code>status</code></a>:</p>
+
+<figure class='code'><figcaption><span>Targeted revert, Status</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch revert --to @HEAD^^ dev
+</span><span class='line'>sqitch status prod
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The great thing about this feature is that the configuration is all stored
+in the project Sqitch configuration file. That means you can commit all the
+connection URIs for all likely targets in directly to the project repository.
+If they change, just change them in the config, commit, and push.</p>
+
+<p>Targets don&rsquo;t always have to be configured in advance, of course. The names
+essentially stand in for the URIs, so you can connect to an unnamed target
+just by using a URI:</p>
+
+<figure class='code'><figcaption><span>URI Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch log db:postgres://db1.example.net/flipr_export
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course there are still defaults specific to each engine. I generally like
+to set the &ldquo;dev&rdquo; target as the default deploy target, like so:</p>
+
+<figure class='code'><figcaption><span>Configure Default Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch config core.pg.target dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the &ldquo;dev&rdquo; target as the default for the PostgreSQL engine. So now I
+can do stuff with the &ldquo;dev&rdquo; target without mentioning it at all:</p>
+
+<figure class='code'><figcaption><span>Rebase Dev Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch rebase --onto HEAD^4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Named targets may also have a couple other attributes associated with them:</p>
+
+<ul>
+<li><code>client</code>: The command-line client to use for a target.</li>
+<li><code>registry</code>: The name of the Sqitch registry schema or database, which defaults to, simply, <code>sqitch</code>.</li>
+</ul>
+
+
+<p>Now that I&rsquo;ve started using it, I can think of other things I&rsquo;d like to add to targets in the future, including:</p>
+
+<ul>
+<li><a href="https://github.com/theory/sqitch/issues/143">Setting other attributes</a>, such as the deployment mode, whether to verify changes, and variables.</li>
+<li><a href="https://github.com/theory/sqitch/issues/135">Allowing multiple URIs</a>, for concurrent database deployments!</li>
+</ul>
+
+
+<p>Pretty cool stuff ahead, IMO. I&rsquo;m grateful to <a href="http://www.iovation.com/">work</a> for letting me hack on
+Sqitch.</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Toward A Database URI Standard]]></title>
+<link href="http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/"/>
+<updated>2013-11-26T20:14:00-08:00</updated>
+<id>http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard</id>
+
+      <content type="html"><![CDATA[<p>As part of my effort to improve <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, I plan to add support for <a href="https://github.com/theory/sqitch/issues/100" title="Issue #100: “Add target command to configure target databases”">specifying
+deployment targets via URIs</a>. Inspired by <a href="http://git-scm.com/book/en/Git-Basics-Working-with-Remotes" title="Git Basics - Working with Remotes">Git remotes</a>, targets will greatly
+simplify the specification of databases to update &mdash; especially when stored as
+named targets in the configuration file.</p>
+
+<p>Before implementing it, though, I started casting about for a standard
+<a href="http://en.wikipedia.org/wiki/URI_scheme" title="Wikipedia: “URI Scheme”">URI Scheme</a> for database connections. Imagine my surprise<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> to find that
+there is none! The closest thing to a standard is <a href="http://www.jguru.com/faq/view.jsp?EID=690" title="jGuru: “What is a database URL?”">JDBC URLs</a>. Formally, their
+format is simply:</p>
+
+<pre><code>jdbc:&lt;jdbc-specific-stuff&gt;
+</code></pre>
+
+<p>Turns out that JDBC URLs are <a href="https://groups.google.com/forum/#!topic/comp.lang.java.programmer/twkIYNaDS64" title="comp.lang.java.programmer: ”JDBC URLs ...not really URLs?“">barely URLs at all</a>. I mean, fine, according to
+<a href="http://www.ietf.org/rfc/rfc3986.txt" title="Uniform Resource Identifier (URI): Generic Syntax">RFC 3986</a> they start with the <code>jdbc:</code> scheme followed by whatever. According
+to the <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/jdbc/getstart/connection.html#997649" title="Getting Started with the JDBC API: “JDBC URLs”">JDBC docs</a>, what comes after the scheme is defined as follows:</p>
+
+<pre><code>jdbc:&lt;subprotocol&gt;:&lt;subname&gt;
+</code></pre>
+
+<p>The &ldquo;subprotocol&rdquo; is simply a driver name, while the the format of the &ldquo;subname
+can vary, depending on the subprotocol, and it can have any internal syntax the
+driver writer chooses, including a subsubname.&rdquo; In other words, it can be
+anything at all. Not very satisfying, or particularly &ldquo;standard.&rdquo;<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+
+<p>In poking around the net, however, I found a fair number of database URI
+formats defined by various projects:</p>
+
+<ul>
+<li><p><a href="http://www.postgresql.org/docs/9.3/static/libpq-connect.html#LIBPQ-CONNSTRING" title="PostgreSQL Documentation: “Connection Strings”">PostgreSQL libpq URIs</a>
+<code>postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&amp;...]</code></p></li>
+<li><p><a href="http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html#database-urls" title="SQLAlchemy Documentation: “Database Urls”">SQLAlchemy URLs</a>:
+<code>dialect[+driver:]//[username[:password]@host[:port]/database</code></p></li>
+<li><p><a href="http://docs.stackato.com/3.0/user/services/data-services.html#database-url" title="Stackato Documentation: “DATABASE_URL”">Stackato database URLs</a>:
+<code>protocol://[username[:password]@host[:port]/database_name</code></p></li>
+<li><p><a href="https://github.com/kennethreitz/dj-database-url" title="DJ-Database-URL on GitHub">Django database URLs</a>:
+<code>ENGINE://[USER[:PASSWORD]@][HOST][:PORT]/DATABASE</code></p></li>
+<li><p><a href="https://github.com/glenngillen/rails-database-url" title="rails-database-url on GitHub">Rails database URLs</a>:
+<code>adapter://[userinfo@][hostname][:port]/database</code></p></li>
+</ul>
+
+
+<p>All very similar, right? Most database engines support all or a subset of these
+connection parts in common:</p>
+
+<ul>
+<li>username</li>
+<li>password</li>
+<li>host address</li>
+<li>port</li>
+<li>database name</li>
+<li>configuration parameters</li>
+</ul>
+
+
+<p>So why not define a standard database URI format with all those parts, and use
+them where appropriate for each engine? It&rsquo;s all right there, just like
+<a href="http://tools.ietf.org/html/rfc2616#page-19" title="RFC 2616: “http URL”">http URLs</a>.</p>
+
+<h2>The Proposal</h2>
+
+<p>Here&rsquo;s <a href="https://github.com/theory/uri-db" title="Database URI on GitHub">my proposal</a>. Formally, it&rsquo;s an opaque URI like JDBC. All database URIs
+start with the scheme <code>db:</code>. But in this case, the opaque part is an embedded
+URI that may be in one of two formats:</p>
+
+<pre><code>engine://[username[:password]@]host[:port][/dbname][?params]
+engine:[dbname][?params]
+</code></pre>
+
+<p>In other words, a pretty typical http- or mailto-style URI format. We embed it
+in a <code>db:</code> URI in order to identify the URI as a database URI, and to have a
+single reasonable scheme to register. Informally, it&rsquo;s simplest to think of a
+database URI as a single URI starting with the combination of the scheme and
+the engine, e.g., <code>db:mysql</code>.</p>
+
+<p>Some notes on the formats:</p>
+
+<ul>
+<li><p>The Database URI <em>scheme</em> is <code>db</code>. Consequently, database URIs always start
+with <code>db:</code>. This is the <a href="http://en.wikipedia.org/wiki/URI_scheme" title="Wikipedia: “URI Scheme”">URI scheme</a> that defines a database URI.</p></li>
+<li><p>Next comes the database <em>engine</em>. This part is a string naming the type of
+database engine for the database. It must always be followed by a colon, <code>:</code>.
+There is no formal list of supported engines, though certain implementations
+may specify engine-specific semantics, such as a default port.</p></li>
+<li><p>The <em>authority</em> part is separated from the engine by a double slash, <code>//</code>,
+and terminated by the next slash or end of the URI. It consists of an
+optional user-information part, terminated by <code>@</code> (e.g.,
+<code>username:password@</code>); a required host address (e.g., domain name or IP
+address); and an optional port number, preceded by a colon, <code>:</code>.</p></li>
+<li><p>The <em>path</em> part specifies the database name or path. For URIs that contain
+an authority part, a path specifying a file name must be absolute. URIs
+without an authority may use absolute or relative paths.</p></li>
+<li><p>The optional <em>query</em> part, separated by a question mark, <code>?</code>, contains
+<code>key=value</code> pairs separated by a semicolon, <code>;</code>, or ampersand, <code>&amp;</code>. These
+parameters may be used to configure a database connection with parameters not
+directly supported by the rest of the URI format.</p></li>
+</ul>
+
+
+<h3>Examples</h3>
+
+<p>Here are some database URIs without an authority part, which is typical for
+non-server engines such as <a href="http://sqlite.org/" title="SQLite Home Page">SQLite</a>, where the path part is a relative or
+absolute file name:</p>
+
+<ul>
+<li><code>db:sqlite:</code></li>
+<li><code>db:sqlite:foo.db</code></li>
+<li><code>db:sqlite:../foo.db</code></li>
+<li><code>db:sqlite:/var/db/foo.sqlite</code></li>
+</ul>
+
+
+<p>Other engines may use a database name rather than a file name:</p>
+
+<ul>
+<li><code>db:ingres:mydb</code></li>
+<li><code>db:postgresql:template1</code></li>
+</ul>
+
+
+<p>When a URI includes an authority part, it must be preceded by a double slash:</p>
+
+<ul>
+<li><code>db:postgresql://example.com</code></li>
+<li><code>db:mysql://root@localhost</code></li>
+<li><code>db:pg://postgres:secr3t@example.net</code></li>
+</ul>
+
+
+<p>To add the database name, separate it from the authority by a single slash:</p>
+
+<ul>
+<li><code>db:postgresql://example.com/template1</code></li>
+<li><code>db:mongodb://localhost:27017/myDatabase</code></li>
+<li><code>db:oracle://scott:tiger@foo.com/scott</code></li>
+</ul>
+
+
+<p>Some databases, such as Firebird, take both a host name and a file path.
+These paths must be absolute:</p>
+
+<ul>
+<li><code>db:firebird://localhost/tmp/test.gdb</code></li>
+<li><code>db:firebird://localhost/C:/temp/test.gdb</code></li>
+</ul>
+
+
+<p>Any URI format may optionally have a query part containing key/value pairs:</p>
+
+<ul>
+<li><code>db:sqlite:foo.db?foreign_keys=ON;journal_mode=WAL</code></li>
+<li><code>db:pg://localhost:5433/postgres?client_encoding=utf8;connect_timeout=10</code></li>
+</ul>
+
+
+<h2>Issues</h2>
+
+<p>In discussing this proposal with various folks, I&rsquo;ve become aware of a few
+challenges to standardization.</p>
+
+<p>First, the requirement that the authority part must include a host address
+prevents the specification of a URI with a username that can be used to connect
+to a Unix socket. PostgreSQL and MySQL, among others provide authenticated
+socket connections. While <a href="http://www.ietf.org/rfc/rfc3986.txt" title="Uniform Resource Identifier (URI): Generic Syntax">RFC 3986</a> requires the host name, its predecessor,
+<a href="http://www.ietf.org/rfc/rfc3986.txt" title="Uniform Resource Identifiers (URI): Generic Syntax">RFC 2396</a>, does not. Furthermore, as a precedent, neither do <a href="http://en.wikipedia.org/wiki/File_URI_scheme#Examples" title="Wikipedia: “File URI Scheme: Examples”">file URIs</a>. So
+I&rsquo;m thinking of allowing something like this to connect to a PostgreSQL database</p>
+
+<pre><code>db:pg://postgres:secr3t@/
+</code></pre>
+
+<p>In short, it makes sense to allow the user information without a host name.</p>
+
+<p>The second issue is the disallowing of relative file names in the path part
+following an authority part. The problem here is that most database engines
+don&rsquo;t use paths for database names, so a leading slash makes no sense. For
+example, in <code>db:pg:localhost/foo</code>, the PostgreSQL database name is <code>foo</code>, not
+<code>/foo</code>. Yet in <code>db:firebird:localhost/foo</code>, the Firebird database name <em>is</em> a
+path, <code>/foo</code>. So each engine implementation must know whether or not the path
+part is a file name.</p>
+
+<p>But some databases may in fact allow a path to be specified for a local
+connection, and a name for a remote connection. <a href="https://metacpan.org/pod/DBD::Informix#INFORMIX-CONNECTION-SEMANTICS" title="MetaCPAN: “Informix Connection Semantics”">Informix</a> appears to support
+such variation. So how is one to know whether the path is a file path or a
+named database? The two variants cannot be distinguished.</p>
+
+<p><a href="http://www.ietf.org/rfc/rfc3986.txt" title="Uniform Resource Identifiers (URI): Generic Syntax">RFC 2396</a> is quite explicit that the path part must be absolute when following
+an authority part. But <a href="http://www.ietf.org/rfc/rfc3986.txt" title="Uniform Resource Identifier (URI): Generic Syntax">RFC 3986</a> forbids the double slash only when there is
+no authority part. Therefore, I think it might be best to require a second
+slash for absolute paths. Engines that use a simple name or relative path can
+have it just after the slash, while an absolute path could use a second slash:</p>
+
+<ul>
+<li>Absolute: db:firebird://localhost//tmp/test.gdb</li>
+<li>Relative: db:firebird://localhost/db/test.gdb</li>
+<li>Name: db:postgresql://localhost/template1</li>
+</ul>
+
+
+<h2>That&rsquo;s It</h2>
+
+<p>The path issue aside, I feel like this is a pretty simple proposal, and could
+have wide utility. I&rsquo;ve already knocked out a Perl reference implementation,
+<a href="https://github.com/theory/uri-db/blob/master/lib/URI/db.pm" title="URI::db on GitHub">URI::db</a>. Given the wide availability of URI parsers in various programming
+languages, I wouldn&rsquo;t expect it to be difficult to port, either.</p>
+
+<p>The <a href="https://github.com/theory/uri-db/" title="uri-db on GitHub">uri-db project</a> is the canonical home for the proposal for now, so check
+there for updates. And your feedback would be appreciated! What other issues
+have I overlooked? What have I got wrong? Let me know!</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>As in not surprised at all. Though I was hoping!<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>DSNs for Perl&rsquo;s <a href="https://metacpan.org/module/DBI" title="MetaCPAN: DBI">DBI</a> aren&rsquo;t much better: <code>dbi:&lt;driver&gt;:&lt;driver-specific-stuff&gt;</code>.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Indexing Nested hstore]]></title>
+<link href="http://theory.pm/pg/2013/10/25/indexing-nested-hstore/"/>
+<updated>2013-10-25T14:36:00-07:00</updated>
+<id>http://theory.pm/pg/2013/10/25/indexing-nested-hstore</id>
+
+      <content type="html"><![CDATA[<p>In my first <a href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/">Nested hstore</a> post yesterday, I ran a query against unindexed
+hstore data, which required a table scan. But hstore is able to take
+advantage of <a href="http://www.postgresql.org/docs/current/static/gin.html">GIN indexes</a>. So let&rsquo;s see what that looks like. Connecting to
+the same database, I indexed the <code>review</code> column:</p>
+
+<figure class='code'><figcaption><span>Indexing reviews</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">reviews</span><span class="o">=#</span> <span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">idx_reviews_gin</span> <span class="k">ON</span> <span class="n">reviews</span> <span class="k">USING</span> <span class="n">GIN</span><span class="p">(</span><span class="n">review</span><span class="p">);</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">INDEX</span>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">360448</span><span class="p">.</span><span class="mi">426</span> <span class="n">ms</span>
+</span><span class='line'><span class="n">reviews</span><span class="o">=#</span> <span class="k">SELECT</span> <span class="n">pg_size_pretty</span><span class="p">(</span><span class="n">pg_database_size</span><span class="p">(</span><span class="n">current_database</span><span class="p">()));</span>
+</span><span class='line'> <span class="n">pg_size_pretty</span>
+</span><span class='line'><span class="c1">----------------</span>
+</span><span class='line'> <span class="mi">421</span> <span class="n">MB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Well, that takes a while, and makes the database a lot bigger (it was 277 MB
+unindexed). But is it worth it? Let&rsquo;s find out. Oleg and Teodor&rsquo;s patch adds
+support for a nested hstore value on the right-hand-side of the <code>@&gt;</code>
+operator. In practice, that means we can specify the full path to a nested
+value as an hstore expression. In our case, to query only for Books, instead
+of using this expression:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">WHERE</span> <span class="n">review</span> <span class="o">#&gt;</span> <span class="s1">&#39;{product,group}&#39;</span> <span class="o">=</span> <span class="s1">&#39;Book&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can use an hstore value with the entire path, including the value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">WHERE</span> <span class="n">review</span> <span class="o">@&gt;</span> <span class="s1">&#39;{product =&gt; {group =&gt; Book}}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Awesome, right? Let&rsquo;s give it a try:</p>
+
+<figure class='code'><figcaption><span>Query Book Reviews</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">reviews</span><span class="o">=#</span> <span class="k">SELECT</span>
+</span><span class='line'>    <span class="n">width_bucket</span><span class="p">(</span><span class="k">length</span><span class="p">(</span><span class="n">review</span> <span class="o">#&gt;</span> <span class="s1">&#39;{product,title}&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="n">title_length_bucket</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">round</span><span class="p">(</span><span class="k">avg</span><span class="p">(</span><span class="n">review</span> <span class="o">#^&gt;</span> <span class="s1">&#39;{review,rating}&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">review_average</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span>
+</span><span class='line'>    <span class="n">reviews</span>
+</span><span class='line'><span class="k">WHERE</span>
+</span><span class='line'>    <span class="n">review</span> <span class="o">@&gt;</span> <span class="s1">&#39;{product =&gt; {group =&gt; Book}}&#39;</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span><span class="p">;</span>
+</span><span class='line'> <span class="n">title_length_bucket</span> <span class="o">|</span> <span class="n">review_average</span> <span class="o">|</span> <span class="k">count</span>
+</span><span class='line'><span class="c1">---------------------+----------------+--------</span>
+</span><span class='line'>                   <span class="mi">1</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">42</span> <span class="o">|</span>  <span class="mi">56299</span>
+</span><span class='line'>                   <span class="mi">2</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">33</span> <span class="o">|</span> <span class="mi">170774</span>
+</span><span class='line'>                   <span class="mi">3</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">45</span> <span class="o">|</span> <span class="mi">104778</span>
+</span><span class='line'>                   <span class="mi">4</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">41</span> <span class="o">|</span>  <span class="mi">69719</span>
+</span><span class='line'>                   <span class="mi">5</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">36</span> <span class="o">|</span>  <span class="mi">47110</span>
+</span><span class='line'>                   <span class="mi">6</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">43</span> <span class="o">|</span>  <span class="mi">43070</span>
+</span><span class='line'><span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">849</span><span class="p">.</span><span class="mi">681</span> <span class="n">ms</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That time looks better than yesterday&rsquo;s, but in truth I first ran this query
+just before building the GIN index and got about the same result. Must be
+that Mavericks is finished indexing my disk or something. At any rate, the
+index is not buying us much here.</p>
+
+<p>But hey, we&rsquo;re dealing with 1998 Amazon reviews, so querying against books
+probably isn&rsquo;t very selective. I don&rsquo;t blame the planner for deciding that a
+table scan is cheaper than an index scan. But what if we try a more selective
+value, say &ldquo;DVD&rdquo;?</p>
+
+<figure class='code'><figcaption><span>Query DVD Reivews</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">reviews</span><span class="o">=#</span> <span class="k">SELECT</span>
+</span><span class='line'>    <span class="n">width_bucket</span><span class="p">(</span><span class="k">length</span><span class="p">(</span><span class="n">review</span> <span class="o">#&gt;</span> <span class="s1">&#39;{product,title}&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="n">title_length_bucket</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">round</span><span class="p">(</span><span class="k">avg</span><span class="p">(</span><span class="n">review</span> <span class="o">#^&gt;</span> <span class="s1">&#39;{review,rating}&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">review_average</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span>
+</span><span class='line'>    <span class="n">reviews</span>
+</span><span class='line'><span class="k">WHERE</span>
+</span><span class='line'>    <span class="n">review</span> <span class="o">@&gt;</span> <span class="s1">&#39;{product =&gt; {group =&gt; DVD}}&#39;</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span><span class="p">;</span>
+</span><span class='line'> <span class="n">title_length_bucket</span> <span class="o">|</span> <span class="n">review_average</span> <span class="o">|</span> <span class="k">count</span>
+</span><span class='line'><span class="c1">---------------------+----------------+-------</span>
+</span><span class='line'>                   <span class="mi">1</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">27</span> <span class="o">|</span>  <span class="mi">2646</span>
+</span><span class='line'>                   <span class="mi">2</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">44</span> <span class="o">|</span>  <span class="mi">4180</span>
+</span><span class='line'>                   <span class="mi">3</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">53</span> <span class="o">|</span>  <span class="mi">1996</span>
+</span><span class='line'>                   <span class="mi">4</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">38</span> <span class="o">|</span>  <span class="mi">2294</span>
+</span><span class='line'>                   <span class="mi">5</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">48</span> <span class="o">|</span>   <span class="mi">943</span>
+</span><span class='line'>                   <span class="mi">6</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">42</span> <span class="o">|</span>   <span class="mi">738</span>
+</span><span class='line'><span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">73</span><span class="p">.</span><span class="mi">913</span> <span class="n">ms</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Wow! Under 100ms. That&rsquo;s more like it! <a href="http://en.wikipedia.org/wiki/Inverted_index">Inverted indexing</a> FTW!</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Testing Nested hstore]]></title>
+<link href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/"/>
+<updated>2013-10-23T10:26:00-07:00</updated>
+<id>http://theory.pm/pg/2013/10/23/testing-nested-hstore</id>
+
+      <content type="html"><![CDATA[<p>I&rsquo;ve been helping Oleg Bartunov and Teodor Sigaev with documentation for the
+forthcoming <a href="http://www.sai.msu.su/~megera/postgres/talks/hstore-pgcon-2013.pdf">nested hstore</a> patch for <a href="http://www.posrgresql.org/">PostgreSQL</a>. It adds support for
+arrays, numeric and boolean types, and of course arbitrarily nested data
+structures. This gives it feature parity with <a href="http://json.org/">JSON</a>, but unlike the
+<a href="http://www.postgresql.org/docs/current/static/datatype-json.html">JSON type</a>, its values are stored in a binary representation, which makes it
+much more efficient to query. The support for <a href="http://www.postgresql.org/docs/current/static/gist.html">GiST</a> and <a href="http://www.postgresql.org/docs/current/static/gin.html">GIN</a> indexes to
+speed up path searches doesn&rsquo;t hurt, either.</p>
+
+<p>As part of the documentation, we wanted to include a short tutorial, something
+to show off the schemaless flexibility of the new hstore. The <a href="http://citusdata.com/">CitusDB</a> guys
+were kind enough to show off their <a href="https://github.com/citusdata/json_fdw">json_fdw</a> with some Amazon review data in
+a <a href="http://citusdata.com/blog/65-run-sql-on-json-files-without-any-data-loads">blog post</a> a few months back; it even includes an interesting query against
+the data. Let&rsquo;s see what we can do with it. First, load it:</p>
+
+<figure class='code'><figcaption><span>Load Amazon Reviews as hstore</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; createdb reviews
+</span><span class='line'>&gt; psql -d reviews -c <span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">    CREATE EXTENSION HSTORE;</span>
+</span><span class='line'><span class="s1">    CREATE TABLE reviews(review hstore);</span>
+</span><span class='line'><span class="s1">&#39;</span>
+</span><span class='line'>CREATE TABLE
+</span><span class='line'>&gt; gzcat customer_reviews_nested_1998.json.gz | sed -e <span class="s1">&#39;s/\\/\\\\/g&#39;</span> <span class="se">\</span>
+</span><span class='line'> | sed -e <span class="s2">&quot;s/&#39;/&#39;&#39;/g&quot;</span> | sed -e <span class="s1">&#39;s/&quot;:/&quot; =&gt;/g&#39;</span> &gt; /tmp/hstore.copy
+</span><span class='line'>&gt; <span class="nb">time </span>psql -d reviews -c <span class="s2">&quot;COPY reviews FROM &#39;/tmp/hstore.copy&#39;&quot;</span>
+</span><span class='line'>COPY 589859
+</span><span class='line'>       0.00s user 0.00s system 0% cpu 13.059 total
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>13 seconds to load 589,859 records from a file &ndash; a little over 45k records
+per second. Not bad. Let&rsquo;s see what the storage looks like:</p>
+
+<figure class='code'><figcaption><span>How Big is the hstore Data?</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; psql -d reviews -c <span class="s1">&#39;SELECT pg_size_pretty(pg_database_size(current_database()));&#39;</span>
+</span><span class='line'> pg_size_pretty
+</span><span class='line'>----------------
+</span><span class='line'> 277 MB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The original, uncompressed data is 208 MB on disk, so roughly a third bigger
+given the overhead of the database. Just for fun, let&rsquo;s compare it to JSON:</p>
+
+<figure class='code'><figcaption><span>Load Amazon Reviews as JSON</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&gt; createdb reviews_js
+</span><span class='line'>&gt; psql -d reviews_js -c <span class="s1">&#39;CREATE TABLE reviews(review json);&#39;</span>
+</span><span class='line'>CREATE TABLE
+</span><span class='line'>&gt; gzcat customer_reviews_nested_1998.json.gz | sed -e <span class="s1">&#39;s/\\/\\\\/g&#39;</span> <span class="se">\</span>
+</span><span class='line'> | sed -e <span class="s2">&quot;s/&#39;/&#39;&#39;/g&quot;</span> | &gt; /tmp/json.copy
+</span><span class='line'>&gt; <span class="nb">time </span>psql -d reviews_js -c <span class="s2">&quot;COPY reviews FROM &#39;/tmp/json.copy&#39;&quot;</span>
+</span><span class='line'>COPY 589859
+</span><span class='line'>       0.00s user 0.00s system 0% cpu 7.434 total
+</span><span class='line'>&gt; psql -d reviews_js -c <span class="s1">&#39;SELECT pg_size_pretty(pg_database_size(current_database()));&#39;</span>
+</span><span class='line'> pg_size_pretty
+</span><span class='line'>----------------
+</span><span class='line'> 239 MB
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Almost 80K records per second, faster, I&rsquo;m guessing, because the JSON type
+doesn&rsquo;t convert the data to binary representation its way in. JSON currently
+uses less overhead for storage, aw well; I wonder if that&rsquo;s the benefit of
+<a href="http://www.postgresql.org/docs/current/static/storage-toast.html">TOAST storage</a>?</p>
+
+<p>Let&rsquo;s try querying these guys. I adapted the query from the CitusDB <a href="http://citusdata.com/blog/65-run-sql-on-json-files-without-any-data-loads">blog
+post</a> and ran it on my 2013 MacBook Air (1.7 GHz Intel Core i7) with iTunes
+and a bunch of other apps running in the background [yeah, I&rsquo;m lazy]). Check
+out those operators, by the way! Given a path, <code>#^&gt;</code> returns a numeric value:</p>
+
+<figure class='code'><figcaption><span>Query the hstore-encoded reviews</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">reviews</span><span class="o">=#</span> <span class="k">SELECT</span>
+</span><span class='line'>    <span class="n">width_bucket</span><span class="p">(</span><span class="k">length</span><span class="p">(</span><span class="n">review</span> <span class="o">#&gt;</span> <span class="s1">&#39;{product,title}&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="n">title_length_bucket</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">round</span><span class="p">(</span><span class="k">avg</span><span class="p">(</span><span class="n">review</span> <span class="o">#^&gt;</span> <span class="s1">&#39;{review,rating}&#39;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">review_average</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span>
+</span><span class='line'>    <span class="n">reviews</span>
+</span><span class='line'><span class="k">WHERE</span>
+</span><span class='line'>    <span class="n">review</span> <span class="o">#&gt;</span> <span class="s1">&#39;{product,group}&#39;</span> <span class="o">=</span> <span class="s1">&#39;Book&#39;</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span><span class="p">;</span>
+</span><span class='line'> <span class="n">title_length_bucket</span> <span class="o">|</span> <span class="n">review_average</span> <span class="o">|</span> <span class="k">count</span>
+</span><span class='line'><span class="c1">---------------------+----------------+--------</span>
+</span><span class='line'>                   <span class="mi">1</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">42</span> <span class="o">|</span>  <span class="mi">56299</span>
+</span><span class='line'>                   <span class="mi">2</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">33</span> <span class="o">|</span> <span class="mi">170774</span>
+</span><span class='line'>                   <span class="mi">3</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">45</span> <span class="o">|</span> <span class="mi">104778</span>
+</span><span class='line'>                   <span class="mi">4</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">41</span> <span class="o">|</span>  <span class="mi">69719</span>
+</span><span class='line'>                   <span class="mi">5</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">36</span> <span class="o">|</span>  <span class="mi">47110</span>
+</span><span class='line'>                   <span class="mi">6</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">43</span> <span class="o">|</span>  <span class="mi">43070</span>
+</span><span class='line'><span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">2301</span><span class="p">.</span><span class="mi">620</span> <span class="n">ms</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The benefit of the native type is pretty apparent here. I ran this query
+several times, and the time was always between 2.3 and 2.4 seconds. The Citus
+<a href="https://github.com/citusdata/json_fdw">json_fdw</a> query took &ldquo;about 6 seconds on a 3.1 GHz CPU core.&rdquo; Let&rsquo;s see how
+well the JSON type does (pity there is no operator to fetch a value as
+numeric; we have to cast from text):</p>
+
+<figure class='code'><figcaption><span>Query the JSON-encoded reviews</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">reviews_js</span><span class="o">=#</span> <span class="k">SELECT</span>
+</span><span class='line'>    <span class="n">width_bucket</span><span class="p">(</span><span class="k">length</span><span class="p">(</span><span class="n">review</span> <span class="o">#&gt;&gt;</span> <span class="s1">&#39;{product,title}&#39;</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="n">title_length_bucket</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">round</span><span class="p">(</span><span class="k">avg</span><span class="p">((</span><span class="n">review</span> <span class="o">#&gt;&gt;</span> <span class="s1">&#39;{review,rating}&#39;</span><span class="p">)::</span><span class="nb">numeric</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="k">AS</span> <span class="n">review_average</span><span class="p">,</span>
+</span><span class='line'>    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+</span><span class='line'><span class="k">FROM</span>
+</span><span class='line'>    <span class="n">reviews</span>
+</span><span class='line'><span class="k">WHERE</span>
+</span><span class='line'>    <span class="n">review</span> <span class="o">#&gt;&gt;</span> <span class="s1">&#39;{product,group}&#39;</span> <span class="o">=</span> <span class="s1">&#39;Book&#39;</span>
+</span><span class='line'><span class="k">GROUP</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span>
+</span><span class='line'><span class="k">ORDER</span> <span class="k">BY</span>
+</span><span class='line'>    <span class="n">title_length_bucket</span><span class="p">;</span>
+</span><span class='line'> <span class="n">title_length_bucket</span> <span class="o">|</span> <span class="n">review_average</span> <span class="o">|</span> <span class="k">count</span>
+</span><span class='line'><span class="c1">---------------------+----------------+--------</span>
+</span><span class='line'>                   <span class="mi">1</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">42</span> <span class="o">|</span>  <span class="mi">56299</span>
+</span><span class='line'>                   <span class="mi">2</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">33</span> <span class="o">|</span> <span class="mi">170774</span>
+</span><span class='line'>                   <span class="mi">3</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">45</span> <span class="o">|</span> <span class="mi">104778</span>
+</span><span class='line'>                   <span class="mi">4</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">41</span> <span class="o">|</span>  <span class="mi">69719</span>
+</span><span class='line'>                   <span class="mi">5</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">36</span> <span class="o">|</span>  <span class="mi">47110</span>
+</span><span class='line'>                   <span class="mi">6</span> <span class="o">|</span>           <span class="mi">4</span><span class="p">.</span><span class="mi">43</span> <span class="o">|</span>  <span class="mi">43070</span>
+</span><span class='line'><span class="p">(</span><span class="mi">6</span> <span class="k">rows</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Time</span><span class="p">:</span> <span class="mi">5530</span><span class="p">.</span><span class="mi">120</span> <span class="n">ms</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A little faster than the <a href="https://github.com/citusdata/json_fdw">json_fdw</a> version, but comparable. But takes well
+over twice as long as the hstore version, though. For queries, hstore is the
+clear winner. Yes, you pay up-front for loading and storage, but the payoff at
+query time is substantial. Ideally, of course, we would have the insert and
+storage benefits of JSON <em>and</em> the query performance of hstore. There was talk
+last spring at PGCon of using the same representation for JSON and hstore;
+perhaps that can still come about.</p>
+
+<p>Meanwhile, I expect to play with some other data sets over the next week;
+watch this spot for more!</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ The Power of Enums]]></title>
+<link href="http://www.openscg.com/2013/09/the-power-of-enums/"/>
+<updated>2013-09-29T14:50:00-07:00</updated>
+<id>http://theory.pm/pg/2013/09/29/the-power-of-enums</id>
+
+      <content type="html"><![CDATA[<p>Jim Mlodgenski on using <a href="http://www.postgresql.org/docs/9.3/static/datatype-enum.html">Enums</a> in place of references to small lookup tables:</p>
+
+<blockquote><p>I saw something else I didn’t expect: […] There was a 8% increase
+in performance. I was expecting the test with the enums to be close
+to the baseline, but I wasn’t expecting it to be faster. Thinking
+about it, it makes sense. Enums values are just numbers so we’re
+effectively using surrogate keys under the covers, but the users would
+still the the enum labels when they are looking at the data. It ended
+up being a no brainer to use enums for these static tables. There was
+a increase in performance while still maintaining the integrity of the
+data.</p></blockquote>
+
+<p>I&rsquo;ve been a big fan of Enums since Andrew and Tom Dunstan released a patch for
+them during the PostgreSQL 8.2 era. Today they&rsquo;re a core feature, and as of
+9.1, you can even modify their values! You&rsquo;re missing out if you&rsquo;re not using
+them yet.</p>
+<p><a rel="bookmark" href="http://theory.pm/pg/2013/09/29/the-power-of-enums/">§</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ Whither Impala Fault Tolerance?]]></title>
+<link href="http://blog.cloudera.com/blog/2013/09/whats-next-for-impala-after-release-1-1/"/>
+<updated>2013-09-29T14:29:00-07:00</updated>
+<id>http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance</id>
+
+      <content type="html"><![CDATA[<p>Justin Erickson on the <a href="http://blog.cloudera.com/">Cloudera Blog</a></p>
+
+<blockquote><p>In December 2012, while Cloudera Impala was still in its beta phase, we
+<a href="http://blog.cloudera.com/blog/2012/12/whats-next-for-cloudera-impala/">provided a roadmap</a>
+for planned functionality in the production release. In the same spirit of
+keeping Impala users, customers, and enthusiasts well informed, this post
+provides an updated roadmap for upcoming releases later this year and in early
+2014.</p></blockquote>
+
+<p><a href="http://www.cloudera.com/content/cloudera/en/products/cdh/impala.html">Impala</a> is a pretty nice-looking SQLish query engine that runs on Hadoop. It
+provides the same basic interface as <a href="http://hive.apache.org/">Hive</a>, but circumvents MapReduce to
+access data directly from data nodes in parallel. But, in my opinion, to be
+useful as a real-time query engine, it needs fault tolerance. From the
+<a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/Impala/latest/Cloudera-Impala-Frequently-Asked-Questions/Cloudera-Impala-Frequently-Asked-Questions.html">Impala FAQ</a>, under the list of unsupported features:</p>
+
+<blockquote><p>Fault tolerance for running queries (not currently). In the current release,
+Impala aborts the query if any host on which the query is executing fails. In
+the future, we will consider adding fault tolerance to Impala, so that a
+running query would complete even in the presence of host failures.</p></blockquote>
+
+<p>Sounds like an unfortunate issue. Since it&rsquo;s pretty typical for data nodes to
+go down, this seems like an essential feature. Products like <a href="http://citusdata.com/docs/sql-on-hadoop" title="CitusDB SQL on Hadoop">CitusDB</a> offer
+fault tolerance:</p>
+
+<blockquote><p><strong>Does CitusDB recover from failures?</strong></p>
+
+<p>Yes. The CitusDB master node intelligently re-routes the work on any failed
+nodes to the remaining nodes in real-time. Since the underlying data are kept
+in fixed-size blocks in HDFS, a failed node&rsquo;s work can evenly be distributed
+among the remaining nodes in the cluster.</p></blockquote>
+
+<p>That sound exactly right. I&rsquo;m excited about Citus, and if it adds solid
+support for more data formats, such as <a href="http://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.0.0.2/ds_Hive/orcfile.html" title="ORC File Format">ORC</a> and <a href="http://parquet.io/" title="Parquet is a columnar storage format for Hadoop.">Parquet</a>, it may well be the
+way to go. But Impala will be a nice alternative if it can get fault tolerance
+figured out. I&rsquo;m disappointed it&rsquo;s not on the road map.</p>
+<p><a rel="bookmark" href="http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance/">§</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
 <title type="html"><![CDATA[→ Lexical Subroutines]]></title>
 <link href="http://rjbs.manxome.org/rubric/entry/2016"/>
 <updated>2013-09-25T20:12:00-07:00</updated>
@@ -815,104 +2153,548 @@ to get to know your database well.</p>
 
 
 
-<title type="html"><![CDATA[→ TPF To Revamp Grants]]></title>
-<link href="http://news.perlfoundation.org/2013/08/2013q3-grant-proposals.html"/>
-<updated>2013-08-23T17:28:00-07:00</updated>
-<id>http://theory.pm/tpf/2013/08/23/tpf-to-revamp-grants</id>
+<title type="html"><![CDATA[Sqitch Templating]]></title>
+<link href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/"/>
+<updated>2013-09-06T13:44:00-07:00</updated>
+<id>http://theory.pm/sqitch/2013/09/06/sqitch-templating</id>
 
-      <content type="html"><![CDATA[<p>Alberto Simões:</p>
+      <content type="html"><![CDATA[<p>Last week saw the v.980 release of <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, a database change management
+system. The headline feature in this version is support for <a href="http://dev.mysql.com/" title="The world's most popular open source database">MySQL</a> 5.6.4 or
+higher. Why 5.6.4 rather than 5.1 or even 5.5? Mainly because 5.6.4 finally
+added support for fractional seconds in <code>DATETIME</code> columns (details in the
+<a href="https://dev.mysql.com/doc/relnotes/mysql/5.6/en/news-5-6-4.html" title="Changes in MySQL 5.6.4 (2011-12-20, Milestone 7)">release notes</a>). This feature is essential for Sqitch, because changes often
+execute within a second of each other, and the deploy time is included in the
+log table&rsquo;s primary key.</p>
 
-<blockquote><p>Nevertheless, this lack of &ldquo;lower than $3000&rdquo; grant proposals, and the fact
-that lot of people have been discussing (and complaining) about this value
-being too low, the Grants Committee is starting a discussion on rewriting
-and reorganizing the way it works. Namely, in my personal blog I
-<a href="http://blogs.perl.org/users/alberto_simoes/2013/02/about-the-grants-committee.html">opened a discussion</a> about the Grants Committee some time ago, and had
-plenty of feedback, that will be helpful for our internal discussion.</p></blockquote>
+<p>With the requirement for fractional seconds satisfied by 5.6.4, there was
+nothing to prevent usage of <a href="http://dev.mysql.com/doc/refman/5.5/en/condition-handling.html" title="MySQL 5.5 Reference Manual: Condition Handling"><code>SIGNAL</code></a>, added in 5.5, to
+<a href="http://stackoverflow.com/a/17424570/79202" title="How do I get MySQL to throw a conditional runtime exception in SQL">mimic check constraints</a> in a trigger. This brings the Sqitch MySQL
+implementation into line with what was already possible in the Postgres,
+SQLite, and Oracle support. Check out the <a href="https://metacpan.org/module/sqitchtutorial-mysql" title="A tutorial introduction to Sqitch change management on MySQL">tutorial</a> and the accompanying
+<a href="https://github.com/theory/sqitch-mysql-intro" title="Sqitch MySQL Intro Sample Repository">Git repository</a> to get started managing your MySQL databases with Sqitch.</p>
 
-<p>This is great news. I would love to see more and more ambitious grant
-proposals, as well as awards people an subsist on. I look forward to seeing
-the new rules.</p>
-<p><a rel="bookmark" href="http://theory.pm/tpf/2013/08/23/tpf-to-revamp-grants/">§</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
+<p>The MySQL support might be the headliner, but the change in v0.980 I&rsquo;m most
+excited about is improved template support. Sqitch executes templates to
+create the default deploy, revert, and verify scripts, but up to now they have
+not been easy to customize. With v0.980, you can create as many custom
+templates as you like, and use them as appropriate.</p>
 
-
-
-
-<title type="html"><![CDATA[→ Mopping the Moose]]></title>
-<link href="http://blogs.perl.org/users/stevan_little/2013/08/mapping-the-mop-to-moose.html"/>
-<updated>2013-08-15T13:44:00-07:00</updated>
-<id>http://theory.pm/mop/2013/08/15/mopping-the-moose</id>
-
-      <content type="html"><![CDATA[<p>Stevan Little:</p>
-
-<blockquote><p>I spent much of last week on vacation with the family so very little actual
-coding got done on the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a>, but instead I did a lot of thinking. My
-next major goal for the <a href="https://github.com/stevan/p5-mop-redux">p5-mop</a> is to port a module written in <a href="https://metacpan.org/module/Moose">Moose</a>, in
-particular, one that uses many different <a href="https://metacpan.org/module/Moose">Moose</a> features. The module I have
-chosen to port is <a href="https://metacpan.org/module/Bread::Board">Bread::Board</a> and I chose it for two reasons; first, it
-was the first real module that I wrote using <a href="https://metacpan.org/module/Moose">Moose</a> and second, it makes
-heavy use of a lot of <a href="https://metacpan.org/module/Moose">Moose</a>&rsquo;s features.</p></blockquote>
-
-<p>I&rsquo;m so happy to see Stevan making progress on the Perl 5 MOP again.</p>
-<p><a rel="bookmark" href="http://theory.pm/mop/2013/08/15/mopping-the-moose/">§</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
+<!-- more -->
 
 
+<h2>A Custom Template</h2>
+
+<p>Let&rsquo;s create a custom template for creating a table. The first step is to
+create the template files. Custom templates can live in <code>`sqitch
+&ndash;etc-path`/templates</code> or in <code>~/.sqitch/templates</code>. Let&rsquo;s use the
+latter. Each template goes into a directory for the type of script, so we&rsquo;ll
+create them:</p>
+
+<figure class='code'><figcaption><span>Create template directories</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mkdir -p ~/.sqitch/templates/deploy
+</span><span class='line'>mkdir -p ~/.sqitch/templates/revert
+</span><span class='line'>mkdir -p ~/.sqitch/templates/verify
+</span></code></pre></td></tr></table></div></figure>
 
 
-<title type="html"><![CDATA[A Perl Blog]]></title>
-<link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
-<updated>2013-07-26T18:08:00-07:00</updated>
-<id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
+<p>Copy the default templates for your preferred database engine; here I copy the
+Postgres templates:</p>
 
-      <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
-blog in 2004 more or less for fun, thinking it would be my permanent home on
-the internet. And it has been. But the design, while okay in 2004, is just
-awful by today&rsquo;s standards. A redesign is something I have planned to do for
-quite some time.</p>
+<figure class='code'><figcaption><span>Copy default templates</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">tmpldir</span><span class="o">=</span><span class="sb">`</span>sqitch --etc-path<span class="sb">`</span>/templates
+</span><span class='line'>cp <span class="nv">$tmpldir</span>/deploy/pg.tmpl ~/.sqitch/templates/deploy/createtable.tmpl
+</span><span class='line'>cp <span class="nv">$tmpldir</span>/revert/pg.tmpl ~/.sqitch/templates/revert/createtable.tmpl
+</span><span class='line'>cp <span class="nv">$tmpldir</span>/verify/pg.tmpl ~/.sqitch/templates/verify/createtable.tmpl
+</span><span class='line'>chmod -R +w ~/.sqitch/templates
+</span></code></pre></td></tr></table></div></figure>
 
-<p>I had also been thinking about my audience. Or rather, audiences. I&rsquo;ve blogged
-about many things, but while a few dear family members might want to read
-everything I ever post, most folks, I think, are interested in only a subset
-of topics. Readers of <a href="http://justatheory.com/">Just a Theory</a> came for posts about Perl, or
-PostgreSQL, or culture, travel, or politics. But few came for all those
-topics, in my estimation.</p>
 
-<p>More recently, a whole bunch of top-level domains have opened up, often with
-the opportunity for anyone to register them. I was lucky enough to snag
-<code>theory.pm</code> and <code>theory.pl</code>, thinking that perhaps I would create a site just
-for blogging about Perl. I also nabbed <code>theory.so</code>, which I might dedicate to
-database-related blogging, and <code>theory.me</code>, which would be my personal blog
-(travel, photography, cultural essays, etc.).</p>
+<p>Here&rsquo;s what the default deploy template looks like:</p>
 
-<p>And then there is <a href="http://octopress.org">Octopress</a>. A blogging engine for hackers. Perfect for me.
-Hard to imagine something more appropriate (unless it was written in Perl). It
-seemed like a good opportunity to partition my online blogging.</p>
+<figure class='code'><figcaption><span>Default deploy template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy [% change %]</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">item</span> <span class="k">IN</span> <span class="n">requires</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="c1">-- requires: [% item %]</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">item</span> <span class="k">IN</span> <span class="n">conflicts</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="c1">-- conflicts: [% item %]</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">-- XXX Add DDLs here.</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>So here we are with my first partition. <a href="http://theory.pm/">theory.pm</a> is a Perl blog. Seemed
-like the perfect name. I fiddled with it off and on for a few months, often
-following <a href="http://mattgemmell.com/2013/05/22/designing-blogs-for-readers/">Matt Gemmell&rsquo;s Advice</a>, and I&rsquo;m really happy with it. The
-open-source fonts <a href="https://github.com/adobe/source-sans-pro">Source Sans Pro</a> and <a href="https://github.com/adobe/source-code-pro">Source Code Pro</a>, from Adobe, look
-great. The source code examples are beautifully marked up and displayed using
-the <a href="http://ethanschoonover.com/solarized">Solarized</a> color scheme (though presentation varies in feed readers).
-Better still, it&rsquo;s equally attractive and readable on computers, tablets and
-phones, thanks to the foundation laid by Aron Cedercrantz’s <a href="https://github.com/rastersize/BlogTheme">BlogTheme</a>.</p>
 
-<p>I expect to fork this code to create a database blog soon, and then perhaps
-put together a personal blog. Maybe the personal blog will provide link posts
-for posts on the other sites, so that if anyone really wants to read
-everything, they can. I haven&rsquo;t decided yet.</p>
+<p>The code before the <code>BEGIN</code> names the template and lists dependencies, which
+is reasonably useful, so we&rsquo;ll leave it as-is. We&rsquo;ll focus on replacing that
+comment, <code>-- XXX Add DDLs here.</code>, with the template for a <code>CREATE TABLE</code>
+statement. Start simple: just use the change name for the table name. In
+<code>~/.sqitch/templates/deploy/createtable.tmpl</code>, replace the comment with these
+lines:</p>
 
-<p>In the meantime, now that I have a dedicated Perl blog, I guess I&rsquo;ll have to
-start writing more Perl-related stuff. I&rsquo;m starting with some posts about the
-state of exception handling in Perl 5, the first of which is <a href="http://theory.pm/exceptions/2013/07/26/trying-times/">already up</a>. Stay
-tuned for more.</p>
+<figure class='code'><figcaption><span>Add CREATE TABLE statement to deploy template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">]</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c1">-- Add columns here.</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the revert template, <code>~/.sqitch/templates/deploy/createtable.tmpl</code>, replace
+the comment with a <code>DROP TABLE</code> statement:</p>
+
+<figure class='code'><figcaption><span>Add DROP TABLE statement to revert template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="p">[</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And finally, in the verify template,
+<code>~/.sqitch/templates/verify/createtable.tmpl</code>, replace the comment with a
+simple <code>SELECT</code> statement, which is just enough to verify the creation of a
+table:</p>
+
+<figure class='code'><figcaption><span>Add SELECT statement to verify template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="p">[</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great, we&rsquo;ve created a set of simple customized templates for adding a
+<code>CREATE TABLE</code> change to a Sqitch project. To use them, just pass the
+<code>--template</code> option to <a href="http://metacpan.org/module/sqitch-add" title="Add a database change to the Sqitch plan"><code>sqitch add</code></a>, like so:</p>
+
+<figure class='code'><figcaption><span>Use the createtable template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add widgets --template createtable -n <span class="s1">&#39;Add widgets table.&#39;</span>
+</span><span class='line'>Created deploy/widgets.sql
+</span><span class='line'>Created revert/widgets.sql
+</span><span class='line'>Created verify/widgets.sql
+</span><span class='line'>Added <span class="s2">&quot;widgets&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now have a look at <code>deploy/widgets.sql</code>:</p>
+
+<figure class='code'><figcaption><span>Widgets Deploy Script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">widgets</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c1">-- Add columns here.</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool! The revert template should also have done its job. Here&rsquo;s
+<code>revert/widgets.sql</code>:</p>
+
+<figure class='code'><figcaption><span>Widgets Revert Script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Revert widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">widgets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the verify script, <code>verify/widgets.sql</code>:</p>
+
+<figure class='code'><figcaption><span>Widgets Verify Script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Verify widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">widgets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Custom Table Name</h2>
+
+<p>What if you want to name the change one thing and the table it creates
+something else? What if you want to schema-qualify the table? Easy! Sqitch&rsquo;s
+dead simple default <a href="https://metacpan.org/module/sqitch-add#Syntax" title="Sqitch Template Syntax">templating language</a>, <a href="https://metacpan.org/module/Template::Tiny">Template::Tiny</a>, features <code>if</code>
+statements. Try using them with custom variables for the schema and table
+names:</p>
+
+<figure class='code'><figcaption><span>Deploy table with schema and table</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">ELSE</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c1">-- Add columns here.</span>
+</span><span class='line'><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If the <code>schema</code> variable is set, the <code>search_path</code>, which determines where
+objects will go, gets set to <code>$schema,public</code>. If <code>schema</code> is not set, the
+path is simply <code>public</code>, which is the default schema in Postgres.</p>
+
+<p>We take a similar tack with the <code>CREATE TABLE</code> statement: If the <code>table</code>
+variable is set, it&rsquo;s used as the name of the table. Otherwise, we use the
+change name, as before.</p>
+
+<p>The revert script needs the same treatment:</p>
+
+<figure class='code'><figcaption><span>Revert table with schema and table</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'><span class="k">DROP</span> <span class="k">TABLE</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">ELSE</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As does the verify script:</p>
+
+<figure class='code'><figcaption><span>Verify table with schema and table</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">ELSE</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Take it for a spin:</p>
+
+<figure class='code'><figcaption><span>Add table to schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  --set <span class="nv">schema</span><span class="o">=</span>corp --set <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span><span class='line'>Created deploy/corp_widgets.sql
+</span><span class='line'>Created revert/corp_widgets.sql
+</span><span class='line'>Created verify/corp_widgets.sql
+</span><span class='line'>Added <span class="s2">&quot;corp_widgets&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The resulting deploy script will create <code>corp.widgets</code>:</p>
+
+<figure class='code'><figcaption><span>Deploy table to schema</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy corp_widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">widgets</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c1">-- Add columns here.</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool, right? The revert and verify scripts of course yield similar results.
+Omitting the <code>--set</code> option, the template falls back on the change name:</p>
+
+<figure class='code'><figcaption><span>Deploy a table to public</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">widgets</span> <span class="p">(</span>
+</span><span class='line'>    <span class="c1">-- Add columns here.</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Add Columns</h2>
+
+<p>Template variables may contain array values. The default templates takes
+advantage of this feature to list dependencies in SQL comments. It works great
+for custom variables, too. For the purposes of our <code>CREATE TABLE</code> template,
+let&rsquo;s add columns. Replace the <code>-- Add columns here</code> comment in the deploy
+simple with these three lines:</p>
+
+<figure class='code'><figcaption><span>Deploy script with columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">[</span><span class="o">%</span> <span class="n">col</span> <span class="o">%</span><span class="p">]</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">-%</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can similarly improve the verify script: change its <code>SELECT</code> statement to:</p>
+
+<figure class='code'><figcaption><span>Verify script with columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">col</span> <span class="o">%</span><span class="p">],</span> <span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">ELSE</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Just pass multiple <code>--set</code> (or <code>-s</code>) options to <code>sqitch add</code> to add as many
+columns as you like:</p>
+
+<figure class='code'><figcaption><span>Add table with columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">schema</span><span class="o">=</span>corp -s <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>id -s <span class="nv">column</span><span class="o">=</span>name -s <span class="nv">column</span><span class="o">=</span>quantity <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Behold the resulting deploy script!</p>
+
+<figure class='code'><figcaption><span>Deploy table with columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy corp_widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">widgets</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">id</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">name</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">quantity</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You still have to edit the resulting file, of course. Maybe <code>NULL</code>s should be
+allowed in the <code>name</code> column. And I suspect that <code>quantity</code> ought be an
+integer. There&rsquo;s that pesky trailing comma to remove, too. The verify script
+suffers the same deficiency:</p>
+
+<figure class='code'><figcaption><span>Verify each column</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Verify corp_widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">quantity</span><span class="p">,</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="n">widgets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Still, these templates remove much of the grudge work of adding <code>CREATE TABLE</code>
+changes, giving you the scaffolding on which to build the objects you need.</p>
+
+<h2>Upgraded Templates</h2>
+
+<p>We call Sqitch&rsquo;s <a href="https://metacpan.org/module/sqitch-add#Syntax" title="Sqitch Template Syntax">templating language</a> &ldquo;default&rdquo; because it can be replaced
+with a more capable one. Simply install <a href="http://tt2.org/">Template Toolkit</a> to transparently
+upgrade your Sqitch templates. Template Toolkit&rsquo;s comprehensive feature set
+covers just about any functionality you could want out of a templating system.
+It&rsquo;s big and complex, but relatively straight-forward to install: just run
+<code>cpan Template</code>, <code>cpanm Template</code>, <code>yum install perl-Template-Toolkit</code>, or the
+like and you&rsquo;ll be in business.</p>
+
+<p>We can resolve the trailing comma issue thanks to Template Toolkit&rsquo;s <code>loop</code>
+variable, which is implicitly created in the <code>FOREACH</code> loop. Simply replace
+the comma in the template with the expression <code>[% loop.last ? '' : ',' %]</code>:</p>
+
+<figure class='code'><figcaption><span>Use the loop variable</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">[</span><span class="o">%</span> <span class="n">col</span> <span class="o">%</span><span class="p">]</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">[</span><span class="o">%</span> <span class="n">loop</span><span class="p">.</span><span class="k">last</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="p">:</span> <span class="s1">&#39;,&#39;</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">-%</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now the comma will be omitted for the last iteration of the loop. The fix for
+the verify script is even simpler: use <code>join()</code> <a href="http://tt2.org/docs/manual/VMethods.html" title="Template Toolkit Docs: Virtual Methods">VMethod</a> instead of a
+<code>FOREACH</code> loop to emit all the columns in a single expression:</p>
+
+<figure class='code'><figcaption><span>Join verify columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="p">[</span><span class="o">%</span> <span class="k">column</span><span class="p">.</span><span class="k">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">table</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">ELSE</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="n">change</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Really simplifies things, doesn&rsquo;t it?</p>
+
+<p>Better still, going back to the deploy template, we can add data types for
+each column. Try this on for size:</p>
+
+<figure class='code'><figcaption><span>Deploy with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="o">[</span>% FOREACH col IN column -%<span class="o">]</span>
+</span><span class='line'>    <span class="o">[</span>% col %<span class="o">]</span> <span class="o">[</span>% type.item<span class="o">(</span> loop.index <span class="o">)</span> or <span class="s1">&#39;TEXT&#39;</span> %<span class="o">]</span> NOT NULL<span class="o">[</span>% loop.last ? <span class="s1">&#39;&#39;</span> : <span class="s1">&#39;,&#39;</span> %<span class="o">]</span>
+</span><span class='line'><span class="o">[</span>% END -%<span class="o">]</span>
+</span><span class='line'><span class="o">)</span>;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As we iterate over the list of columns, simply pass <code>loop.index</code> to the
+<code>item()</code> <a href="http://tt2.org/docs/manual/VMethods.html" title="Template Toolkit Docs: Virtual Methods">VMethod</a> on the <code>type</code> variable to get the corresponding type.
+Then specify a type for each column when you create the change:</p>
+
+<figure class='code'><figcaption><span>Create table with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">schema</span><span class="o">=</span>corp -s <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>id -s <span class="nb">type</span><span class="o">=</span>SERIAL <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>name -s <span class="nb">type</span><span class="o">=</span>TEXT <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>quantity -s <span class="nb">type</span><span class="o">=</span>INTEGER <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This yields a much more comprehensive deploy script:</p>
+
+<figure class='code'><figcaption><span>Deploy table with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Deploy corp_widgets</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">widgets</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">id</span> <span class="nb">SERIAL</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">name</span> <span class="nb">TEXT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">quantity</span> <span class="nb">INTEGER</span> <span class="k">NOT</span> <span class="k">NULL</span>
+</span><span class='line'><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Go Crazy</h2>
+
+<p>The basics for creating task-specific change templates are baked into Sqitch,
+and a transparent upgrade to advanced templating is a simple install away. I
+can imagine lots of uses for task-specific changes, including:</p>
+
+<ul>
+<li>Adding schemas, users, procedures, and views</li>
+<li>Modifying tables to add columns, constraints and indexes</li>
+<li>Inserting or Updating data</li>
+</ul>
+
+
+<p>Maybe folks will even start sharing templates! You should subscribe to the
+<a href="https://groups.google.com/forum/#!forum/sqitch-users">mail list</a> to find out. See you there?</p>
 ]]></content>
     </entry>
   
@@ -922,195 +2704,141 @@ tuned for more.</p>
 
 
 
-<title type="html"><![CDATA[Trying Times]]></title>
-<link href="http://theory.pm/exceptions/2013/07/26/trying-times/"/>
-<updated>2013-07-26T15:20:00-07:00</updated>
-<id>http://theory.pm/exceptions/2013/07/26/trying-times</id>
+<title type="html"><![CDATA[→ Understanding Window Functions]]></title>
+<link href="http://tapoueh.org/blog/2013/08/20-Window-Functions"/>
+<updated>2013-08-28T17:25:00-07:00</updated>
+<id>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions</id>
 
-      <content type="html"><![CDATA[<p>Exception handling is a bit of a pain in Perl. Traditionally, we use
-<code>eval {}</code>:</p>
+      <content type="html"><![CDATA[<p>Dimitri Fontaine:</p>
 
-<figure class='code'><figcaption><span>Perl eval</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="nb">eval</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="vg">$@</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $err…</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<blockquote><p>There was SQL before
+<a href="http://www.postgresql.org/docs/current/static/tutorial-window.html">window functions</a>
+and SQL after <em>window functions:</em> that&rsquo;s how powerful this tool is. Being
+that of a deal breaker unfortunately means that it can be quite hard to
+grasp the feature. This article aims at making it crystal clear so that you
+can begin using it today and are able to reason about it and recognize cases
+where you want to be using <em>window functions.</em></p></blockquote>
 
-
-<p>The use of the <code>if</code> block is a bit unfortunate; worse is the use of the global
-<code>$@</code> variable, which has inflicted unwarranted pain on developers over the
-years<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Many Perl hackers put <a href="https://metacpan.org/module/Try::Tiny">Try::Tiny</a> to work to circumvent these
-shortcomings:</p>
-
-<figure class='code'><figcaption><span>Try::Tiny</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">foo</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Inspect $_…</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Alas, Try::Tiny introduces its own idiosyncrasies, particularly its use of
-subroutine references rather than blocks. While a necessity of a pure-Perl
-implementation, it prevents <code>return</code>ing from the calling context. One must
-work around this deficiency by <a href="http://stackoverflow.com/a/10366209/79202">checking return values</a>:</p>
-
-<figure class='code'><figcaption><span>Return from Try::Tiny</span><a href='http://stackoverflow.com/a/10366209/79202'>More Gotchas</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$rv</span> <span class="o">=</span> <span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>   <span class="n">f</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>   <span class="c1"># …</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$rv</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>   <span class="k">return</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I can&rsquo;t tell you how often this quirk burns me.</p>
-
-<!-- more -->
-
-
-<p>Sadly, there is a deeper problem then syntax: Just what, exactly, is an
-exception? How does one determine the exceptional condition, and what can be
-done about it? It might be a string. The string might be localized. It might
-be an <a href="https://metacpan.org/module/Exception::Class">Exception::Class</a> object, or a <a href="https://metacpan.org/module/Throwable">Throwable</a> object, or a simple array
-reference. Or any other value a Perl scalar can hold. This lack of specificity
-requires careful handling of exceptions:</p>
-
-<figure class='code'><figcaption><span>Exceptional Conditions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="vg">$@</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">ref</span> <span class="nv">$err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nb">eval</span> <span class="p">{</span> <span class="nv">$err</span><span class="o">-&gt;</span><span class="n">isa</span><span class="p">(</span><span class="s">&#39;Exception::Class&#39;</span><span class="p">)</span> <span class="p">})</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span> <span class="nv">$err</span><span class="o">-&gt;</span><span class="n">isa</span><span class="p">(</span><span class="s">&#39;SomeException&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="c1"># …</span>
-</span><span class='line'>            <span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span> <span class="nv">$err</span><span class="o">-&gt;</span><span class="n">isa</span><span class="p">(</span><span class="s">&#39;SomeException&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="c1"># …</span>
-</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="c1"># …</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span><span class="nb">eval</span> <span class="p">{</span> <span class="nv">$err</span><span class="o">-&gt;</span><span class="n">DOES</span><span class="p">(</span><span class="s">&#39;Throwable&#39;</span><span class="p">)</span> <span class="p">})</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1"># …</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span> <span class="nb">ref</span> <span class="nv">$err</span> <span class="ow">eq</span> <span class="s">&#39;ARRAY&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1"># …</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nv">$err</span> <span class="o">=~</span><span class="sr"> /DBI/</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1"># …</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span> <span class="nv">$err</span> <span class="o">=~</span><span class="sr"> /cannot open &#39;([^&#39;]+)&#39;/</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="c1"># …</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Not every exception handler requires so many conditions, but I have certainly
-exercised all these approaches. Usually my exception handlers accrete
-condition as users report new, unexpected errors.</p>
-
-<p>That&rsquo;s not all. My code frequently requires parsing information out of a
-string error. Here&rsquo;s an example from <a href="https://github.com/pgxn/pgxn-manager/">PGXN::Manager</a>:</p>
-
-<figure class='code'><figcaption><span>Exception Parsing</span><a href='https://github.com/pgxn/pgxn-manager/blob/master/lib/PGXN/Manager/Distribution.pm#L123'>Source</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="n">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">distmeta</span><span class="p">(</span><span class="n">decode_json</span> <span class="nb">scalar</span> <span class="nv">$member</span><span class="o">-&gt;</span><span class="n">contents</span> <span class="p">);</span>
-</span><span class='line'><span class="p">}</span> <span class="n">catch</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">my</span> <span class="nv">$f</span> <span class="o">=</span> <span class="nb">quotemeta</span> <span class="n">__FILE__</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">(</span><span class="k">my</span> <span class="nv">$err</span> <span class="o">=</span> <span class="nv">$_</span><span class="p">)</span> <span class="o">=~</span> <span class="sr">s/\s+at\s+$f.+//ms</span><span class="p">;</span>
-</span><span class='line'>    <span class="nv">$self</span><span class="o">-&gt;</span><span class="n">error</span><span class="p">([</span>
-</span><span class='line'>        <span class="s">&#39;Cannot parse JSON from “[_1]”: [_2]&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nv">$member</span><span class="o">-&gt;</span><span class="n">fileName</span><span class="p">,</span>
-</span><span class='line'>        <span class="nv">$err</span>
-</span><span class='line'>    <span class="p">]);</span>
-</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span> <span class="ow">or</span> <span class="k">return</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">return</span> <span class="nv">$self</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When <a href="https://metacpan.org/module/JSON">JSON</a> throws an exception on invalid JSON, the code must catch that
-exception to show the user. The user cares not at all what file threw the
-exception, nor the line number. The code must <em>strip that stuff out</em> before
-passing the original message off to a localizing error method.</p>
-
-<p>Gross.</p>
-
-<p>It&rsquo;s time to end this. A forthcoming post will propose a plan for adding
-proper exception handling to the core Perl language, including exception
-objects and an official <code>try</code>/<code>catch</code> syntax.</p>
-
-<!-- notes -->
+<p>Great intro to a powerful feature.</p>
+<p><a rel="bookmark" href="http://theory.pm/pg/windows/2013/08/28/understanding-window-functions/">§</a></p>]]></content>
+    </entry>
+  
+    <entry>
+      
 
 
 
-<div class="footnotes">
-<hr/>
+
+<title type="html"><![CDATA[Data Deployment with Sqitch]]></title>
+<link href="http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch/"/>
+<updated>2013-08-28T17:09:00-07:00</updated>
+<id>http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch</id>
+
+      <content type="html"><![CDATA[<p>I&rsquo;ve been thinking about data migrations. I love how well <a href="http://sqitch.org/">Sqitch</a> works for
+<em>schema</em> changes, but so far have avoided <em>data</em> changes. Some data ought to
+be managed by the deployment process, rather than by end-user applications.
+Lists of countries, for example. Yet none of <a href="http://iovation.com/">our</a> Sqitch-managed databases
+include <code>INSERT</code>s, <code>UPDATE</code>s, or <code>DELETE</code>s in deploy scripts. Why not? Two
+reasons:</p>
+
 <ol>
-<li id="fn:1">
-<p>In fairness much of the <code>$@</code> pain has been addressed [in Perl 5.14].<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li><p>These are mainly Postgres ports of existing Oracle databases. As such, I&rsquo;ve
+written independent migration scripts that use <a href="http://pgxn.org/extension/oracle_fdw"><code>oracle_fdw</code></a> to copy data
+from Oracle. It made no sense to commit hard-coded changes to the deploy
+script, even for static data, as it was all to be copied from the old
+production Oracle databases &mdash; often months after I wrote the migrations.</p></li>
+<li><p>These projects include extensive <a href="http://pgtap.org/">pgTAP</a> unit tests that expect to run many
+times against an empty database with no side effects. Having different data
+in testing than in production increases the likelihood of unforeseen
+behavioral variations. Better to expect <em>no</em> data in tests, freeing them to
+focus on units of behavior without regard to preexisting data.</p></li>
 </ol>
-</div>
 
+
+<p>Now that we have multiple Sqitch-deployed databases in production, the time
+has come to address these issues.</p>
+
+<h2>Deploy Hooks for External Sources</h2>
+
+<p>I propose to resolve the one-time migration requirement with <a href="https://github.com/theory/sqitch/issues/96">deploy hooks</a>.
+The idea is similar to <a href="http://git-scm.com/docs/githooks">Git hooks</a>: Before or after any <code>sqitch deploy</code>, one
+or more hook scripts can run. The impetus was to ensure some higher level of
+consistency after every <code>deploy</code>. For example, a post-deploy hook might grant
+privileges on all tables in a database. Another might run <code>VACCUM; ANALZYE;</code>.</p>
+
+<p>But we could also use it for one-time data migrations. An option to <code>deploy</code>
+will disable them, which would be useful for development and test databases.
+Once the migration has been run in production, we just delete the migration
+hook scripts from the project. Sqitch won&rsquo;t record hook executions, so adding
+or removing them will be no problem.</p>
+
+<p>I like this approach, as Sqitch will automatically run migration scripts, but
+hooks will not change the interface of Sqitch itself. And it&rsquo;s more generally
+useful. Hell, I might want deploy hook script that sends an email notification
+announcing a deployment (though that might require adding support for
+<a href="https://github.com/theory/sqitch/issues/1">non-SQL scripts</a>). There are all kinds of things for which hooks will prove
+useful.</p>
+
+<h2>Changes for Static Data Maintenance</h2>
+
+<p>For data that must be tied to the deployment process, there are two
+complications that have prevetned me from simply managing them in normal
+Sqitch changes:</p>
+
+<ol>
+<li><p>There might be side-effects to the deployment. For example, a foreign key
+constraint to the <code>users</code> table, to identify the users who added rows to
+the database. But in a new database, perhaps there are no users &mdash; and
+Sqitch doesn&rsquo;t create them, the app does. Chicken, meet egg.</p></li>
+<li><p>The initial data set might derived from some external source, such as
+another database. Consequently, none of that data was defined in Sqitch
+deploy scripts. This situation complicates future updates of the data. We
+can add data via Sqitch in the future, but then we don&rsquo;t have the canonical
+list of all rows that should exist in all such databases.</p></li>
+</ol>
+
+
+<p>However, I can think of no alternative that does not over-complicate Sqitch
+itself. I considered adding another change-related script type, named
+&ldquo;update&rdquo;, to complement the existing deploy, verify, and revert scripts. But
+oftentimes a data change would not be tied to a schema change, so the
+corresponding deploy script would be a no-op. Seems silly.</p>
+
+<p>I also considered adding a completely separate command specifically for
+deploying data changes. Yet these data migrations are exactly like schema
+changes: Sqitch must execute them in the proper order relative to other
+changes, record successful or failed deployment, and be able to revert them
+when required. The only difference is what&rsquo;s defined in them: data
+modification rather than definition.</p>
+
+<p>Through several drafts of this post, I have come around to the idea that I
+should change nothing in Sqitch with regard to data deployments. A better
+solution than the above, I believe, is organizational.</p>
+
+<h3>Data Deploy Best Practice</h3>
+
+<p>Let the best practice for data deploys be this: they should be contained in
+Sqitch changes, but such changes should contain <em>only</em> data modifications. No
+change script should both define a table and insert its initial rows. Keep the
+table and its data in separate changes &mdash; keep DML separate from DDL.</p>
+
+<p>For our list of countries, we might have a change named &ldquo;countries&rdquo;, which
+creates the <code>countries</code> table, and another, named &ldquo;country_data&rdquo;, which
+inserts the appropriate data into that table. Where necessary and appropriate,
+these changes may use conditional paths to bring the data up-to-date and in
+sync across deployments.</p>
+
+<p>Conditions must deal with side-effects, such as foreign key constraints. Where
+possible, such side effects ought be removed from deployment-managed data. For
+tracking the user or users who added data to a database, for example, one can
+use the tools of the source code repository (<code>git log</code>, <code>git blame</code>) to assign
+blame. Other side-effects may be more necessary, but to the extent possible,
+deployed data should be independent.</p>
+
+<p>Naturally, unit tests must expect static data to be present, and be updated
+when that data changes. We are, after all, talking about infrequently-updated
+data. Frequently-updated data should have separate interfaces provided by
+applications to change the data. Otherwise, how static is it, really?</p>
 ]]></content>
     </entry>
   

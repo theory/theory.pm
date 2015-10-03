@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pg | theory.pm]]></title>
+  <link href="http://theory.pm/categories/pg/atom.xml" rel="self"/>
+  <link href="http://theory.pm/"/>
+  <updated>2015-10-03T13:25:47-07:00</updated>
+  <id>http://theory.pm/</id>
+  <author>
+    <name><![CDATA[David E. Wheeler]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Indexing Nested hstore]]></title>
+<link href="http://theory.pm/pg/2013/10/25/indexing-nested-hstore/"/>
+<updated>2013-10-25T14:36:00-07:00</updated>
+<id>http://theory.pm/pg/2013/10/25/indexing-nested-hstore</id>
+
+      <content type="html"><![CDATA[<p>In my first <a href="/pg/2013/10/23/testing-nested-hstore/">Nested hstore</a> post yesterday, I ran a query against unindexed
+hstore data, which required a table scan. But hstore is able to take
+advantage of <a href="http://www.postgresql.org/docs/current/static/gin.html">GIN indexes</a>. So let&rsquo;s see what that looks like. Connecting to
+the same database, I indexed the <code>review</code> column:</p>
+
+<pre><code class="sql Indexing reviews">reviews=# CREATE INDEX idx_reviews_gin ON reviews USING GIN(review);
+CREATE INDEX
+Time: 360448.426 ms
+reviews=# SELECT pg_size_pretty(pg_database_size(current_database()));
+ pg_size_pretty 
+----------------
+ 421 MB
+</code></pre>
+
+<p>Well, that takes a while, and makes the database a lot bigger (it was 277 MB
+unindexed). But is it worth it? Let&rsquo;s find out. Oleg and Teodor&rsquo;s patch adds
+support for a nested hstore value on the right-hand-side of the <code>@&gt;</code>
+operator. In practice, that means we can specify the full path to a nested
+value as an hstore expression. In our case, to query only for Books, instead
+of using this expression:</p>
+
+<pre><code class="sql">WHERE review #&gt; '{product,group}' = 'Book'
+</code></pre>
+
+<p>We can use an hstore value with the entire path, including the value:</p>
+
+<pre><code class="sql">WHERE review @&gt; '{product =&gt; {group =&gt; Book}}'
+</code></pre>
+
+<p>Awesome, right? Let&rsquo;s give it a try:</p>
+
+<pre><code class="sql Query Book Reviews">reviews=# SELECT
+    width_bucket(length(review #&gt; '{product,title}'), 1, 50, 5) title_length_bucket,
+    round(avg(review #^&gt; '{review,rating}'), 2) AS review_average,
+    count(*)
+FROM
+    reviews
+WHERE
+    review @&gt; '{product =&gt; {group =&gt; Book}}'
+GROUP BY
+    title_length_bucket
+ORDER BY
+    title_length_bucket;
+ title_length_bucket | review_average | count  
+---------------------+----------------+--------
+                   1 |           4.42 |  56299
+                   2 |           4.33 | 170774
+                   3 |           4.45 | 104778
+                   4 |           4.41 |  69719
+                   5 |           4.36 |  47110
+                   6 |           4.43 |  43070
+(6 rows)
+
+Time: 849.681 ms
+</code></pre>
+
+<p>That time looks better than yesterday&rsquo;s, but in truth I first ran this query
+just before building the GIN index and got about the same result. Must be
+that Mavericks is finished indexing my disk or something. At any rate, the
+index is not buying us much here.</p>
+
+<p>But hey, we&rsquo;re dealing with 1998 Amazon reviews, so querying against books
+probably isn&rsquo;t very selective. I don&rsquo;t blame the planner for deciding that a
+table scan is cheaper than an index scan. But what if we try a more selective
+value, say &ldquo;DVD&rdquo;?</p>
+
+<pre><code class="sql Query DVD Reivews">reviews=# SELECT
+    width_bucket(length(review #&gt; '{product,title}'), 1, 50, 5) title_length_bucket,
+    round(avg(review #^&gt; '{review,rating}'), 2) AS review_average,
+    count(*)
+FROM
+    reviews
+WHERE
+    review @&gt; '{product =&gt; {group =&gt; DVD}}'
+GROUP BY
+    title_length_bucket
+ORDER BY
+    title_length_bucket;
+ title_length_bucket | review_average | count 
+---------------------+----------------+-------
+                   1 |           4.27 |  2646
+                   2 |           4.44 |  4180
+                   3 |           4.53 |  1996
+                   4 |           4.38 |  2294
+                   5 |           4.48 |   943
+                   6 |           4.42 |   738
+(6 rows)
+
+Time: 73.913 ms
+</code></pre>
+
+<p>Wow! Under 100ms. That&rsquo;s more like it! <a href="http://en.wikipedia.org/wiki/Inverted_index">Inverted indexing</a> FTW!</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[Testing Nested hstore]]></title>
+<link href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/"/>
+<updated>2013-10-23T10:26:00-07:00</updated>
+<id>http://theory.pm/pg/2013/10/23/testing-nested-hstore</id>
+
+      <content type="html"><![CDATA[<p>I&rsquo;ve been helping Oleg Bartunov and Teodor Sigaev with documentation for the
+forthcoming <a href="http://www.sai.msu.su/~megera/postgres/talks/hstore-pgcon-2013.pdf">nested hstore</a> patch for <a href="http://www.posrgresql.org/">PostgreSQL</a>. It adds support for
+arrays, numeric and boolean types, and of course arbitrarily nested data
+structures. This gives it feature parity with <a href="http://json.org/">JSON</a>, but unlike the
+<a href="http://www.postgresql.org/docs/current/static/datatype-json.html">JSON type</a>, its values are stored in a binary representation, which makes it
+much more efficient to query. The support for <a href="http://www.postgresql.org/docs/current/static/gist.html">GiST</a> and <a href="http://www.postgresql.org/docs/current/static/gin.html">GIN</a> indexes to
+speed up path searches doesn&rsquo;t hurt, either.</p>
+
+<p>As part of the documentation, we wanted to include a short tutorial, something
+to show off the schemaless flexibility of the new hstore. The <a href="http://citusdata.com/">CitusDB</a> guys
+were kind enough to show off their <a href="https://github.com/citusdata/json_fdw">json_fdw</a> with some Amazon review data in
+a <a href="http://citusdata.com/blog/65-run-sql-on-json-files-without-any-data-loads">blog post</a> a few months back; it even includes an interesting query against
+the data. Let&rsquo;s see what we can do with it. First, load it:</p>
+
+<pre><code class="bash Load Amazon Reviews as hstore">&gt; createdb reviews
+&gt; psql -d reviews -c '
+    CREATE EXTENSION HSTORE;
+    CREATE TABLE reviews(review hstore);
+'
+CREATE TABLE
+&gt; gzcat customer_reviews_nested_1998.json.gz | sed -e 's/\\/\\\\/g' \
+ | sed -e "s/'/''/g" | sed -e 's/":/" =&gt;/g' &gt; /tmp/hstore.copy
+&gt; time psql -d reviews -c "COPY reviews FROM '/tmp/hstore.copy'"
+COPY 589859
+       0.00s user 0.00s system 0% cpu 13.059 total
+</code></pre>
+
+<p>13 seconds to load 589,859 records from a file &ndash; a little over 45k records
+per second. Not bad. Let&rsquo;s see what the storage looks like:</p>
+
+<pre><code class="bash How Big is the hstore Data?">&gt; psql -d reviews -c 'SELECT pg_size_pretty(pg_database_size(current_database()));'
+ pg_size_pretty 
+----------------
+ 277 MB
+</code></pre>
+
+<p>The original, uncompressed data is 208 MB on disk, so roughly a third bigger
+given the overhead of the database. Just for fun, let&rsquo;s compare it to JSON:</p>
+
+<pre><code class="bash Load Amazon Reviews as JSON">&gt; createdb reviews_js
+&gt; psql -d reviews_js -c 'CREATE TABLE reviews(review json);'
+CREATE TABLE
+&gt; gzcat customer_reviews_nested_1998.json.gz | sed -e 's/\\/\\\\/g' \
+ | sed -e "s/'/''/g" | &gt; /tmp/json.copy
+&gt; time psql -d reviews_js -c "COPY reviews FROM '/tmp/json.copy'"
+COPY 589859
+       0.00s user 0.00s system 0% cpu 7.434 total
+&gt; psql -d reviews_js -c 'SELECT pg_size_pretty(pg_database_size(current_database()));'
+ pg_size_pretty 
+----------------
+ 239 MB
+</code></pre>
+
+<p>Almost 80K records per second, faster, I&rsquo;m guessing, because the JSON type
+doesn&rsquo;t convert the data to binary representation its way in. JSON currently
+uses less overhead for storage, aw well; I wonder if that&rsquo;s the benefit of
+<a href="http://www.postgresql.org/docs/current/static/storage-toast.html">TOAST storage</a>?</p>
+
+<p>Let&rsquo;s try querying these guys. I adapted the query from the CitusDB <a href="http://citusdata.com/blog/65-run-sql-on-json-files-without-any-data-loads">blog
+post</a> and ran it on my 2013 MacBook Air (1.7 GHz Intel Core i7) with iTunes
+and a bunch of other apps running in the background [yeah, I&rsquo;m lazy]). Check
+out those operators, by the way! Given a path, <code>#^&gt;</code> returns a numeric value:</p>
+
+<pre><code class="sql Query the hstore-encoded reviews">reviews=# SELECT
+    width_bucket(length(review #&gt; '{product,title}'), 1, 50, 5) title_length_bucket,
+    round(avg(review #^&gt; '{review,rating}'), 2) AS review_average,
+    count(*)
+FROM
+    reviews
+WHERE
+    review #&gt; '{product,group}' = 'Book'
+GROUP BY
+    title_length_bucket
+ORDER BY
+    title_length_bucket;
+ title_length_bucket | review_average | count  
+---------------------+----------------+--------
+                   1 |           4.42 |  56299
+                   2 |           4.33 | 170774
+                   3 |           4.45 | 104778
+                   4 |           4.41 |  69719
+                   5 |           4.36 |  47110
+                   6 |           4.43 |  43070
+(6 rows)
+
+Time: 2301.620 ms
+</code></pre>
+
+<p>The benefit of the native type is pretty apparent here. I ran this query
+several times, and the time was always between 2.3 and 2.4 seconds. The Citus
+<a href="https://github.com/citusdata/json_fdw">json_fdw</a> query took &ldquo;about 6 seconds on a 3.1 GHz CPU core.&rdquo; Let&rsquo;s see how
+well the JSON type does (pity there is no operator to fetch a value as
+numeric; we have to cast from text):</p>
+
+<pre><code class="sql Query the JSON-encoded reviews">reviews_js=# SELECT
+    width_bucket(length(review #&gt;&gt; '{product,title}'), 1, 50, 5) title_length_bucket,
+    round(avg((review #&gt;&gt; '{review,rating}')::numeric), 2) AS review_average,
+    count(*)
+FROM
+    reviews
+WHERE
+    review #&gt;&gt; '{product,group}' = 'Book'
+GROUP BY
+    title_length_bucket
+ORDER BY
+    title_length_bucket;
+ title_length_bucket | review_average | count  
+---------------------+----------------+--------
+                   1 |           4.42 |  56299
+                   2 |           4.33 | 170774
+                   3 |           4.45 | 104778
+                   4 |           4.41 |  69719
+                   5 |           4.36 |  47110
+                   6 |           4.43 |  43070
+(6 rows)
+
+Time: 5530.120 ms
+</code></pre>
+
+<p>A little faster than the <a href="https://github.com/citusdata/json_fdw">json_fdw</a> version, but comparable. But takes well
+over twice as long as the hstore version, though. For queries, hstore is the
+clear winner. Yes, you pay up-front for loading and storage, but the payoff at
+query time is substantial. Ideally, of course, we would have the insert and
+storage benefits of JSON <em>and</em> the query performance of hstore. There was talk
+last spring at PGCon of using the same representation for JSON and hstore;
+perhaps that can still come about.</p>
+
+<p>Meanwhile, I expect to play with some other data sets over the next week;
+watch this spot for more!</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ The Power of Enums]]></title>
+<link href="http://www.openscg.com/2013/09/the-power-of-enums/"/>
+<updated>2013-09-29T14:50:00-07:00</updated>
+<id>http://theory.pm/pg/2013/09/29/the-power-of-enums</id>
+
+      <content type="html"><![CDATA[<p>Jim Mlodgenski on using <a href="http://www.postgresql.org/docs/9.3/static/datatype-enum.html&lt;p>&lt;a">Enums</a> in place of references to small lookup tables:</p>
+
+<blockquote><p>I saw something else I didn’t expect: […] There was a 8% increase
+in performance. I was expecting the test with the enums to be close
+to the baseline, but I wasn’t expecting it to be faster. Thinking
+about it, it makes sense. Enums values are just numbers so we’re
+effectively using surrogate keys under the covers, but the users would
+still the the enum labels when they are looking at the data. It ended
+up being a no brainer to use enums for these static tables. There was
+a increase in performance while still maintaining the integrity of the
+data.</p></blockquote>
+
+<p>I&rsquo;ve been a big fan of Enums since Andrew and Tom Dunstan released a patch for
+them during the PostgreSQL 8.2 era. Today they&rsquo;re a core feature, and as of
+9.1, you can even modify their values! You&rsquo;re missing out if you&rsquo;re not using
+them yet.</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ Understanding Window Functions]]></title>
+<link href="http://tapoueh.org/blog/2013/08/20-Window-Functions"/>
+<updated>2013-08-28T17:25:00-07:00</updated>
+<id>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions</id>
+
+      <content type="html"><![CDATA[<p>Dimitri Fontaine:</p>
+
+<blockquote><p>There was SQL before
+<a href="http://www.postgresql.org/docs/current/static/tutorial-window.html">window functions</a>
+and SQL after <em>window functions:</em> that&rsquo;s how powerful this tool is. Being
+that of a deal breaker unfortunately means that it can be quite hard to
+grasp the feature. This article aims at making it crystal clear so that you
+can begin using it today and are able to reason about it and recognize cases
+where you want to be using <em>window functions.</em></p></blockquote>
+
+<p>Great intro to a powerful feature.</p>
+
+<p><a rel="bookmark" href="http://theory.pm/pg/windows/2013/08/28/understanding-window-functions/">§</a></p>
+
+]]></content>
+    </entry>
+  
+</feed>
+
