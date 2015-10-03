@@ -9,8 +9,8 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="About theory.pm My name is David E. Wheeler, and this is my Perl blog. I&rsquo;ve been hacking Perl
-since 1995, when I first started programming. &hellip;">
+  <meta name="description" content="About theory.pm My name is David E. Wheeler, and this is my Perl and database blog. I&rsquo;ve been
+hacking Perl since 1995, when I first started &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,17 +80,25 @@ since 1995, when I first started programming. &hellip;">
   
   <p><img src="/images/theory.jpg" title="David E. “Theory” Wheeler" ></p>
 
-<p>My name is David E. Wheeler, and this is my Perl blog. I&rsquo;ve been hacking Perl
-since 1995, when I first started programming. Perl was my first language, and
-still my favorite. Today I mostly hack on database-related code, including
-<a href="http://pgxn.org/">PGXN</a>, a <a href="https://metacpan.org/">CPAN</a>-like service for
-<a href="http://www.postgresql.org/">PostgreSQL</a>, and <a href="http://sqitch.org/">Sqitch</a>,
-a database schema change management app.</p>
+<p>My name is David E. Wheeler, and this is my Perl and database blog. I&rsquo;ve been
+hacking Perl since 1995, when I first started programming. Perl was my first
+language, and still my favorite.</p>
 
-<p>I&rsquo;m <a href="https://twitter.com/theory/">@theory on Twitter</a> and also
-<a href="https://alpha.app.net/theory/">@theory on App.Net</a>.</p>
+<p>I&rsquo;ve been hacking databases since 1997, when I started messing around with
+<a href="https://en.wikipedia.org/wiki/FileMaker">FileMaker Pro</a> and <a href="https://en.wikipedia.org/wiki/Microsoft_Access">Microsoft
+Access</a>. Since 2001, I&rsquo;ve
+focused primarily on <a href="http://postgresql.org/">PostgreSQL</a>, for which I have
+developed <a href="http://pgxn.org/">PGXN</a>, a <a href="https://metacpan.org/">CPAN</a>-like
+service for distributing extensions; <a href="http://pgtap.org/">pgTAP</a>, a unit
+testing framework; and <a href="http://sqitch.org/">Sqitch</a>, a database schema change
+management app</p>
 
-<p>You can hire me to hack Perl and PostgreSQL via my consulting firm,
+<p>More recently, I&rsquo;ve been working on <a href="http://sqitch.org/">Sqitch</a>, a database
+schema change management app for PostgreSQL, Oracle, SQLite, MySQL, Vertica, and Firebird.</p>
+
+<p>I&rsquo;m <a href="https://twitter.com/theory/">@theory on Twitter</a>.</p>
+
+<p>œYou can hire me to hack Perl and PostgreSQL via my consulting firm,
 <a href="http://pgexperts.com/">PostgreSQL Experts</a>.</p>
 
 <h2>Recent CPAN Releases</h2>
@@ -118,6 +126,28 @@ function dists(data) {
 </script>
 
 
+<h2>PGXN Extensions</h2>
+
+<script type="text/javascript">
+function dists(data) {
+    document.write('<dl>');
+    for (dist in data.releases) {
+        document.write(
+            '<dt><a href=http://pgxn.org/dist/' + dist.toLowerCase() +
+            '/>' + dist + '</a></dt>' +
+            '<dd>' + data.releases[dist].abstract + '</dd>'
+        );
+    }
+    document.write('</dl>');
+}
+</script>
+
+
+<script type="text/javascript"
+        src="http://api.pgxn.org/user/theory.json?callback=dists">
+</script>
+
+
 <h2>Contact Me</h2>
 
 <p><section class="vcard" itemtype="http://data-vocabulary.org/Person"><p></p></p>
@@ -135,6 +165,8 @@ function dists(data) {
     <dd itemprop="url"><a href="https://github.com/theory">@theory</a></dd>
     <dt>CPAN:</dt>
     <dd itemprop="url"><a href="https://metacpan.org/author/DWHEELER">@dwheeler</a></dd>
+    <dt>PGXN:</dt>
+    <dd itemprop="url"><a href="http://pgxn.org/user/theory">@theory</a></dd>
 </dl>
 
 
@@ -174,36 +206,9 @@ text is set in <a href="https://github.com/adobe/source-sans-pro">Source Sans Pr
 
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
 
 
 
