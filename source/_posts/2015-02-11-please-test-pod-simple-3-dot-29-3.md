@@ -7,7 +7,7 @@ external-url:
 categories: 
 ---
 
-{% img left http://a1886.phobos.apple.com/us/r30/Purple2/v4/32/36/8c/32368cd4-b6ef-02e6-9020-2265de069e80/mzl.debeadca.png 250 250 'Pod Book' %}
+{% img left /images/cpan.png 250 250 'Pod Book' %}
 
 I've just pushed [Pod-Simple] 3.29_v3 to CPAN. [Karl Williamson] did a lot of
 hacking on this release, finally adding support for EBCDIC. But as part of
