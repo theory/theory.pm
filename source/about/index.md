@@ -13,13 +13,13 @@ hacking Perl since 1995, when I first started programming. Perl was my first
 language, and still my favorite.
 
 I've been hacking databases since 1997, when I started messing around with
-[FileMaker Pro](https://en.wikipedia.org/wiki/FileMaker) and [Microsoft
-Access](https://en.wikipedia.org/wiki/Microsoft_Access). Since 2001, I've
-focused primarily on [PostgreSQL](http://postgresql.org/), for which I have
-developed [PGXN](http://pgxn.org/), a [CPAN](https://metacpan.org/)-like
-service for distributing extensions; [pgTAP](http://pgtap.org/), a unit
-testing framework; and [Sqitch](http://sqitch.org/), a database schema change
-management app
+[FileMaker Pro](https://en.wikipedia.org/wiki/FileMaker) and
+[Microsoft Access](https://en.wikipedia.org/wiki/Microsoft_Access). Since
+2001, I've focused primarily on [PostgreSQL](http://postgresql.org/), for
+which I have developed [PGXN](http://pgxn.org/), a
+[CPAN](https://metacpan.org/)-like service for distributing extensions;
+[pgTAP](http://pgtap.org/), a unit testing framework; and
+[Sqitch](http://sqitch.org/), a database schema change management app
 
 More recently, I've been working on [Sqitch](http://sqitch.org/), a database
 schema change management app for PostgreSQL, Oracle, SQLite, MySQL, Vertica, and Firebird.
