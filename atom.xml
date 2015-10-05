@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2015-10-05T10:44:46-07:00</updated>
+  <updated>2015-10-05T11:32:31-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -45,7 +45,7 @@
 <updated>2015-02-11T10:53:00-08:00</updated>
 <id>http://theory.pm/2015/02/11/please-test-pod-simple-3-dot-29-3</id>
 
-      <content type="html"><![CDATA[<p><img class="left" src="http://a1886.phobos.apple.com/us/r30/Purple2/v4/32/36/8c/32368cd4-b6ef-02e6-9020-2265de069e80/mzl.debeadca.png" width="250" height="250" title="'Pod Book'" ></p>
+      <content type="html"><![CDATA[<p><img class="left" src="http://theory.pm/images/cpan.png" width="250" height="250" title="'Pod Book'" ></p>
 
 <p>I&rsquo;ve just pushed <a href="https://metacpan.org/release/Pod-Simple/">Pod-Simple</a> 3.29_v3 to CPAN. <a href="https://metacpan.org/author/KHW">Karl Williamson</a> did a lot of
 hacking on this release, finally adding support for EBCDIC. But as part of
