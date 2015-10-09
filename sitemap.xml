@@ -2,101 +2,101 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://theory.pm/exceptions/2013/07/26/trying-times/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/blog/2013/07/26/a-perl-blog/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/mop/2013/08/15/mopping-the-moose/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/tpf/2013/08/23/tpf-to-revamp-grants/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2013/09/06/sqitch-templating/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sql/2013/09/09/multirow-database-updates/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/syntax/2013/09/25/lexical-subroutines/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/09/29/the-power-of-enums/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/10/23/testing-nested-hstore/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/10/25/indexing-nested-hstore/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/01/09/sqitch-on-target/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/2014/09/05/sqitch-goes-vertical/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/
         </loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/podcast/2014/09/17/sqitch-on-floss-weekly/</loc>
-        <lastmod>2015-10-03T14:48:05-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/</loc>
-        <lastmod>2015-10-03T14:19:37-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/2015/02/11/please-test-pod-simple-3-dot-29-3/</loc>
-        <lastmod>2015-10-05T11:31:01-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/</loc>
-        <lastmod>2015-10-05T11:37:12-07:00</lastmod>
+        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/404.html</loc>
