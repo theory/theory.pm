@@ -78,7 +78,7 @@ a {
 .entry-content a, .entry-content a * {
     position: relative;
     text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 2px, $link-color 2px, $link-color 3px, rgba(0, 0, 0, 0) 3px);
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 2px, lighten($link-color, 50) 2px, lighten($link-color, 50) 3px, rgba(0, 0, 0, 0) 3px);
     &:hover {
       background-image: none;
       text-shadow: none;
