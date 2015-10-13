@@ -69,7 +69,6 @@ a {
   text-decoration: none;
   &:hover {
     background-color: lighten($link-color, 50);
-    border-color: $link-color;
   }
   &:hover * {
     background-color: lighten($link-color, 50);
