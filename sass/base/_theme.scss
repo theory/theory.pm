@@ -75,10 +75,18 @@ a {
     background-color: lighten($link-color, 50);
   }
 }
-
 .entry-content a, .entry-content a * {
-  border: 1px solid lighten($link-color, 50) !important;
-  border-width: 0 0 1px 0 !important;
+    position: relative;
+    text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) 2px, $link-color 2px, $link-color 3px, rgba(0, 0, 0, 0) 3px);
+    &:hover {
+      background-image: none;
+      text-shadow: none;
+    }
+    &:hover * {
+      background-image: none;
+      text-shadow: none;
+    }
 }
 aside.sidebar a {
   @include link-colors($sidebar-link-color, $hover: $sidebar-link-color-hover, $focus: $sidebar-link-color-hover, $active: $sidebar-link-color-active);
