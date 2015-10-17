@@ -65,6 +65,9 @@ default_asides: []
 # post_asides:
 # page_asides:
 
+# Disable modernizr.js, ender.js, and octopress.js
+withjs: false
+
 # ----------------------- #
 #   3rd Party Settings    #
 # ----------------------- #
