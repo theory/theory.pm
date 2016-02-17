@@ -9,8 +9,8 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="As part of my effort to improve Sqitch, I plan to add support for specifying
-deployment targets via URIs. Inspired by Git remotes, targets will &hellip;">
+  <meta name="description" content="At the end of the day last week, I released Sqitch v0.990. This was a
+pretty big release, with lots of changes. The most awesome addition, in my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,6 +57,159 @@ deployment targets via URIs. Inspired by Git remotes, targets will &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/sqitch/2014/01/09/sqitch-on-target/">Sqitch on Target</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-09T15:27:00-08:00" pubdate data-updated="true">Thursday,  9 January 2014</time>
+        
+         &bull; <a rel="bookmark" href="/sqitch/2014/01/09/sqitch-on-target/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>At the end of the day last week, I released <a href="http://sqitch.org/">Sqitch</a> v0.990. This was a
+pretty big release, with lots of changes. The most awesome addition, in my
+opinion, is <em>Named Deployment targets.</em></p>
+
+<p>In previous versions of Sqitch, one
+could set default values for the database to deploy to, but needed to use the
+<code>--db-*</code> options to deploy to another database. This was fine for
+development: just set the default on <code>localhost</code> and go. But when it came
+time to deploy to other servers for testing, QA, or production, it was a bit
+of a PITA. At <a href="http://www.iovation.com/">work</a>, I ended up writing deployment docs that defined a slew
+of environment variables, and our operations team needed to adjust those
+variables to deploy to various servers. It was ugly, and frankly a bit of a
+pain in the ass.</p>
+
+<p>I thought it&rsquo;d be better to have named deployment targets, so instead of
+changing a bunch of environment variables in order to set a bunch of options,
+we could just name a target and go. I borrowed the idea from <a href="http://git-scm.com/docs/git-remote">Git remotes</a>,
+and started a <a href="https://github.com/theory/uri-db">database URI spec</a> (mentioned <a href="/rfc/2013/11/26/toward-a-database-uri-standard/">previously</a>) to simplify things
+a bit. Here&rsquo;s how it works. Say you have a PostgreSQL Sqitch project called
+&ldquo;Flipr&rdquo;. While doing development, you&rsquo;ll want to have a local database to
+deploy to. There is also a QA database and a production database. Use the
+<a href="https://metacpan.org/pod/sqitch-target"><code>target</code></a> command to set them up:</p>
+
+<figure class='code'><figcaption><span>Sqitch Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch target add dev db:pg:flipr
+</span><span class='line'>sqitch target add qa db:pg://sqitch@qa.example.com/flipr
+</span><span class='line'>sqitch target add prod db:pg://sqitch@db.example.com/flipr
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Like <a href="http://git-scm.com/docs/git-remote">Git remotes</a>, we just have names and URIs. To <a href="https://metacpan.org/pod/sqitch-deploy"><code>deploy</code></a> to a database,
+just name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to Dev</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Want to deploy to QA? Name it:</p>
+
+<figure class='code'><figcaption><span>Deploy to QA</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch deploy qa
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works with any of the commands that connect to a database, including
+<a href="https://metacpan.org/pod/sqitch-revert"><code>revert</code></a> and <a href="https://metacpan.org/pod/sqitch-status"><code>status</code></a>:</p>
+
+<figure class='code'><figcaption><span>Targeted revert, Status</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch revert --to @HEAD^^ dev
+</span><span class='line'>sqitch status prod
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The great thing about this feature is that the configuration is all stored
+in the project Sqitch configuration file. That means you can commit all the
+connection URIs for all likely targets in directly to the project repository.
+If they change, just change them in the config, commit, and push.</p>
+
+<p>Targets don&rsquo;t always have to be configured in advance, of course. The names
+essentially stand in for the URIs, so you can connect to an unnamed target
+just by using a URI:</p>
+
+<figure class='code'><figcaption><span>URI Targeting</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch log db:postgres://db1.example.net/flipr_export
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course there are still defaults specific to each engine. I generally like
+to set the &ldquo;dev&rdquo; target as the default deploy target, like so:</p>
+
+<figure class='code'><figcaption><span>Configure Default Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch config core.pg.target dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sets the &ldquo;dev&rdquo; target as the default for the PostgreSQL engine. So now I
+can do stuff with the &ldquo;dev&rdquo; target without mentioning it at all:</p>
+
+<figure class='code'><figcaption><span>Rebase Dev Target</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sqitch rebase --onto HEAD^4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Named targets may also have a couple other attributes associated with them:</p>
+
+<ul>
+<li><code>client</code>: The command-line client to use for a target.</li>
+<li><code>registry</code>: The name of the Sqitch registry schema or database, which defaults to, simply, <code>sqitch</code>.</li>
+</ul>
+
+
+<p>Now that I&rsquo;ve started using it, I can think of other things I&rsquo;d like to add to targets in the future, including:</p>
+
+<ul>
+<li><a href="https://github.com/theory/sqitch/issues/143">Setting other attributes</a>, such as the deployment mode, whether to verify changes, and variables.</li>
+<li><a href="https://github.com/theory/sqitch/issues/135">Allowing multiple URIs</a>, for concurrent database deployments!</li>
+</ul>
+
+
+<p>Pretty cool stuff ahead, IMO. I&rsquo;m grateful to <a href="http://www.iovation.com/">work</a> for letting me hack on
+Sqitch.</p>
+</div>
+
+
+    </article>
   
     
     
@@ -1310,159 +1463,6 @@ where you want to be using <em>window functions.</em></p></blockquote>
 
     </article>
   
-    
-    
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/sqitch/data/2013/08/28/data-deployment-with-sqitch/">Data Deployment with Sqitch</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-28T17:09:00-07:00" pubdate data-updated="true">Wednesday, 28 August 2013</time>
-        
-         &bull; <a rel="bookmark" href="/sqitch/data/2013/08/28/data-deployment-with-sqitch/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>I&rsquo;ve been thinking about data migrations. I love how well <a href="http://sqitch.org/">Sqitch</a> works for
-<em>schema</em> changes, but so far have avoided <em>data</em> changes. Some data ought to
-be managed by the deployment process, rather than by end-user applications.
-Lists of countries, for example. Yet none of <a href="http://iovation.com/">our</a> Sqitch-managed databases
-include <code>INSERT</code>s, <code>UPDATE</code>s, or <code>DELETE</code>s in deploy scripts. Why not? Two
-reasons:</p>
-
-<ol>
-<li><p>These are mainly Postgres ports of existing Oracle databases. As such, I&rsquo;ve
-written independent migration scripts that use <a href="http://pgxn.org/extension/oracle_fdw"><code>oracle_fdw</code></a> to copy data
-from Oracle. It made no sense to commit hard-coded changes to the deploy
-script, even for static data, as it was all to be copied from the old
-production Oracle databases &mdash; often months after I wrote the migrations.</p></li>
-<li><p>These projects include extensive <a href="http://pgtap.org/">pgTAP</a> unit tests that expect to run many
-times against an empty database with no side effects. Having different data
-in testing than in production increases the likelihood of unforeseen
-behavioral variations. Better to expect <em>no</em> data in tests, freeing them to
-focus on units of behavior without regard to preexisting data.</p></li>
-</ol>
-
-
-<p>Now that we have multiple Sqitch-deployed databases in production, the time
-has come to address these issues.</p>
-
-<h2>Deploy Hooks for External Sources</h2>
-
-<p>I propose to resolve the one-time migration requirement with <a href="https://github.com/theory/sqitch/issues/96">deploy hooks</a>.
-The idea is similar to <a href="http://git-scm.com/docs/githooks">Git hooks</a>: Before or after any <code>sqitch deploy</code>, one
-or more hook scripts can run. The impetus was to ensure some higher level of
-consistency after every <code>deploy</code>. For example, a post-deploy hook might grant
-privileges on all tables in a database. Another might run <code>VACCUM; ANALZYE;</code>.</p>
-
-<p>But we could also use it for one-time data migrations. An option to <code>deploy</code>
-will disable them, which would be useful for development and test databases.
-Once the migration has been run in production, we just delete the migration
-hook scripts from the project. Sqitch won&rsquo;t record hook executions, so adding
-or removing them will be no problem.</p>
-
-<p>I like this approach, as Sqitch will automatically run migration scripts, but
-hooks will not change the interface of Sqitch itself. And it&rsquo;s more generally
-useful. Hell, I might want deploy hook script that sends an email notification
-announcing a deployment (though that might require adding support for
-<a href="https://github.com/theory/sqitch/issues/1">non-SQL scripts</a>). There are all kinds of things for which hooks will prove
-useful.</p>
-
-<h2>Changes for Static Data Maintenance</h2>
-
-<p>For data that must be tied to the deployment process, there are two
-complications that have prevetned me from simply managing them in normal
-Sqitch changes:</p>
-
-<ol>
-<li><p>There might be side-effects to the deployment. For example, a foreign key
-constraint to the <code>users</code> table, to identify the users who added rows to
-the database. But in a new database, perhaps there are no users &mdash; and
-Sqitch doesn&rsquo;t create them, the app does. Chicken, meet egg.</p></li>
-<li><p>The initial data set might derived from some external source, such as
-another database. Consequently, none of that data was defined in Sqitch
-deploy scripts. This situation complicates future updates of the data. We
-can add data via Sqitch in the future, but then we don&rsquo;t have the canonical
-list of all rows that should exist in all such databases.</p></li>
-</ol>
-
-
-<p>However, I can think of no alternative that does not over-complicate Sqitch
-itself. I considered adding another change-related script type, named
-&ldquo;update&rdquo;, to complement the existing deploy, verify, and revert scripts. But
-oftentimes a data change would not be tied to a schema change, so the
-corresponding deploy script would be a no-op. Seems silly.</p>
-
-<p>I also considered adding a completely separate command specifically for
-deploying data changes. Yet these data migrations are exactly like schema
-changes: Sqitch must execute them in the proper order relative to other
-changes, record successful or failed deployment, and be able to revert them
-when required. The only difference is what&rsquo;s defined in them: data
-modification rather than definition.</p>
-
-<p>Through several drafts of this post, I have come around to the idea that I
-should change nothing in Sqitch with regard to data deployments. A better
-solution than the above, I believe, is organizational.</p>
-
-<h3>Data Deploy Best Practice</h3>
-
-<p>Let the best practice for data deploys be this: they should be contained in
-Sqitch changes, but such changes should contain <em>only</em> data modifications. No
-change script should both define a table and insert its initial rows. Keep the
-table and its data in separate changes &mdash; keep DML separate from DDL.</p>
-
-<p>For our list of countries, we might have a change named &ldquo;countries&rdquo;, which
-creates the <code>countries</code> table, and another, named &ldquo;country_data&rdquo;, which
-inserts the appropriate data into that table. Where necessary and appropriate,
-these changes may use conditional paths to bring the data up-to-date and in
-sync across deployments.</p>
-
-<p>Conditions must deal with side-effects, such as foreign key constraints. Where
-possible, such side effects ought be removed from deployment-managed data. For
-tracking the user or users who added data to a database, for example, one can
-use the tools of the source code repository (<code>git log</code>, <code>git blame</code>) to assign
-blame. Other side-effects may be more necessary, but to the extent possible,
-deployed data should be independent.</p>
-
-<p>Naturally, unit tests must expect static data to be present, and be updated
-when that data changes. We are, after all, talking about infrequently-updated
-data. Frequently-updated data should have separate interfaces provided by
-applications to change the data. Otherwise, how static is it, really?</p>
-</div>
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/page/3/">&larr; Older</a>
@@ -1477,7 +1477,7 @@ applications to change the data. Otherwise, how static is it, really?</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 – David E. Wheeler –
+  Copyright &copy; 2016 – David E. Wheeler –
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span> –
   <a href="/atom.xml" title="Subscribe to theory.com">Feed</a>
 </p>

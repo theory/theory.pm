@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Lexical Subroutines - theory.pm</title>
+  <title>Apple Challenges FBI Decryption Demand - theory.pm</title>
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="Ricardo Signes: One of the big new experimental features in Perl 5.18.0 is lexical subroutines. In other words, you can write this: my sub quickly &hellip;">
+  <meta name="description" content="Incredible post from Apple, signed by Tim Cook: The government is asking Apple to hack our own users and undermine decades
+of security advancements &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://theory.pm/syntax/2013/09/25/lexical-subroutines">
+  <link rel="canonical" href="http://theory.pm/encryption/2016/02/17/apple-encryption-stand">
   <link href="/favicon.ico" rel="icon">
   
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -73,7 +74,7 @@
   <header>
     <h1 class="entry-title">
 
-<a href="http://rjbs.manxome.org/rubric/entry/2016">Lexical Subroutines</a>
+<a href="https://www.apple.com/customer-letter/">Apple Challenges FBI Decryption Demand</a>
 <span class='linklog-marker'>→</span>
 </h1>
 
@@ -91,42 +92,37 @@
   
 
 
-<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+<time datetime="2016-02-17T11:30:00-08:00" pubdate data-updated="true">Wednesday, 17 February 2016</time>
         
-         &bull; <a rel="bookmark" href="/syntax/2013/09/25/lexical-subroutines/">§</a>
+         &bull; <a rel="bookmark" href="/encryption/2016/02/17/apple-encryption-stand/">§</a>
       </p>
     
   </header>
 
 
 
-  <div class="entry-content"><p>Ricardo Signes:</p>
+  <div class="entry-content"><p>Incredible post from Apple, signed by Tim Cook:</p>
 
-<blockquote><p>One of the big new experimental features in Perl 5.18.0 is lexical
- subroutines. In other words, you can write this:</p>
+<blockquote><p>The government is asking Apple to hack our own users and undermine decades
+of security advancements that protect our customers — including tens of
+millions of American citizens — from sophisticated hackers and
+cybercriminals. The same engineers who built strong encryption into the
+iPhone to protect our users would, ironically, be ordered to weaken those
+protections and make our users less safe.</p>
 
-<pre><code>my sub quickly { ... }
-my @sorted = sort quickly @list;
+<p>We can find no precedent for an American company being forced to expose its
+customers to a greater risk of attack. For years, cryptologists and national
+security experts have been warning against weakening encryption. Doing so
+would hurt only the well-meaning and law-abiding citizens who rely on
+companies like Apple to protect their data. Criminals and bad actors will
+still encrypt, using tools that are readily available to them.</p></blockquote>
 
-my sub greppy (&amp;@) { ... }
-my @grepped = greppy { ... } @input;
-</code></pre>
-
-<p>These two examples show cases where lexical <em>references</em> to anonymous
-subroutines would not have worked. The first argument to <code>sort</code> must be a
-block or a subroutine <em>name</em>, which leads to awful code like this:</p>
-
-<pre><code>sort { $subref-&gt;($a, $b) } @list
-</code></pre>
-
-<p>With our greppy, above, we get to benefit from the parser-affecting
-behaviors of subroutine prototypes.</p></blockquote>
-
-<p>My favorite tidbit about this feature? Because lexical subs are <em>lexical,</em> and
-method-dispatch is <em>package</em>-based, lexical subs are not subject to method
-lookup and dispatch! This just might alleviate the confusion of methods and
-subs, as <a href="http://www.modernperlbooks.com/mt/2013/09/functions-shouldnt-be-methods-yet-another-reminder.html">chromatic complained about just yesterday</a>. Probably doesn&rsquo;t solve
-the problem for imported subs, though.</p>
+<p>I only wish there was a place to co-sign. Companies must do all they can to
+safeguard the privacy of their users, preferably such only users can unlock
+and access their personal information. It&rsquo;s in the interest of the government
+to ensure that private data remain private. Forcing Apple to crack its own
+encryption sets a dangerous precedent likely to be exploited by
+cybercriminals for decades to come. Shame on the FBI.</p>
 </div>
 
 
@@ -157,12 +153,12 @@ the problem for imported subs, though.</p>
   
 
 
-<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+<time datetime="2016-02-17T11:30:00-08:00" pubdate data-updated="true">Wednesday, 17 February 2016</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/categories/syntax/'>syntax</a>
+    <a class='category' href='/categories/encryption/'>encryption</a>
   
 </span>
 
@@ -204,8 +200,8 @@ document.write('<button id="ld" onclick="ld()"/>Load Comments</button>');
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://theory.pm/syntax/2013/09/25/lexical-subroutines/';
-        var disqus_url = 'http://theory.pm/syntax/2013/09/25/lexical-subroutines/';
+        var disqus_identifier = 'http://theory.pm/encryption/2016/02/17/apple-encryption-stand/';
+        var disqus_url = 'http://theory.pm/encryption/2016/02/17/apple-encryption-stand/';
         var disqus_script = 'embed.js';
       
     function ld() {

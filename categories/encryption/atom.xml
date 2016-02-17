@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: encryption | theory.pm]]></title>
+  <link href="http://theory.pm/categories/encryption/atom.xml" rel="self"/>
+  <link href="http://theory.pm/"/>
+  <updated>2016-02-17T11:42:06-08:00</updated>
+  <id>http://theory.pm/</id>
+  <author>
+    <name><![CDATA[David E. Wheeler]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[→ Apple Challenges FBI Decryption Demand]]></title>
+<link href="https://www.apple.com/customer-letter/"/>
+<updated>2016-02-17T11:30:00-08:00</updated>
+<id>http://theory.pm/encryption/2016/02/17/apple-encryption-stand</id>
+
+      <content type="html"><![CDATA[<p>Incredible post from Apple, signed by Tim Cook:</p>
+
+<blockquote><p>The government is asking Apple to hack our own users and undermine decades
+of security advancements that protect our customers — including tens of
+millions of American citizens — from sophisticated hackers and
+cybercriminals. The same engineers who built strong encryption into the
+iPhone to protect our users would, ironically, be ordered to weaken those
+protections and make our users less safe.</p>
+
+<p>We can find no precedent for an American company being forced to expose its
+customers to a greater risk of attack. For years, cryptologists and national
+security experts have been warning against weakening encryption. Doing so
+would hurt only the well-meaning and law-abiding citizens who rely on
+companies like Apple to protect their data. Criminals and bad actors will
+still encrypt, using tools that are readily available to them.</p></blockquote>
+
+<p>I only wish there was a place to co-sign. Companies must do all they can to
+safeguard the privacy of their users, preferably such only users can unlock
+and access their personal information. It&rsquo;s in the interest of the government
+to ensure that private data remain private. Forcing Apple to crack its own
+encryption sets a dangerous precedent likely to be exploited by
+cybercriminals for decades to come. Shame on the FBI.</p>
+
+<p><a rel="bookmark" href="http://theory.pm/encryption/2016/02/17/apple-encryption-stand/">§</a></p>
+
+]]></content>
+    </entry>
+  
+</feed>
+
