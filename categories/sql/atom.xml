@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sql | theory.pm]]></title>
   <link href="http://theory.pm/categories/sql/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-02-17T11:42:06-08:00</updated>
+  <updated>2016-02-17T11:58:31-08:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -19,7 +19,7 @@
 
 
 
-<title type="html"><![CDATA[→ Multirow Database Updates]]></title>
+<title type="html"><![CDATA[Multirow Database Updates →]]></title>
 <link href="http://techblog.net-a-porter.com/2013/08/dbixmultirow-updating-multiple-database-rows-quickly-and-easily/"/>
 <updated>2013-09-09T17:47:00-07:00</updated>
 <id>http://theory.pm/sql/2013/09/09/multirow-database-updates</id>

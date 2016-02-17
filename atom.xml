@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-02-17T11:42:06-08:00</updated>
+  <updated>2016-02-17T11:58:31-08:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -19,7 +19,7 @@
 
 
 
-<title type="html"><![CDATA[→ Apple Challenges FBI Decryption Demand]]></title>
+<title type="html"><![CDATA[Apple Challenges FBI Decryption Demand →]]></title>
 <link href="https://www.apple.com/customer-letter/"/>
 <updated>2016-02-17T11:30:00-08:00</updated>
 <id>http://theory.pm/encryption/2016/02/17/apple-encryption-stand</id>
@@ -200,7 +200,7 @@ and leave the sad RPM past behind.</p>
 
 
 
-<title type="html"><![CDATA[→ Sqitch on FLOSS Weekly]]></title>
+<title type="html"><![CDATA[Sqitch on FLOSS Weekly →]]></title>
 <link href="https://twit.tv/shows/floss-weekly/episodes/309"/>
 <updated>2014-09-17T20:42:00-07:00</updated>
 <id>http://theory.pm/podcast/2014/09/17/sqitch-on-floss-weekly</id>
@@ -793,7 +793,7 @@ to get that done by early October.</p>
 
 
 
-<title type="html"><![CDATA[→ Managing Sqitch with Make]]></title>
+<title type="html"><![CDATA[Managing Sqitch with Make →]]></title>
 <link href="http://www.modernperlbooks.com/mt/2014/02/managing-sqitch-with-make.html"/>
 <updated>2014-02-09T13:58:00-08:00</updated>
 <id>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make</id>
@@ -1119,7 +1119,7 @@ revert, and verify scripts created previously:</p>
 
 
 
-<title type="html"><![CDATA[→ Brent Simmons is Not Wrong]]></title>
+<title type="html"><![CDATA[Brent Simmons is Not Wrong →]]></title>
 <link href="http://inessential.com/2014/01/02/vesper_sync_diary_7_audibles"/>
 <updated>2014-01-10T11:02:00-08:00</updated>
 <id>http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong</id>
@@ -1930,7 +1930,7 @@ watch this spot for more!</p>
 
 
 
-<title type="html"><![CDATA[→ The Power of Enums]]></title>
+<title type="html"><![CDATA[The Power of Enums →]]></title>
 <link href="http://www.openscg.com/2013/09/the-power-of-enums/"/>
 <updated>2013-09-29T14:50:00-07:00</updated>
 <id>http://theory.pm/pg/2013/09/29/the-power-of-enums</id>
@@ -1960,7 +1960,7 @@ them yet.</p>
 
 
 
-<title type="html"><![CDATA[→ Whither Impala Fault Tolerance?]]></title>
+<title type="html"><![CDATA[Whither Impala Fault Tolerance? →]]></title>
 <link href="http://blog.cloudera.com/blog/2013/09/whats-next-for-impala-after-release-1-1/"/>
 <updated>2013-09-29T14:29:00-07:00</updated>
 <id>http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance</id>
@@ -2009,7 +2009,7 @@ figured out. I&rsquo;m disappointed it&rsquo;s not on the road map.</p>
 
 
 
-<title type="html"><![CDATA[→ Lexical Subroutines]]></title>
+<title type="html"><![CDATA[Lexical Subroutines →]]></title>
 <link href="http://rjbs.manxome.org/rubric/entry/2016"/>
 <updated>2013-09-25T20:12:00-07:00</updated>
 <id>http://theory.pm/syntax/2013/09/25/lexical-subroutines</id>
@@ -2050,7 +2050,7 @@ the problem for imported subs, though.</p>
 
 
 
-<title type="html"><![CDATA[→ Multirow Database Updates]]></title>
+<title type="html"><![CDATA[Multirow Database Updates →]]></title>
 <link href="http://techblog.net-a-porter.com/2013/08/dbixmultirow-updating-multiple-database-rows-quickly-and-easily/"/>
 <updated>2013-09-09T17:47:00-07:00</updated>
 <id>http://theory.pm/sql/2013/09/09/multirow-database-updates</id>
@@ -2734,7 +2734,7 @@ can imagine lots of uses for task-specific changes, including:</p>
 
 
 
-<title type="html"><![CDATA[→ Understanding Window Functions]]></title>
+<title type="html"><![CDATA[Understanding Window Functions →]]></title>
 <link href="http://tapoueh.org/blog/2013/08/20-Window-Functions"/>
 <updated>2013-08-28T17:25:00-07:00</updated>
 <id>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions</id>
