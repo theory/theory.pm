@@ -50,7 +50,7 @@ permalink_label: "§"
 permalink_label_feed: "§"
 linklog_marker: "→"
 linklog_marker_position: after
-linklog_marker_position_feed: before
+linklog_marker_position_feed: after
 standard_post_marker:
 
 titlecase: false       # Converts page and post titles to titlecase
