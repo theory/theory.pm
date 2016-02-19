@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Do We Have Right to Security"
+title: "Do We Have Right to Security?"
 date: 2016-02-19 15:26
 comments: true
 external-url: https://securosis.com/blog/do-we-have-a-right-to-security
