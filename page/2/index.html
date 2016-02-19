@@ -9,8 +9,8 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="Brent Simmons: Database people are already gasping for air, because they know what’s coming.
-Instead of creating a separate table for attachment &hellip;">
+  <meta name="description" content="Back in September, I described how to create custom deploy, revert, and
+verify scripts for various types of Sqitch changes, such as adding a new &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,6 +57,321 @@ Instead of creating a separate table for attachment &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+
+
+
+
+
+
+    <article >
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="/sqitch/2014/01/13/templating-tests-with-sqitch/">Templating Tests with Sqitch</a>
+
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-13T14:11:00-08:00" pubdate data-updated="true">Monday, 13 January 2014</time>
+        
+         &bull; <a rel="bookmark" href="/sqitch/2014/01/13/templating-tests-with-sqitch/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Back in September, <a href="/sqitch/2013/09/06/sqitch-templating/">I described</a> how to create custom deploy, revert, and
+verify scripts for various types of <a href="http://sqitch.org/" title="Sane database schema change management">Sqitch</a> changes, such as adding a new
+table. Which is cool and all, but what I&rsquo;ve found while developing databases
+at <a href="http://iovation.com/">work</a> is that I nearly always want to create a test script with the same
+name as a newly-added change.</p>
+
+<p>So for the recent v0.990 release, the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> gained the ability to
+generate arbitrary script files from templates. To get it to work, we just
+have to create template files. Templates can go into <code>~/.sqitch/templates</code>
+(for personal use) or in <code>$(sqitch --etc-path)/templates</code> (for use by
+everyone on a system). The latter is where templates are installed by
+default. Here&rsquo;s what it looks like:</p>
+
+<figure class='code'><figcaption><span>List Default Templates</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates
+</span><span class='line'>deploy  revert  verify
+</span><span class='line'>&gt; ls <span class="k">$(</span>sqitch --etc-path<span class="k">)</span>/templates/deploy
+</span><span class='line'>firebird.tmpl  mysql.tmpl  oracle.tmpl  pg.tmpl  sqlite.tmpl
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Each directory defines the type of script and the name of the directory in
+which it will be created. The contents are default templates, one for each
+engine.</p>
+
+<p>To create a default test template, all we have to do is create a template for our preferred engine in a directory named <code>test</code>. So I created <code>~/.sqitch/templates/test/pg.tmpl</code>. Here it is:</p>
+
+<figure class='code'><figcaption><span>Default pgTAP template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test [% change %]!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is my standard boilerplate for tests, more or less. It just loads
+<a href="http://pgtap.org/">pgTAP</a>, sets the plan, runs the tests, finishes and rolls back. See this
+template in action:</p>
+
+<figure class='code'><figcaption><span>Add a change.</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add whatever -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/whatever.sql
+</span><span class='line'>Created revert/whatever.sql
+</span><span class='line'>Created <span class="nb">test</span>/whatever.sql
+</span><span class='line'>Created verify/whatever.sql
+</span><span class='line'>Added <span class="s2">&quot;whatever&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Cool, it added the test script. Here’s what it looks like:</p>
+
+<figure class='code'><figcaption><span>Generated test script</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">pass</span><span class="p">(</span><span class="s1">&#39;Test whatever!&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that it replaced the <code>change</code> variable in the call to <code>pass()</code>. All
+ready to start writing tests! Nice, right? If we don&rsquo;t want the test script
+created &ndash; for example when adding a column to a table for which a test
+already exists &ndash; we use the <code>--without</code> option to omit it:</p>
+
+<figure class='code'><figcaption><span>Add change without test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add add_timestamp_column --without <span class="nb">test</span> -n <span class="s1">&#39;Adds whatever.&#39;</span>
+</span><span class='line'>Created deploy/add_timestamp_column.sql
+</span><span class='line'>Created revert/add_timestamp_column.sql
+</span><span class='line'>Created verify/add_timestamp_column.sql
+</span><span class='line'>Added <span class="s2">&quot;add_timestamp_column&quot;</span> to sqitch.plan
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Naturally you&rsquo;ll want to update the existing test to validate the new column.</p>
+
+<p>In the <a href="/sqitch/2013/09/06/sqitch-templating/">previous templating post</a>, we added custom scripts as for <code>CREATE
+TABLE</code> changes; now we can add a test template, too. This one takes advantage
+of the advanced features of <a href="http://tt2.org/">Template Toolkit</a>. We name it
+<code>~/.sqitch/templates/test/createtable.tmpl</code> to complement the deploy,
+revert, and verify scripts created previously:</p>
+
+<figure class='code'><figcaption><span>CREATE TABLE test template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test [% change %]</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="p">[</span><span class="o">%</span> <span class="n">IF</span> <span class="k">schema</span> <span class="o">%</span><span class="p">][</span><span class="o">%</span> <span class="k">schema</span> <span class="o">%</span><span class="p">],[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;[% table or change %]&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="n">FOREACH</span> <span class="n">col</span> <span class="k">IN</span> <span class="k">column</span> <span class="o">-%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% type.item( loop.index ) or &#39;</span><span class="nb">text</span><span class="s1">&#39; %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;[% table or change %]&#39;</span><span class="p">,</span> <span class="s1">&#39;[% col %]&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="o">%</span> <span class="k">END</span> <span class="o">%</span><span class="p">]</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As <a href="/sqitch/2013/09/06/sqitch-templating/">before</a>, we tell the <a href="https://metacpan.org/pod/sqitch-add"><code>add</code> command</a> to use the <code>createtable</code> templates:</p>
+
+<figure class='code'><figcaption><span>Create table with typed columns</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>&gt; sqitch add corp_widgets --template createtable <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">schema</span><span class="o">=</span>corp -s <span class="nv">table</span><span class="o">=</span>widgets <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>id -s <span class="nb">type</span><span class="o">=</span>SERIAL <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>name -s <span class="nb">type</span><span class="o">=</span>TEXT <span class="se">\</span>
+</span><span class='line'>  -s <span class="nv">column</span><span class="o">=</span>quantity -s <span class="nb">type</span><span class="o">=</span>INTEGER <span class="se">\</span>
+</span><span class='line'>  -n <span class="s1">&#39;Add corp.widgets table.&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This yields a very nice test script to get you going:</p>
+
+<figure class='code'><figcaption><span>Generated Table Test</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">-- Test corp_widgets</span>
+</span><span class='line'><span class="k">SET</span> <span class="n">client_min_messages</span> <span class="k">TO</span> <span class="n">warning</span><span class="p">;</span>
+</span><span class='line'><span class="k">CREATE</span> <span class="n">EXTENSION</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">pgtap</span><span class="p">;</span>
+</span><span class='line'><span class="k">RESET</span> <span class="n">client_min_messages</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">BEGIN</span><span class="p">;</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">no_plan</span><span class="p">();</span>
+</span><span class='line'><span class="c1">-- SELECT plan(1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SET</span> <span class="n">search_path</span> <span class="k">TO</span> <span class="n">corp</span><span class="p">,</span><span class="k">public</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_table</span><span class="p">(</span><span class="s1">&#39;widgets&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_pk</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;SERIAL&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;TEXT&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">has_column</span><span class="p">(</span>        <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_type_is</span><span class="p">(</span>       <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span><span class="p">,</span> <span class="s1">&#39;INTEGER&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_not_null</span><span class="p">(</span>      <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">col_hasnt_default</span><span class="p">(</span> <span class="s1">&#39;widgets&#39;</span><span class="p">,</span> <span class="s1">&#39;quantity&#39;</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">SELECT</span> <span class="n">finish</span><span class="p">();</span>
+</span><span class='line'><span class="k">ROLLBACK</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t know about you, but I&rsquo;ll be using this functionality <em>a lot.</em></p>
+</div>
+
+
+    </article>
   
     
     
@@ -1434,78 +1749,6 @@ like <a href="https://github.com/hochgurgler/DBIx-MultiRow" title="DBIx::MultiRo
 on one database for an app, I can&rsquo;t recommend stongly enough how well it pays
 to get to know your database well.</p>
 </div>
-
-
-    </article>
-  
-    
-    
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/sqitch/2013/09/06/sqitch-templating/">Sqitch Templating</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-06T13:44:00-07:00" pubdate data-updated="true">Friday,  6 September 2013</time>
-        
-         &bull; <a rel="bookmark" href="/sqitch/2013/09/06/sqitch-templating/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>Last week saw the v.980 release of <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, a database change management
-system. The headline feature in this version is support for <a href="http://dev.mysql.com/" title="The world's most popular open source database">MySQL</a> 5.6.4 or
-higher. Why 5.6.4 rather than 5.1 or even 5.5? Mainly because 5.6.4 finally
-added support for fractional seconds in <code>DATETIME</code> columns (details in the
-<a href="https://dev.mysql.com/doc/relnotes/mysql/5.6/en/news-5-6-4.html" title="Changes in MySQL 5.6.4 (2011-12-20, Milestone 7)">release notes</a>). This feature is essential for Sqitch, because changes often
-execute within a second of each other, and the deploy time is included in the
-log table&rsquo;s primary key.</p>
-
-<p>With the requirement for fractional seconds satisfied by 5.6.4, there was
-nothing to prevent usage of <a href="http://dev.mysql.com/doc/refman/5.5/en/condition-handling.html" title="MySQL 5.5 Reference Manual: Condition Handling"><code>SIGNAL</code></a>, added in 5.5, to
-<a href="http://stackoverflow.com/a/17424570/79202" title="How do I get MySQL to throw a conditional runtime exception in SQL">mimic check constraints</a> in a trigger. This brings the Sqitch MySQL
-implementation into line with what was already possible in the Postgres,
-SQLite, and Oracle support. Check out the <a href="https://metacpan.org/module/sqitchtutorial-mysql" title="A tutorial introduction to Sqitch change management on MySQL">tutorial</a> and the accompanying
-<a href="https://github.com/theory/sqitch-mysql-intro" title="Sqitch MySQL Intro Sample Repository">Git repository</a> to get started managing your MySQL databases with Sqitch.</p>
-
-<p>The MySQL support might be the headliner, but the change in v0.980 I&rsquo;m most
-excited about is improved template support. Sqitch executes templates to
-create the default deploy, revert, and verify scripts, but up to now they have
-not been easy to customize. With v0.980, you can create as many custom
-templates as you like, and use them as appropriate.</p>
-
-</div>
-  <footer>
-    <a rel="full-article" href="/sqitch/2013/09/06/sqitch-templating/">do continue →</a>
-  </footer>
 
 
     </article>
