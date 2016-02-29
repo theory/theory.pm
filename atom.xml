@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-02-19T15:48:19-08:00</updated>
+  <updated>2016-02-29T11:53:56-08:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[A Porous “Privacy Shield” →]]></title>
+<link href="http://arstechnica.com/tech-policy/2016/02/privacy-shield-doomed-from-get-go-nsa-bulk-surveillance-waved-through/"/>
+<updated>2016-02-29T11:34:00-08:00</updated>
+<id>http://theory.pm/privacy/2016/02/29/privacy-shield</id>
+
+      <content type="html"><![CDATA[<p>Glyn Moody, in <em>Ars Technica,</em> on the proposed replacement for the recently
+struck-down Safe Harbor framework:</p>
+
+<blockquote><p>However, with what seems like extraordinarily bad timing, President Obama
+has just made winning the trust of EU citizens even harder. As
+<a href="http://arstechnica.com/tech-policy/2016/02/obama-administration-closing-in-on-rules-to-let-nsa-share-more-freely-with-fbi-cia/" title="Obama administration closing in on rules to let NSA share more freely with FBI, CIA">Ars reported last week</a>, the Obama administration is close to allowing the
+NSA to share more of the private communications it intercepts with other
+federal agencies, including the FBI and the CIA, without removing
+identifying information first.</p>
+
+<p>In other words, not only will the new Privacy Shield allow the NSA to
+continue to scoop up huge quantities of personal data from EU citizens, it
+may soon be allowed to share them widely. That&rsquo;s unlikely to go down well
+with Europeans, the Article 29 Working Party, or the CJEU&mdash;all of which
+ironically increases the likelihood that the new Privacy Shield will suffer
+the same fate as the Safe Harbour scheme it has been designed to replace.</p></blockquote>
+
+<p>So let me get this straight. Under this proposal:</p>
+
+<ul>
+<li>The NSA can continue to bulk collect EU citizen data.</li>
+<li>That data may be shared with other agencies in the US government.</li>
+<li>Said collection must fall under six allowed case, one of wich is
+undefined &ldquo;counter-terrorism&rdquo; purposes. No one ever abused <em>that</em> kind of
+thing before.</li>
+<li>The US claims there is no more bulk surveillance, except that there is under those six cases.</li>
+<li>The appointed &ldquo;independent ombudsman&rdquo; to address complaints by EU citizens will be a single US Undersecretary of State.</li>
+<li>Complaints can also be addressed to US companies housing EU citizen data, even though, in the absence of another Snowden-scale whistle-blowing, they may have no idea their data is being surveilled.</li>
+</ul>
+
+
+<p>Color me skeptical that this would work, let alone not be thrown out by another case similar to the one that killed Safe Harbor.</p>
+
+<p>I have a better idea. How about eliminating mass surveillance?</p>
+<p><a rel="bookmark" href="http://theory.pm/privacy/2016/02/29/privacy-shield/">§</a></p>]]></content>
+    </entry>
   
     <entry>
       
@@ -2110,139 +2158,6 @@ lookup and dispatch! This just might alleviate the confusion of methods and
 subs, as <a href="http://www.modernperlbooks.com/mt/2013/09/functions-shouldnt-be-methods-yet-another-reminder.html">chromatic complained about just yesterday</a>. Probably doesn&rsquo;t solve
 the problem for imported subs, though.</p>
 <p><a rel="bookmark" href="http://theory.pm/syntax/2013/09/25/lexical-subroutines/">§</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[Multirow Database Updates →]]></title>
-<link href="http://techblog.net-a-porter.com/2013/08/dbixmultirow-updating-multiple-database-rows-quickly-and-easily/"/>
-<updated>2013-09-09T17:47:00-07:00</updated>
-<id>http://theory.pm/sql/2013/09/09/multirow-database-updates</id>
-
-      <content type="html"><![CDATA[<p>William Blunn:</p>
-
-<blockquote><p>So, given a list of updates to apply we could effect them using the
-following steps:</p>
-
-<ol>
-<li>Use CREATE TEMPORARY TABLE to create a temporary table to hold the
-updates</li>
-<li>Use INSERT to populate the temporary table with the updates</li>
-<li>Use UPDATE … FROM to update the target table using updates in the
-temporary table</li>
-<li>Use DROP TABLE to drop the temporary table</li>
-</ol>
-
-
-<p>So in the example above we can reduce five statements to four. This isn’t a
-significant improvement in this case. But now the number of statements is no
-longer directly dependent on the number of rows requiring updates.</p>
-
-<p><strong>Even if we wanted to update a thousand rows with different values, we
-could still do it with four statements.</strong></p></blockquote>
-
-<p>Or you could just use one statement. Here&rsquo;s how to do it with a <a href="http://www.postgresql.org/docs/current/static/queries-with.html" title="PostgreSQL Documentation: WITH Queries (Common Table Expressions)">CTE</a> on
-PostgreSQL 9.2 and higher:</p>
-
-<figure class='code'><figcaption><span>PostgreSQL Multirow Upate with CTE</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">WITH</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span> <span class="k">AS</span> <span class="p">(</span> <span class="k">VALUES</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
-</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
-</span><span class='line'><span class="p">)</span>
-</span><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'>  <span class="k">FROM</span> <span class="n">up</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Still on PostgreSQL 9.1 or lower? Use a subselect in the <code>FROM</code> clause
-instead:</p>
-
-<figure class='code'><figcaption><span>PostgreSQL Multirow Update with Subselect</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'>   <span class="k">FROM</span> <span class="p">(</span><span class="k">VALUES</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
-</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
-</span><span class='line'>   <span class="p">)</span> <span class="k">AS</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Stuck with MySQL or Oracle? Use a <code>UNION</code> query in a second table:</p>
-
-<figure class='code'><figcaption><span>MySQL & Oracle Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span><span class="p">,</span> <span class="p">(</span>
-</span><span class='line'>         <span class="k">SELECT</span> <span class="s1">&#39;Jane&#39;</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="mi">1200</span> <span class="k">AS</span> <span class="n">salary</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span>        <span class="mi">1100</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span>        <span class="mi">1175</span>
-</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;John&#39;</span><span class="p">,</span>         <span class="mi">1150</span>
-</span><span class='line'><span class="p">)</span> <span class="k">AS</span> <span class="n">up</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">staff</span><span class="p">.</span><span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Using SQLite? Might make sense to use a temporary table for thousands or
-millions of rows. But for just a few, use a <code>CASE</code> expression:</p>
-
-<figure class='code'><figcaption><span>SQLite Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
-</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">name</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Jane&#39;</span>  <span class="k">THEN</span> <span class="mi">1200</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Frank&#39;</span> <span class="k">THEN</span> <span class="mi">1100</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Susan&#39;</span> <span class="k">THEN</span> <span class="mi">1175</span>
-</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;John&#39;</span>  <span class="k">THEN</span> <span class="mi">1150</span>
-</span><span class='line'>   <span class="k">END</span>
-</span><span class='line'> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you need to support multiple database architectures, sure, use something
-like <a href="https://github.com/hochgurgler/DBIx-MultiRow" title="DBIx::MultiRow on GitHub">DBIx::MultiRow</a> to encapsulate things. But if, like most of us, you&rsquo;re
-on one database for an app, I can&rsquo;t recommend stongly enough how well it pays
-to get to know your database well.</p>
-<p><a rel="bookmark" href="http://theory.pm/sql/2013/09/09/multirow-database-updates/">§</a></p>]]></content>
     </entry>
   
 </feed>

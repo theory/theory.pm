@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: privacy | theory.pm]]></title>
+  <link href="http://theory.pm/categories/privacy/atom.xml" rel="self"/>
+  <link href="http://theory.pm/"/>
+  <updated>2016-02-29T11:53:56-08:00</updated>
+  <id>http://theory.pm/</id>
+  <author>
+    <name><![CDATA[David E. Wheeler]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[A Porous “Privacy Shield” →]]></title>
+<link href="http://arstechnica.com/tech-policy/2016/02/privacy-shield-doomed-from-get-go-nsa-bulk-surveillance-waved-through/"/>
+<updated>2016-02-29T11:34:00-08:00</updated>
+<id>http://theory.pm/privacy/2016/02/29/privacy-shield</id>
+
+      <content type="html"><![CDATA[<p>Glyn Moody, in <em>Ars Technica,</em> on the proposed replacement for the recently
+struck-down Safe Harbor framework:</p>
+
+<blockquote><p>However, with what seems like extraordinarily bad timing, President Obama
+has just made winning the trust of EU citizens even harder. As
+<a href="http://arstechnica.com/tech-policy/2016/02/obama-administration-closing-in-on-rules-to-let-nsa-share-more-freely-with-fbi-cia/" title="Obama administration closing in on rules to let NSA share more freely with FBI, CIA&quot;&lt;p&gt;&lt;a rel=&quot;bookmark&quot; href=&quot;http://theory.pm/privacy/2016/02/29/privacy-shield/">Ars reported last week</a>, the Obama administration is close to allowing the
+NSA to share more of the private communications it intercepts with other
+federal agencies, including the FBI and the CIA, without removing
+identifying information first.</p>
+
+<p>In other words, not only will the new Privacy Shield allow the NSA to
+continue to scoop up huge quantities of personal data from EU citizens, it
+may soon be allowed to share them widely. That&rsquo;s unlikely to go down well
+with Europeans, the Article 29 Working Party, or the CJEU&mdash;all of which
+ironically increases the likelihood that the new Privacy Shield will suffer
+the same fate as the Safe Harbour scheme it has been designed to replace.</p></blockquote>
+
+<p>So let me get this straight. Under this proposal:</p>
+
+<ul>
+<li>The NSA can continue to bulk collect EU citizen data.</li>
+<li>That data may be shared with other agencies in the US government.</li>
+<li>Said collection must fall under six allowed case, one of wich is
+undefined &ldquo;counter-terrorism&rdquo; purposes. No one ever abused <em>that</em> kind of
+thing before.</li>
+<li>The US claims there is no more bulk surveillance, except that there is under those six cases.</li>
+<li>The appointed &ldquo;independent ombudsman&rdquo; to address complaints by EU citizens will be a single US Undersecretary of State.</li>
+<li>Complaints can also be addressed to US companies housing EU citizen data, even though, in the absence of another Snowden-scale whistle-blowing, they may have no idea their data is being surveilled.</li>
+</ul>
+
+
+<p>Color me skeptical that this would work, let alone not be thrown out by another case similar to the one that killed Safe Harbor.</p>
+
+<p>I have a better idea. How about eliminating mass surveillance?</p>
+]]></content>
+    </entry>
+  
+</feed>
+

@@ -9,8 +9,8 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="Last week saw the v.980 release of Sqitch, a database change management
-system. The headline feature in this version is support for MySQL 5.6.4 or &hellip;">
+  <meta name="description" content="William Blunn: So, given a list of updates to apply we could effect them using the
+following steps: Use CREATE TEMPORARY TABLE to create a temporary &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,6 +57,175 @@ system. The headline feature in this version is support for MySQL 5.6.4 or &hell
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+  
+
+
+
+
+
+
+
+    <article data-linklog>
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="http://techblog.net-a-porter.com/2013/08/dbixmultirow-updating-multiple-database-rows-quickly-and-easily/">Multirow Database Updates</a>
+<span class='linklog-marker'>→</span>
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-09T17:47:00-07:00" pubdate data-updated="true">Monday,  9 September 2013</time>
+        
+         &bull; <a rel="bookmark" href="/sql/2013/09/09/multirow-database-updates/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>William Blunn:</p>
+
+<blockquote><p>So, given a list of updates to apply we could effect them using the
+following steps:</p>
+
+<ol>
+<li>Use CREATE TEMPORARY TABLE to create a temporary table to hold the
+updates</li>
+<li>Use INSERT to populate the temporary table with the updates</li>
+<li>Use UPDATE … FROM to update the target table using updates in the
+temporary table</li>
+<li>Use DROP TABLE to drop the temporary table</li>
+</ol>
+
+
+<p>So in the example above we can reduce five statements to four. This isn’t a
+significant improvement in this case. But now the number of statements is no
+longer directly dependent on the number of rows requiring updates.</p>
+
+<p><strong>Even if we wanted to update a thousand rows with different values, we
+could still do it with four statements.</strong></p></blockquote>
+
+<p>Or you could just use one statement. Here&rsquo;s how to do it with a <a href="http://www.postgresql.org/docs/current/static/queries-with.html" title="PostgreSQL Documentation: WITH Queries (Common Table Expressions)">CTE</a> on
+PostgreSQL 9.2 and higher:</p>
+
+<figure class='code'><figcaption><span>PostgreSQL Multirow Upate with CTE</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">WITH</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span> <span class="k">AS</span> <span class="p">(</span> <span class="k">VALUES</span>
+</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
+</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
+</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
+</span><span class='line'>     <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
+</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
+</span><span class='line'>  <span class="k">FROM</span> <span class="n">up</span>
+</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Still on PostgreSQL 9.1 or lower? Use a subselect in the <code>FROM</code> clause
+instead:</p>
+
+<figure class='code'><figcaption><span>PostgreSQL Multirow Update with Subselect</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
+</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
+</span><span class='line'>   <span class="k">FROM</span> <span class="p">(</span><span class="k">VALUES</span>
+</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span>  <span class="mi">1200</span><span class="p">),</span>
+</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="mi">1100</span><span class="p">),</span>
+</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="mi">1175</span><span class="p">),</span>
+</span><span class='line'>       <span class="p">(</span><span class="s1">&#39;John&#39;</span><span class="p">,</span>  <span class="mi">1150</span><span class="p">)</span>
+</span><span class='line'>   <span class="p">)</span> <span class="k">AS</span> <span class="n">up</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">salary</span><span class="p">)</span>
+</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Stuck with MySQL or Oracle? Use a <code>UNION</code> query in a second table:</p>
+
+<figure class='code'><figcaption><span>MySQL & Oracle Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span><span class="p">,</span> <span class="p">(</span>
+</span><span class='line'>         <span class="k">SELECT</span> <span class="s1">&#39;Jane&#39;</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="mi">1200</span> <span class="k">AS</span> <span class="n">salary</span>
+</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span>        <span class="mi">1100</span>
+</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span>        <span class="mi">1175</span>
+</span><span class='line'>   <span class="k">UNION</span> <span class="k">SELECT</span> <span class="s1">&#39;John&#39;</span><span class="p">,</span>         <span class="mi">1150</span>
+</span><span class='line'><span class="p">)</span> <span class="k">AS</span> <span class="n">up</span>
+</span><span class='line'>   <span class="k">SET</span> <span class="n">staff</span><span class="p">.</span><span class="n">salary</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">salary</span>
+</span><span class='line'> <span class="k">WHERE</span> <span class="n">staff</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">up</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using SQLite? Might make sense to use a temporary table for thousands or
+millions of rows. But for just a few, use a <code>CASE</code> expression:</p>
+
+<figure class='code'><figcaption><span>SQLite Multirow Update</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">UPDATE</span> <span class="n">staff</span>
+</span><span class='line'>   <span class="k">SET</span> <span class="n">salary</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">name</span>
+</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Jane&#39;</span>  <span class="k">THEN</span> <span class="mi">1200</span>
+</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Frank&#39;</span> <span class="k">THEN</span> <span class="mi">1100</span>
+</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;Susan&#39;</span> <span class="k">THEN</span> <span class="mi">1175</span>
+</span><span class='line'>       <span class="k">WHEN</span> <span class="s1">&#39;John&#39;</span>  <span class="k">THEN</span> <span class="mi">1150</span>
+</span><span class='line'>   <span class="k">END</span>
+</span><span class='line'> <span class="k">WHERE</span> <span class="n">name</span> <span class="k">in</span> <span class="p">(</span><span class="s1">&#39;Jane&#39;</span><span class="p">,</span> <span class="s1">&#39;Frank&#39;</span><span class="p">,</span> <span class="s1">&#39;Susan&#39;</span><span class="p">,</span> <span class="s1">&#39;John&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to support multiple database architectures, sure, use something
+like <a href="https://github.com/hochgurgler/DBIx-MultiRow" title="DBIx::MultiRow on GitHub">DBIx::MultiRow</a> to encapsulate things. But if, like most of us, you&rsquo;re
+on one database for an app, I can&rsquo;t recommend stongly enough how well it pays
+to get to know your database well.</p>
+</div>
+
+
+    </article>
   
     
     
