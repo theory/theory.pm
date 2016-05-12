@@ -9,8 +9,7 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="William Blunn: So, given a list of updates to apply we could effect them using the
-following steps: Use CREATE TEMPORARY TABLE to create a temporary &hellip;">
+  <meta name="description" content="Ricardo Signes: One of the big new experimental features in Perl 5.18.0 is lexical subroutines. In other words, you can write this: my sub quickly &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,6 +56,83 @@ following steps: Use CREATE TEMPORARY TABLE to create a temporary &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+  
+
+
+
+
+
+
+
+    <article data-linklog>
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="http://rjbs.manxome.org/rubric/entry/2016">Lexical Subroutines</a>
+<span class='linklog-marker'>→</span>
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-25T20:12:00-07:00" pubdate data-updated="true">Wednesday, 25 September 2013</time>
+        
+         &bull; <a rel="bookmark" href="/syntax/2013/09/25/lexical-subroutines/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Ricardo Signes:</p>
+
+<blockquote><p>One of the big new experimental features in Perl 5.18.0 is lexical
+ subroutines. In other words, you can write this:</p>
+
+<pre><code>my sub quickly { ... }
+my @sorted = sort quickly @list;
+
+my sub greppy (&amp;@) { ... }
+my @grepped = greppy { ... } @input;
+</code></pre>
+
+<p>These two examples show cases where lexical <em>references</em> to anonymous
+subroutines would not have worked. The first argument to <code>sort</code> must be a
+block or a subroutine <em>name</em>, which leads to awful code like this:</p>
+
+<pre><code>sort { $subref-&gt;($a, $b) } @list
+</code></pre>
+
+<p>With our greppy, above, we get to benefit from the parser-affecting
+behaviors of subroutine prototypes.</p></blockquote>
+
+<p>My favorite tidbit about this feature? Because lexical subs are <em>lexical,</em> and
+method-dispatch is <em>package</em>-based, lexical subs are not subject to method
+lookup and dispatch! This just might alleviate the confusion of methods and
+subs, as <a href="http://www.modernperlbooks.com/mt/2013/09/functions-shouldnt-be-methods-yet-another-reminder.html">chromatic complained about just yesterday</a>. Probably doesn&rsquo;t solve
+the problem for imported subs, though.</p>
+</div>
+
+
+    </article>
   
     
     

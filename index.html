@@ -9,8 +9,7 @@
   <meta name="author" content="David E. Wheeler">
 
   
-  <meta name="description" content="Glyn Moody, in Ars Technica, on the proposed replacement for the recently
-struck-down Safe Harbor framework: However, with what seems like &hellip;">
+  <meta name="description" content="Excerpt from William Mougayar&rsquo;s new book on TechCrunch: At its core, the blockchain is a technology that permanently records transactions in a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -57,6 +56,65 @@ struck-down Safe Harbor framework: However, with what seems like &hellip;">
   <div id="main">
     <div id="content">
       <div class="blog-index">
+  
+    
+    
+
+
+
+  
+
+
+
+
+
+
+
+    <article data-linklog>
+      
+  <header>
+    <h1 class="entry-title">
+
+<a href="http://techcrunch.com/2016/05/11/the-blockchain-is-the-new-google/">The Blockchain Hype Cycle</a>
+<span class='linklog-marker'>→</span>
+</h1>
+
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-05-12T11:32:00-07:00" pubdate data-updated="true">Thursday, 12 May 2016</time>
+        
+         &bull; <a rel="bookmark" href="/security/2016/05/12/the-blockchain-hype-cycle/">§</a>
+      </p>
+    
+  </header>
+
+
+
+  <div class="entry-content"><p>Excerpt from William Mougayar&rsquo;s new book on TechCrunch:</p>
+
+<blockquote><p>At its core, the blockchain is a technology that permanently records transactions in a way that cannot be later erased but can only be sequentially updated, in essence keeping a never-ending historical trail. This seemingly simple functional description has gargantuan implications. It is making us rethink the old ways of creating transactions, storing data, and moving assets, and that’s only the beginning.</p>
+
+<p>The blockchain cannot be described just as a revolution. It is a tsunami-like phenomenon, slowly advancing and gradually enveloping everything along its way by the force of its progression. Plainly, it is the second significant overlay on top of the Internet, just as the Web was that first layer back in 1990. That new layer is mostly about trust, so we could call it the trust layer.</p></blockquote>
+
+<p>What a steaming pile of hype and nonsense. I find it hard to take such revolutionary fervor seriously, as if people forget the Web in the 90s or real estate in 2006. Given that <a href="https://www.linkedin.com/in/williammougayar">the author is a venture capitalist</a> invested in a <a href="https://www.crunchbase.com/organization/openbazaar">blockchain startup</a>, it just feels like a way to try to inflate the value of his investments for short-term gain. A piece like this is snake oil.</p>
+
+<p>Blockchains are inarguably useful tools, like databases or encryption algorithms, and we in the technology business should do our best to understand how thet work and figure out the applications for which they make sense. I’m still trying to wrap my mind around blockchains, but one thing I understand very well: <strong>they&rsquo;re not a panacea.</strong> The industry overall won’t see true benefits from blockchains for a couple of years, once the practicalities have been worked out and the nonsense has subsided. We should learn and contribute to those practicalities, but as for the <a href="https://en.wikipedia.org/wiki/Hype_cycle">hype cycle</a>, for now I just hold my nose.</p>
+</div>
+
+
+    </article>
   
     
     
@@ -1158,141 +1216,6 @@ user-visible strings</li>
 </ol>
 </div>
 
-</div>
-
-
-    </article>
-  
-    
-    
-
-
-
-
-
-
-
-
-
-    <article >
-      
-  <header>
-    <h1 class="entry-title">
-
-<a href="/2014/09/05/sqitch-goes-vertical/">Sqitch Goes Vertical</a>
-
-</h1>
-
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-05T17:46:00-07:00" pubdate data-updated="true">Friday,  5 September 2014</time>
-        
-         &bull; <a rel="bookmark" href="/2014/09/05/sqitch-goes-vertical/">§</a>
-      </p>
-    
-  </header>
-
-
-
-  <div class="entry-content"><p>I released <a href="http://sqitch.org/">Sqitch</a> v0.996 today. Despite the minor version increase, this is
-a pretty big release. I&rsquo;m busy knocking out all the stuff I want to get done
-for 1.0, but the version space is running out, so just a minor version jump
-from v0.995 to v0.996. But a lot changed. A couple the biggies:</p>
-
-<h3>Goodbye Mouse and Moose, Hello Moo</h3>
-
-<p>If you&rsquo;re not a Perl programmer, you probably aren&rsquo;t familiar with <a href="https://metacpan.org/module/Moose">Moose</a> or
-its derivatives <a href="https://metacpan.org/module/Mouse">Mouse</a> and <a href="https://metacpan.org/module/Moo">Moo</a>. Briefly, it&rsquo;s an object system. Great
-interface and features, but freaking <em>huge</em>—and <em>slow</em>. Mouse is a lighter
-version, and when we (mostly) switched to it <a href="https://github.com/theory/sqitch/pull/73">last year</a>, it yielded a 20-30% speed
-improvement.</p>
-
-<p>Still wasn&rsquo;t great, though. So on a day off recently, I switched
-to Moo, which implements most of Moose but without a lot of the baggage. At
-first, there wasn&rsquo;t much difference in performance, but as I profiled it
-(<a href="https://metacpan.org/module/Devel::NYTProf">Devel::NYTProf</a> is indispensable for profiling Perl apps, BTW), I was able
-to root out all trace of Moose or Mouse, including in CPAN modules Sqitch
-depends on. The result is around a 40% speedup over what we had before.
-Honestly, it feels like a new app, it&rsquo;s so fast. I&rsquo;m really happy with how it
-turned out, and to have shed some of the baggage from the code base.</p>
-
-<p>The downside is that package maintainers will need to do some work to get the
-new dependencies built. Have a look at <a href="https://github.com/theory/sqitch/compare/v0.995...v0.996#diff-4">the RPM spec changes</a> I made to get
-our internal Sqitch RPMs to build v0.996.</p>
-
-<h3>MySQL Password Handling</h3>
-
-<p>The handling of MySQL passwords has also been improved. Sqitch now uses the
-<code>$MYSQL_PWD</code> environment variable if a password is provided in a target. This
-should simplify authentication when running MySQL change scripts through the
-<code>mysql</code> client client.</p>
-
-<p>Furthermore, if <a href="https://metacpan.org/module/MySQL::Config">MySQL::Config</a> is installed, Sqitch will look for passwords
-in the <code>client</code> and <code>mysql</code> sections of your MySQL configuration files
-(<code>~/.my.cnf</code>, <code>/etc/my.cnf</code>). This should already happen automatically when
-executing scripts, but Sqitch now tries to replicate that behavior when
-connecting to the database via <a href="https://metacpan.org/module/DBI">DBI</a>.</p>
-
-<p>Spotting the <code>$MYSQL_PWD</code> commit, Ștefan Suciu updated the Firebird engine to
-use the <code>$ISC_PASSWORD</code> when running scripts. Awesome.</p>
-
-<h3>Vertically Integrated</h3>
-
-<p>And finally, another big change: I added support for <a href="https://my.vertica.com/">Vertica</a>, a very nice
-commercial column-store database that features partitioning and sharding,
-among other OLAP-style functionality. It was originally forked from
-<a href="http://www.postgresql.org/">PostgreSQL</a>, so it was fairly straight-forward to port, though I did have to
-borrow a bit from the Oracle and SQLite engines, too. This port was essential
-for <a href="http://www.iovation.com/">work</a>, as we&rsquo;re starting to use Vertical more and more, and need ways to
-manage changes.</p>
-
-<p>If you&rsquo;re using Vertica, peruse <a href="https://github.com/theory/sqitch/blob/master/lib/sqitchtutorial-vertica.pod">the tutorial</a> to get a feel for what it&rsquo;s
-all about. If you want to install it, you can get it from CPAN:</p>
-
-<pre><code>cpan install App::Sqitch BDD::ODBC
-</code></pre>
-
-<p>Or, if you&rsquo;re on Homebrew:</p>
-
-<pre><code>brew tap theory/sqitch
-brew install sqitch_vertica
-</code></pre>
-
-<p>Be warned that there&rsquo;s a minor bug in v0.996, though. Apply this diff to fix
-it:</p>
-
-<pre><code>@@ -16,7 +16,7 @@ our $VERSION = '0.996';
-
- sub key    { 'vertica' }
- sub name   { 'Vertica' }
--sub driver { 'DBD::Pg 2.0' }
-+sub driver { 'DBD::ODBC 1.43' }
- sub default_client { 'vsql' }
-
- has '+destination' =&gt; (
-</code></pre>
-
-<p>That fix will be in the next release, of course, as will <a href="https://github.com/theory/sqitch/commit/4f8dbaa236a04f6dd1ec762250ffd8481078691a">support for Vertica 6</a>.</p>
-
-<h3>What Next?</h3>
-
-<p>I need to focus on some other work stuff for a few weeks, but then I expect
-to come back to Sqitch again. I&rsquo;d like to get 1.0 shipped before the end of
-the year. To that end, next up I will be <a href="https://github.com/theory/sqitch/issues/153">rationalizing configuration hierarchies</a>
-to make engine selection and deploy-time configuration more sensible. I hope
-to get that done by early October.</p>
 </div>
 
 

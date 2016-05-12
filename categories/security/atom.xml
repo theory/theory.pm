@@ -4,7 +4,7 @@
   <title><![CDATA[Category: security | theory.pm]]></title>
   <link href="http://theory.pm/categories/security/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-02-29T11:53:56-08:00</updated>
+  <updated>2016-05-12T11:45:32-07:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+    <entry>
+      
+
+
+
+
+<title type="html"><![CDATA[The Blockchain Hype Cycle →]]></title>
+<link href="http://techcrunch.com/2016/05/11/the-blockchain-is-the-new-google/"/>
+<updated>2016-05-12T11:32:00-07:00</updated>
+<id>http://theory.pm/security/2016/05/12/the-blockchain-hype-cycle</id>
+
+      <content type="html"><![CDATA[<p>Excerpt from William Mougayar&rsquo;s new book on TechCrunch:</p>
+
+<blockquote><p>At its core, the blockchain is a technology that permanently records transactions in a way that cannot be later erased but can only be sequentially updated, in essence keeping a never-ending historical trail. This seemingly simple functional description has gargantuan implications. It is making us rethink the old ways of creating transactions, storing data, and moving assets, and that’s only the beginning.</p>
+
+<p>The blockchain cannot be described just as a revolution. It is a tsunami-like phenomenon, slowly advancing and gradually enveloping everything along its way by the force of its progression. Plainly, it is the second significant overlay on top of the Internet, just as the Web was that first layer back in 1990. That new layer is mostly about trust, so we could call it the trust layer.</p></blockquote>
+
+<p>What a steaming pile of hype and nonsense. I find it hard to take such revolutionary fervor seriously, as if people forget the Web in the 90s or real estate in 2006. Given that <a href="https://www.linkedin.com/in/williammougayar">the author is a venture capitalist</a> invested in a <a href="https://www.crunchbase.com/organization/openbazaar">blockchain startup</a>, it just feels like a way to try to inflate the value of his investments for short-term gain. A piece like this is snake oil.</p>
+
+<p>Blockchains are inarguably useful tools, like databases or encryption algorithms, and we in the technology business should do our best to understand how thet work and figure out the applications for which they make sense. I’m still trying to wrap my mind around blockchains, but one thing I understand very well: <strong>they&rsquo;re not a panacea.</strong> The industry overall won’t see true benefits from blockchains for a couple of years, once the practicalities have been worked out and the nonsense has subsided. We should learn and contribute to those practicalities, but as for the <a href="https://en.wikipedia.org/wiki/Hype_cycle">hype cycle</a>, for now I just hold my nose.</p>
+
+<p><a rel="bookmark" href="http://theory.pm/security/2016/05/12/the-blockchain-hype-cycle/">§</a></p>
+
+]]></content>
+    </entry>
   
     <entry>
       
