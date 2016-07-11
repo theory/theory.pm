@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rpm | theory.pm]]></title>
   <link href="http://theory.pm/categories/rpm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[Build Modern Perl RPMs with rpmcpan]]></title>
 <link href="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/"/>
-<updated>2014-09-21T14:45:00-07:00</updated>
+<updated>2014-09-21T14:45:00+01:00</updated>
 <id>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan</id>
 
       <content type="html"><![CDATA[<p><img class="center" src="/images/ioperllove.png" width="640" title="&lsquo;iovation + Perl = Love&rsquo; &lsquo;iovation + Perl = Love&rsquo;" ></p>

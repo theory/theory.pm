@@ -4,7 +4,7 @@
   <title><![CDATA[Category: sqitch | theory.pm]]></title>
   <link href="http://theory.pm/categories/sqitch/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[Managing Sqitch with Make →]]></title>
 <link href="http://www.modernperlbooks.com/mt/2014/02/managing-sqitch-with-make.html"/>
-<updated>2014-02-09T13:58:00-08:00</updated>
+<updated>2014-02-09T13:58:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make</id>
 
       <content type="html"><![CDATA[<p>chromatic:</p>
@@ -66,7 +66,7 @@ config file. Alas, I don&rsquo;t know when I will have the tuits to work on that
 
 <title type="html"><![CDATA[Templating Tests with Sqitch]]></title>
 <link href="http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/"/>
-<updated>2014-01-13T14:11:00-08:00</updated>
+<updated>2014-01-13T14:11:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch</id>
 
       <content type="html"><![CDATA[<p>Back in September, <a href="/sqitch/2013/09/06/sqitch-templating/">I described</a> how to create custom deploy, revert, and
@@ -239,7 +239,7 @@ ROLLBACK;
 
 <title type="html"><![CDATA[Sqitch on Target]]></title>
 <link href="http://theory.pm/sqitch/2014/01/09/sqitch-on-target/"/>
-<updated>2014-01-09T15:27:00-08:00</updated>
+<updated>2014-01-09T15:27:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/01/09/sqitch-on-target</id>
 
       <content type="html"><![CDATA[<p>At the end of the day last week, I released <a href="http://sqitch.org/">Sqitch</a> v0.990. This was a
@@ -341,7 +341,7 @@ Sqitch.</p>
 
 <title type="html"><![CDATA[Sqitch Templating]]></title>
 <link href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/"/>
-<updated>2013-09-06T13:44:00-07:00</updated>
+<updated>2013-09-06T13:44:00+01:00</updated>
 <id>http://theory.pm/sqitch/2013/09/06/sqitch-templating</id>
 
       <content type="html"><![CDATA[<p>Last week saw the v.980 release of <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, a database change management
@@ -715,7 +715,7 @@ can imagine lots of uses for task-specific changes, including:</p>
 
 <title type="html"><![CDATA[Data Deployment with Sqitch]]></title>
 <link href="http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch/"/>
-<updated>2013-08-28T17:09:00-07:00</updated>
+<updated>2013-08-28T17:09:00+01:00</updated>
 <id>http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch</id>
 
       <content type="html"><![CDATA[<p>I&rsquo;ve been thinking about data migrations. I love how well <a href="http://sqitch.org/">Sqitch</a> works for

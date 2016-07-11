@@ -2,144 +2,148 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://theory.pm/exceptions/2013/07/26/trying-times/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/blog/2013/07/26/a-perl-blog/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/mop/2013/08/15/mopping-the-moose/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/tpf/2013/08/23/tpf-to-revamp-grants/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/data/2013/08/28/data-deployment-with-sqitch/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2013/09/06/sqitch-templating/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sql/2013/09/09/multirow-database-updates/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/syntax/2013/09/25/lexical-subroutines/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/09/29/the-power-of-enums/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/10/23/testing-nested-hstore/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/pg/2013/10/25/indexing-nested-hstore/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/01/09/sqitch-on-target/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/2014/09/05/sqitch-goes-vertical/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>
             http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/
         </loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/podcast/2014/09/17/sqitch-on-floss-weekly/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/2015/02/11/please-test-pod-simple-3-dot-29-3/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/</loc>
-        <lastmod>2015-10-08T20:45:06-07:00</lastmod>
+        <lastmod>2015-10-09T04:45:06+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/encryption/2016/02/17/apple-encryption-stand/</loc>
-        <lastmod>2016-02-17T11:41:29-08:00</lastmod>
+        <lastmod>2016-02-17T19:41:29+00:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/security/2016/02/19/anthem-breach/</loc>
-        <lastmod>2016-02-19T14:05:40-08:00</lastmod>
+        <lastmod>2016-02-19T22:05:40+00:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/security/2016/02/19/right-to-security/</loc>
-        <lastmod>2016-02-19T15:47:55-08:00</lastmod>
+        <lastmod>2016-02-19T23:47:55+00:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/privacy/2016/02/29/privacy-shield/</loc>
-        <lastmod>2016-02-29T11:53:07-08:00</lastmod>
+        <lastmod>2016-02-29T19:53:07+00:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/security/2016/05/12/the-blockchain-hype-cycle/</loc>
-        <lastmod>2016-05-12T11:45:07-07:00</lastmod>
+        <lastmod>2016-05-12T19:45:07+01:00</lastmod>
+    </url>
+    <url>
+        <loc>http://theory.pm/2016/07/11/svn-notify-maintainer-wanted/</loc>
+        <lastmod>2016-07-11T13:36:46+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/404.html</loc>
-        <lastmod>2013-08-25T12:19:16-07:00</lastmod>
+        <lastmod>2013-08-25T20:19:16+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/about/</loc>
-        <lastmod>2015-10-05T10:44:33-07:00</lastmod>
+        <lastmod>2015-10-05T18:44:33+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/archives/</loc>
-        <lastmod>2016-05-12T11:45:07-07:00</lastmod>
+        <lastmod>2016-07-11T13:36:46+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/</loc>
-        <lastmod>2016-05-12T11:45:07-07:00</lastmod>
+        <lastmod>2016-07-11T13:36:46+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/robots.txt</loc>
-        <lastmod>2013-08-25T12:19:16-07:00</lastmod>
+        <lastmod>2013-08-25T20:19:16+01:00</lastmod>
     </url>
     <url>
         <loc>http://theory.pm/test/layout/</loc>
-        <lastmod>2013-09-25T20:51:25-07:00</lastmod>
+        <lastmod>2013-09-26T04:51:25+01:00</lastmod>
     </url>
 </urlset>

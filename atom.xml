@@ -4,7 +4,7 @@
   <title><![CDATA[theory.pm]]></title>
   <link href="http://theory.pm/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -19,9 +19,33 @@
 
 
 
+<title type="html"><![CDATA[Wanted: New SVN::Notify Maintainer]]></title>
+<link href="http://theory.pm/2016/07/11/svn-notify-maintainer-wanted/"/>
+<updated>2016-07-11T13:22:00+01:00</updated>
+<id>http://theory.pm/2016/07/11/svn-notify-maintainer-wanted</id>
+
+      <content type="html"><![CDATA[<p>I&rsquo;ve used Subversion very occasionally <a href="http://justatheory.com/computers/vcs/git/bricolage-svn-to-git.html" title="Just a Theory: “Migrating Bricolage Subversion to Git”">since 2009</a>, and <a href="https://metacpan.org/release/SVN-Notify" title="SVN-Notify on MetaCPAN">SVN::Notify</a> at
+all. Over the years, I&rsquo;ve fixed minor issues with it now and then, and made
+the a couple of releases to address issues fixed by others. But it&rsquo;s past the
+point where I feel qualified to maintain it. Hell, the repository for
+SVN::Notify has been <a href="https://github.com/theory/svn-notify/" title="svn-notify Project on GitHub">hosted on GitHub</a> ever <a href="https://github.com/theory/svn-notify/commit/32347ad" title="SVN-Notify Commit: “Note move to GitHub.”">since 2011</a>. I don&rsquo;t have an
+instance of Subversion against which to test it; nor do I have any SMTP
+servers to throw test messages at.</p>
+
+<p>In short, it&rsquo;s past time I relinquished maintenance of this module to someone
+with a vested interest in its continued use. Is that you? Do you need to keep SVN::Notify running for your projects, and have a few <a href="https://en.wiktionary.org/wiki/tuit" title="Wictionary: “tuit”">TUITs</a> to fix the occasional bug or security issue? If so, drop me a line (david @ this domain). I’d be happy to transfer the repository.</p>
+]]></content>
+    </entry>
+  
+    <entry>
+      
+
+
+
+
 <title type="html"><![CDATA[The Blockchain Hype Cycle →]]></title>
 <link href="http://techcrunch.com/2016/05/11/the-blockchain-is-the-new-google/"/>
-<updated>2016-05-12T11:32:00-07:00</updated>
+<updated>2016-05-12T11:32:00+01:00</updated>
 <id>http://theory.pm/security/2016/05/12/the-blockchain-hype-cycle</id>
 
       <content type="html"><![CDATA[<p>Excerpt from William Mougayar&rsquo;s new book on TechCrunch:</p>
@@ -44,7 +68,7 @@
 
 <title type="html"><![CDATA[A Porous “Privacy Shield” →]]></title>
 <link href="http://arstechnica.com/tech-policy/2016/02/privacy-shield-doomed-from-get-go-nsa-bulk-surveillance-waved-through/"/>
-<updated>2016-02-29T11:34:00-08:00</updated>
+<updated>2016-02-29T11:34:00+00:00</updated>
 <id>http://theory.pm/privacy/2016/02/29/privacy-shield</id>
 
       <content type="html"><![CDATA[<p>Glyn Moody, in <em>Ars Technica,</em> on the proposed replacement for the recently
@@ -92,7 +116,7 @@ thing before.</li>
 
 <title type="html"><![CDATA[Do We Have Right to Security? →]]></title>
 <link href="https://securosis.com/blog/do-we-have-a-right-to-security"/>
-<updated>2016-02-19T15:26:00-08:00</updated>
+<updated>2016-02-19T15:26:00+00:00</updated>
 <id>http://theory.pm/security/2016/02/19/right-to-security</id>
 
       <content type="html"><![CDATA[<p>Rich Mogull:</p>
@@ -126,7 +150,7 @@ common drug dealers.</p>
 
 <title type="html"><![CDATA[Anthem Breach Harms Consumers →]]></title>
 <link href="https://digitalguardian.com/blog/judge-anthem-case-rules-breach-harmed-patients"/>
-<updated>2016-02-19T13:56:00-08:00</updated>
+<updated>2016-02-19T13:56:00+00:00</updated>
 <id>http://theory.pm/security/2016/02/19/anthem-breach</id>
 
       <content type="html"><![CDATA[<p>Paul Roberts in Digital Guardian:</p>
@@ -160,7 +184,7 @@ to protect user data.</p>
 
 <title type="html"><![CDATA[Apple Challenges FBI Decryption Demand →]]></title>
 <link href="https://www.apple.com/customer-letter/"/>
-<updated>2016-02-17T11:30:00-08:00</updated>
+<updated>2016-02-17T11:30:00+00:00</updated>
 <id>http://theory.pm/encryption/2016/02/17/apple-encryption-stand</id>
 
       <content type="html"><![CDATA[<p>Incredible post from Apple, signed by Tim Cook:</p>
@@ -196,7 +220,7 @@ cybercriminals for decades to come. Shame on the FBI.</p>
 
 <title type="html"><![CDATA[theory.so is No More]]></title>
 <link href="http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/"/>
-<updated>2015-10-03T13:14:00-07:00</updated>
+<updated>2015-10-03T13:14:00+01:00</updated>
 <id>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more</id>
 
       <content type="html"><![CDATA[<p>Until last week, I had two newish blogs. This one, <a href="http://theory.pm/">theory.pm</a>, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it would be a good idea to have separate blogs for separate audiences, but it turns out I don&rsquo;t post enough to make much difference. And now, as of last week, I let the theory.so domain expire. Control the <a href="https://en.wikipedia.org/wiki/.so">.so</a> domain was turned over to Somalia a few months ago, and domain renwal fees went <em>way</em> up. Since I had so few posts over there (14 since August, 2013), I decided it was a good time to just merge it with theory.pm and be done with it.</p>
@@ -217,7 +241,7 @@ cybercriminals for decades to come. Shame on the FBI.</p>
 
 <title type="html"><![CDATA[Please Test Pod::Simple 3.29_3]]></title>
 <link href="http://theory.pm/2015/02/11/please-test-pod-simple-3-dot-29-3/"/>
-<updated>2015-02-11T10:53:00-08:00</updated>
+<updated>2015-02-11T10:53:00+00:00</updated>
 <id>http://theory.pm/2015/02/11/please-test-pod-simple-3-dot-29-3</id>
 
       <content type="html"><![CDATA[<p><img class="left" src="http://theory.pm/images/cpan.png" width="250" height="250" title="'Pod Book'" ></p>
@@ -263,7 +287,7 @@ cpanm DWHEELER/Pod-Simple-3.29_3.tar.gz
 
 <title type="html"><![CDATA[Build Modern Perl RPMs with rpmcpan]]></title>
 <link href="http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan/"/>
-<updated>2014-09-21T14:45:00-07:00</updated>
+<updated>2014-09-21T14:45:00+01:00</updated>
 <id>http://theory.pm/rpm/2014/09/21/build-modern-perl-rpms-with-rpmcpan</id>
 
       <content type="html"><![CDATA[<p><img class="center" src="http://theory.pm/images/ioperllove.png" width="640" title="iovation + Perl = Love" alt="iovation + Perl = Love"></p>
@@ -341,7 +365,7 @@ and leave the sad RPM past behind.</p>
 
 <title type="html"><![CDATA[Sqitch on FLOSS Weekly →]]></title>
 <link href="https://twit.tv/shows/floss-weekly/episodes/309"/>
-<updated>2014-09-17T20:42:00-07:00</updated>
+<updated>2014-09-17T20:42:00+01:00</updated>
 <id>http://theory.pm/podcast/2014/09/17/sqitch-on-floss-weekly</id>
 
       <content type="html"><![CDATA[<p>Yours truly was feature in this week&rsquo;s episode of <a href="http://twit.tv/floss">FLOSS Weekly</a>, talking
@@ -374,7 +398,7 @@ using working through one of the tutorials:</p>
 
 <title type="html"><![CDATA[Localize Your Perl Apps with this One Weird Trick]]></title>
 <link href="http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/"/>
-<updated>2014-09-06T18:10:00-07:00</updated>
+<updated>2014-09-06T18:10:00+01:00</updated>
 <id>http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
 
       <content type="html"><![CDATA[<p>Nota Bene: This is a republication of a <a href="http://perladvent.org/2013/2013-12-09.html">post that originally appeared in the
@@ -833,7 +857,7 @@ user-visible strings</li>
 
 <title type="html"><![CDATA[Sqitch Goes Vertical]]></title>
 <link href="http://theory.pm/2014/09/05/sqitch-goes-vertical/"/>
-<updated>2014-09-05T17:46:00-07:00</updated>
+<updated>2014-09-05T17:46:00+01:00</updated>
 <id>http://theory.pm/2014/09/05/sqitch-goes-vertical</id>
 
       <content type="html"><![CDATA[<p>I released <a href="http://sqitch.org/">Sqitch</a> v0.996 today. Despite the minor version increase, this is
@@ -934,7 +958,7 @@ to get that done by early October.</p>
 
 <title type="html"><![CDATA[Managing Sqitch with Make →]]></title>
 <link href="http://www.modernperlbooks.com/mt/2014/02/managing-sqitch-with-make.html"/>
-<updated>2014-02-09T13:58:00-08:00</updated>
+<updated>2014-02-09T13:58:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/02/09/managing-sqitch-with-make</id>
 
       <content type="html"><![CDATA[<p>chromatic:</p>
@@ -979,7 +1003,7 @@ config file. Alas, I don&rsquo;t know when I will have the tuits to work on that
 
 <title type="html"><![CDATA[Templating Tests with Sqitch]]></title>
 <link href="http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch/"/>
-<updated>2014-01-13T14:11:00-08:00</updated>
+<updated>2014-01-13T14:11:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/01/13/templating-tests-with-sqitch</id>
 
       <content type="html"><![CDATA[<p>Back in September, <a href="http://theory.pm/sqitch/2013/09/06/sqitch-templating/">I described</a> how to create custom deploy, revert, and
@@ -1260,7 +1284,7 @@ revert, and verify scripts created previously:</p>
 
 <title type="html"><![CDATA[Brent Simmons is Not Wrong →]]></title>
 <link href="http://inessential.com/2014/01/02/vesper_sync_diary_7_audibles"/>
-<updated>2014-01-10T11:02:00-08:00</updated>
+<updated>2014-01-10T11:02:00+00:00</updated>
 <id>http://theory.pm/theory/2014/01/10/brent-simmons-is-not-wrong</id>
 
       <content type="html"><![CDATA[<p>Brent Simmons:</p>
@@ -1332,7 +1356,7 @@ system.</p>
 
 <title type="html"><![CDATA[Sqitch on Target]]></title>
 <link href="http://theory.pm/sqitch/2014/01/09/sqitch-on-target/"/>
-<updated>2014-01-09T15:27:00-08:00</updated>
+<updated>2014-01-09T15:27:00+00:00</updated>
 <id>http://theory.pm/sqitch/2014/01/09/sqitch-on-target</id>
 
       <content type="html"><![CDATA[<p>At the end of the day last week, I released <a href="http://sqitch.org/">Sqitch</a> v0.990. This was a
@@ -1451,7 +1475,7 @@ Sqitch.</p>
 
 <title type="html"><![CDATA[Toward A Database URI Standard]]></title>
 <link href="http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/"/>
-<updated>2013-11-26T20:14:00-08:00</updated>
+<updated>2013-11-26T20:14:00+00:00</updated>
 <id>http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard</id>
 
       <content type="html"><![CDATA[<p>As part of my effort to improve <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, I plan to add support for <a href="https://github.com/theory/sqitch/issues/100" title="Issue #100: “Add target command to configure target databases”">specifying
@@ -1684,7 +1708,7 @@ have I overlooked? What have I got wrong? Let me know!</p>
 
 <title type="html"><![CDATA[Indexing Nested hstore]]></title>
 <link href="http://theory.pm/pg/2013/10/25/indexing-nested-hstore/"/>
-<updated>2013-10-25T14:36:00-07:00</updated>
+<updated>2013-10-25T14:36:00+01:00</updated>
 <id>http://theory.pm/pg/2013/10/25/indexing-nested-hstore</id>
 
       <content type="html"><![CDATA[<p>In my first <a href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/">Nested hstore</a> post yesterday, I ran a query against unindexed
@@ -1850,7 +1874,7 @@ value, say &ldquo;DVD&rdquo;?</p>
 
 <title type="html"><![CDATA[Testing Nested hstore]]></title>
 <link href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/"/>
-<updated>2013-10-23T10:26:00-07:00</updated>
+<updated>2013-10-23T10:26:00+01:00</updated>
 <id>http://theory.pm/pg/2013/10/23/testing-nested-hstore</id>
 
       <content type="html"><![CDATA[<p>I&rsquo;ve been helping Oleg Bartunov and Teodor Sigaev with documentation for the
@@ -2071,7 +2095,7 @@ watch this spot for more!</p>
 
 <title type="html"><![CDATA[The Power of Enums →]]></title>
 <link href="http://www.openscg.com/2013/09/the-power-of-enums/"/>
-<updated>2013-09-29T14:50:00-07:00</updated>
+<updated>2013-09-29T14:50:00+01:00</updated>
 <id>http://theory.pm/pg/2013/09/29/the-power-of-enums</id>
 
       <content type="html"><![CDATA[<p>Jim Mlodgenski on using <a href="http://www.postgresql.org/docs/9.3/static/datatype-enum.html">Enums</a> in place of references to small lookup tables:</p>
@@ -2091,55 +2115,6 @@ them during the PostgreSQL 8.2 era. Today they&rsquo;re a core feature, and as o
 9.1, you can even modify their values! You&rsquo;re missing out if you&rsquo;re not using
 them yet.</p>
 <p><a rel="bookmark" href="http://theory.pm/pg/2013/09/29/the-power-of-enums/">§</a></p>]]></content>
-    </entry>
-  
-    <entry>
-      
-
-
-
-
-<title type="html"><![CDATA[Whither Impala Fault Tolerance? →]]></title>
-<link href="http://blog.cloudera.com/blog/2013/09/whats-next-for-impala-after-release-1-1/"/>
-<updated>2013-09-29T14:29:00-07:00</updated>
-<id>http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance</id>
-
-      <content type="html"><![CDATA[<p>Justin Erickson on the <a href="http://blog.cloudera.com/">Cloudera Blog</a></p>
-
-<blockquote><p>In December 2012, while Cloudera Impala was still in its beta phase, we
-<a href="http://blog.cloudera.com/blog/2012/12/whats-next-for-cloudera-impala/">provided a roadmap</a>
-for planned functionality in the production release. In the same spirit of
-keeping Impala users, customers, and enthusiasts well informed, this post
-provides an updated roadmap for upcoming releases later this year and in early
-2014.</p></blockquote>
-
-<p><a href="http://www.cloudera.com/content/cloudera/en/products/cdh/impala.html">Impala</a> is a pretty nice-looking SQLish query engine that runs on Hadoop. It
-provides the same basic interface as <a href="http://hive.apache.org/">Hive</a>, but circumvents MapReduce to
-access data directly from data nodes in parallel. But, in my opinion, to be
-useful as a real-time query engine, it needs fault tolerance. From the
-<a href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/Impala/latest/Cloudera-Impala-Frequently-Asked-Questions/Cloudera-Impala-Frequently-Asked-Questions.html">Impala FAQ</a>, under the list of unsupported features:</p>
-
-<blockquote><p>Fault tolerance for running queries (not currently). In the current release,
-Impala aborts the query if any host on which the query is executing fails. In
-the future, we will consider adding fault tolerance to Impala, so that a
-running query would complete even in the presence of host failures.</p></blockquote>
-
-<p>Sounds like an unfortunate issue. Since it&rsquo;s pretty typical for data nodes to
-go down, this seems like an essential feature. Products like <a href="http://citusdata.com/docs/sql-on-hadoop" title="CitusDB SQL on Hadoop">CitusDB</a> offer
-fault tolerance:</p>
-
-<blockquote><p><strong>Does CitusDB recover from failures?</strong></p>
-
-<p>Yes. The CitusDB master node intelligently re-routes the work on any failed
-nodes to the remaining nodes in real-time. Since the underlying data are kept
-in fixed-size blocks in HDFS, a failed node&rsquo;s work can evenly be distributed
-among the remaining nodes in the cluster.</p></blockquote>
-
-<p>That sound exactly right. I&rsquo;m excited about Citus, and if it adds solid
-support for more data formats, such as <a href="http://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.0.0.2/ds_Hive/orcfile.html" title="ORC File Format">ORC</a> and <a href="http://parquet.io/" title="Parquet is a columnar storage format for Hadoop.">Parquet</a>, it may well be the
-way to go. But Impala will be a nice alternative if it can get fault tolerance
-figured out. I&rsquo;m disappointed it&rsquo;s not on the road map.</p>
-<p><a rel="bookmark" href="http://theory.pm/impala/2013/09/29/whither-impala-fault-tolerance/">§</a></p>]]></content>
     </entry>
   
 </feed>

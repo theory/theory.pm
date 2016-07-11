@@ -4,7 +4,7 @@
   <title><![CDATA[Category: pg | theory.pm]]></title>
   <link href="http://theory.pm/categories/pg/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[Indexing Nested hstore]]></title>
 <link href="http://theory.pm/pg/2013/10/25/indexing-nested-hstore/"/>
-<updated>2013-10-25T14:36:00-07:00</updated>
+<updated>2013-10-25T14:36:00+01:00</updated>
 <id>http://theory.pm/pg/2013/10/25/indexing-nested-hstore</id>
 
       <content type="html"><![CDATA[<p>In my first <a href="/pg/2013/10/23/testing-nested-hstore/">Nested hstore</a> post yesterday, I ran a query against unindexed
@@ -127,7 +127,7 @@ Time: 73.913 ms
 
 <title type="html"><![CDATA[Testing Nested hstore]]></title>
 <link href="http://theory.pm/pg/2013/10/23/testing-nested-hstore/"/>
-<updated>2013-10-23T10:26:00-07:00</updated>
+<updated>2013-10-23T10:26:00+01:00</updated>
 <id>http://theory.pm/pg/2013/10/23/testing-nested-hstore</id>
 
       <content type="html"><![CDATA[<p>I&rsquo;ve been helping Oleg Bartunov and Teodor Sigaev with documentation for the
@@ -270,7 +270,7 @@ watch this spot for more!</p>
 
 <title type="html"><![CDATA[The Power of Enums →]]></title>
 <link href="http://www.openscg.com/2013/09/the-power-of-enums/"/>
-<updated>2013-09-29T14:50:00-07:00</updated>
+<updated>2013-09-29T14:50:00+01:00</updated>
 <id>http://theory.pm/pg/2013/09/29/the-power-of-enums</id>
 
       <content type="html"><![CDATA[<p>Jim Mlodgenski on using <a href="http://www.postgresql.org/docs/9.3/static/datatype-enum.html&lt;p>&lt;a">Enums</a> in place of references to small lookup tables:</p>
@@ -300,7 +300,7 @@ them yet.</p>
 
 <title type="html"><![CDATA[Understanding Window Functions →]]></title>
 <link href="http://tapoueh.org/blog/2013/08/20-Window-Functions"/>
-<updated>2013-08-28T17:25:00-07:00</updated>
+<updated>2013-08-28T17:25:00+01:00</updated>
 <id>http://theory.pm/pg/windows/2013/08/28/understanding-window-functions</id>
 
       <content type="html"><![CDATA[<p>Dimitri Fontaine:</p>

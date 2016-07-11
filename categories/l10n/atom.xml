@@ -4,7 +4,7 @@
   <title><![CDATA[Category: l10n | theory.pm]]></title>
   <link href="http://theory.pm/categories/l10n/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[Localize Your Perl Apps with this One Weird Trick]]></title>
 <link href="http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick/"/>
-<updated>2014-09-06T18:10:00-07:00</updated>
+<updated>2014-09-06T18:10:00+01:00</updated>
 <id>http://theory.pm/l10n/2014/09/06/localize-your-perl-apps-with-this-one-weird-trick</id>
 
       <content type="html"><![CDATA[<p>Nota Bene: This is a republication of a <a href="http://perladvent.org/2013/2013-12-09.html">post that originally appeared in the

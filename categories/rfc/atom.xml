@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rfc | theory.pm]]></title>
   <link href="http://theory.pm/categories/rfc/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[Toward A Database URI Standard]]></title>
 <link href="http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard/"/>
-<updated>2013-11-26T20:14:00-08:00</updated>
+<updated>2013-11-26T20:14:00+00:00</updated>
 <id>http://theory.pm/rfc/2013/11/26/toward-a-database-uri-standard</id>
 
       <content type="html"><![CDATA[<p>As part of my effort to improve <a href="http://sqitch.org/" title="Sane database change management">Sqitch</a>, I plan to add support for <a href="https://github.com/theory/sqitch/issues/100" title="Issue #100: “Add target command to configure target databases”">specifying

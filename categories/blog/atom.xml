@@ -4,7 +4,7 @@
   <title><![CDATA[Category: blog | theory.pm]]></title>
   <link href="http://theory.pm/categories/blog/atom.xml" rel="self"/>
   <link href="http://theory.pm/"/>
-  <updated>2016-05-12T11:45:32-07:00</updated>
+  <updated>2016-07-11T13:37:26+01:00</updated>
   <id>http://theory.pm/</id>
   <author>
     <name><![CDATA[David E. Wheeler]]></name>
@@ -21,7 +21,7 @@
 
 <title type="html"><![CDATA[theory.so is No More]]></title>
 <link href="http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more/"/>
-<updated>2015-10-03T13:14:00-07:00</updated>
+<updated>2015-10-03T13:14:00+01:00</updated>
 <id>http://theory.pm/blog/2015/10/03/theory-dot-so-is-no-more</id>
 
       <content type="html"><![CDATA[<p>Until last week, I had two newish blogs. This one, <a href="/">theory.pm</a>, was to be my Perl blog. The other one, theory.so, was my database blog. I thought it would be a good idea to have separate blogs for separate audiences, but it turns out I don&rsquo;t post enough to make much difference. And now, as of last week, I let the theory.so domain expire. Control the <a href="https://en.wikipedia.org/wiki/.so">.so</a> domain was turned over to Somalia a few months ago, and domain renwal fees went <em>way</em> up. Since I had so few posts over there (14 since August, 2013), I decided it was a good time to just merge it with theory.pm and be done with it.</p>
@@ -42,7 +42,7 @@
 
 <title type="html"><![CDATA[A Perl Blog]]></title>
 <link href="http://theory.pm/blog/2013/07/26/a-perl-blog/"/>
-<updated>2013-07-26T18:08:00-07:00</updated>
+<updated>2013-07-26T18:08:00+01:00</updated>
 <id>http://theory.pm/blog/2013/07/26/a-perl-blog</id>
 
       <content type="html"><![CDATA[<p>I have been unsatisfied with <a href="http://justatheory.com/">Just a Theory</a> for some time. I started that
