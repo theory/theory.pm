@@ -11,7 +11,7 @@ GEM
       sass (~> 3.1)
     daemons (1.1.9)
     directory_watcher (1.4.1)
-    eventmachine (1.0.3)
+    eventmachine (1.2.7)
     fast-stemmer (1.0.1)
     fssm (0.2.9)
     haml (3.1.7)
@@ -33,7 +33,7 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
-    rake (10.3.2)
+    rake (12.1.0)
     rb-fsevent (0.9.1)
     rdiscount (2.1.7)
     rubypants (0.2.0)
@@ -63,7 +63,7 @@ DEPENDENCIES
   jekyll (~> 0.12)
   liquid (~> 2.3.0)
   pygments.rb (~> 0.3.4)
-  rake (~> 10.3)
+  rake (~> 12.1)
   rb-fsevent (~> 0.9)
   rdiscount (~> 2.1.7)
   rubypants (~> 0.2.0)
@@ -72,3 +72,6 @@ DEPENDENCIES
   sinatra (~> 1.4.2)
   stringex (~> 1.4.0)
   thin
+
+BUNDLED WITH
+   1.15.4
